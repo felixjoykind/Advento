@@ -1,0 +1,21 @@
+Game
+	- remake tiles rendering system for optimization !!!
+	- map editor
+	- items
+	 Texture
+		- tiles
+		- items
+		- gui
+UI
+	Game
+		- debug menu
+		- pause
+	Menu
+		- Background image
+		- Title
+	Settings
+		- Settings system
+			- saving
+			- loading
+		- Buttons
+		- Other ui elements
