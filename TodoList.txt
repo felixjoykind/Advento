@@ -1,5 +1,5 @@
 Game
-	- remake tiles rendering system for optimization !!!
+	- make components system better!!!
 	- map editor
 	- items
 	 Texture
@@ -9,7 +9,6 @@ Game
 UI
 	Game
 		- debug menu
-		- pause
 	Menu
 		- Background image
 		- Title

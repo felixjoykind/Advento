@@ -5,9 +5,9 @@
 
 Game::Game()
 {
-	this->read_cfg();
-	this->_data->window.create(sf::VideoMode(_data->winConfig.width, _data->winConfig.height), 
-		_data->winConfig.title, sf::Style::Titlebar | sf::Style::Close);
+	this->read_cfg(); // reading window config
+	this->_data->window.create(sf::VideoMode(_data->winConfig.width, _data->winConfig.height),
+		_data->winConfig.title,  _data->winConfig.fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar | sf::Style::Close);
 
 	// loading textures
 	this->_data->assets.AddTexture("player", "./assets/sprites/player/player.png");
@@ -50,7 +50,8 @@ void Game::read_cfg()
 		// creating cfg file and writing default values
 		cfg_file.seekg(0, std::fstream::beg); // going to beginning
 		cfg_file << "Advento" << std::endl;
-		cfg_file << 1290 << " " << 960;
+		cfg_file << 1920 << " " << 1080;
+		cfg_file << 1;
 	}
 
 	if (cfg_file.is_open())
@@ -59,6 +60,7 @@ void Game::read_cfg()
 		cfg_file.seekg(0, std::fstream::beg); // going to beginning
 		std::getline(cfg_file, _data->winConfig.title);
 		cfg_file >> _data->winConfig.width >> _data->winConfig.height;
+		cfg_file >> _data->winConfig.fullscreen;
 	}
 
 	cfg_file.close();

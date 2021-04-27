@@ -11,6 +11,7 @@ struct WindowSettings
 {
 	std::string title;
 	unsigned int width, height;
+	bool fullscreen;
 };
 
 struct GameData

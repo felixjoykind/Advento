@@ -42,6 +42,14 @@ sf::Vector2f Entity::getPosition() const
 	return this->_spr->getPosition();
 }
 
+sf::Vector2u Entity::getGridPosition(const unsigned tileSize) const
+{
+	return sf::Vector2u(
+		static_cast<unsigned>(this->getPosition().x) / gridSize,
+		static_cast<unsigned>(this->getPosition().y) / gridSize
+	);
+}
+
 void Entity::move(const float dir_x, const float dir_y, float deltaTime)
 {
 	if (this->_movement) // if movement components != nullptr

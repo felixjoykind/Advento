@@ -27,10 +27,10 @@ PauseMenu::PauseMenu(GameDataRef data)
 	);
 
 	this->_buttons["MENU"] = new UI::Button(_data,
-		{ float(_data->winConfig.width / 2 - 100), float(_data->winConfig.height / 2 - 50) }, { 200.f, 60.f },
+		{ float(_data->winConfig.width / 2 - 80), float(_data->winConfig.height / 2 - 50) }, { 160.f, 60.f },
 		sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0), sf::Color(0, 0, 0, 0),
 		sf::Color(255, 255, 255, 180), sf::Color(255, 255, 255), sf::Color(255, 255, 255, 100),
-		sf::Text("Resume", _data->assets.GetFont("menu font"), 46)
+		sf::Text("Menu", _data->assets.GetFont("menu font"), 46)
 	);
 
 	this->_buttons["QUIT"] = new UI::Button(_data,

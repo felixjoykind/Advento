@@ -5,7 +5,7 @@ GameState::GameState(GameDataRef data)
 	_camera(sf::View({ 0.f, 0.f }, { (float)_data->winConfig.width, (float)_data->winConfig.height })),
 	_player(new Player(_data, { float(_data->winConfig.width / 2), float(_data->winConfig.height / 2) })),
 	_pauseMenu(new PauseMenu(_data)),
-	_map(new Engine::TileMap(_data, 16, 16))
+	_map(new Engine::TileMap(_data, *_player, 16, 16))
 {
 }
 

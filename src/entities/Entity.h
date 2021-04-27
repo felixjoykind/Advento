@@ -30,6 +30,7 @@ public:
 	// getters
 	virtual Engine::HitboxComponent* getHitbox() const;
 	virtual sf::Vector2f getPosition() const;
+	virtual sf::Vector2u getGridPosition(const unsigned tileSize) const;
 
 	// additions
 	virtual void move(const float dir_x, const float dir_y, float deltaTime);
