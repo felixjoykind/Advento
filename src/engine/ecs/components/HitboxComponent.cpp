@@ -2,22 +2,22 @@
 
 namespace Engine
 {
-	HitboxComponent::HitboxComponent(sf::Sprite& spr, sf::Vector2f offset, sf::Vector2f size, bool visible)
-		:_spr(spr), _visible(visible)
+	HitboxComponent::HitboxComponent(Entity* entity, sf::Vector2f offset, sf::Vector2f size, bool visible)
+		:Component(entity), _visible(visible)
 	{
 		// setting up hitbox
-		this->_hitbox.setPosition(spr.getPosition() + offset);
+		this->_hitbox.setPosition(entity->getPosition() + offset);
 		this->_hitbox.setSize(size);
 		this->_hitbox.setFillColor(sf::Color(0, 0, 0, 0));
 		this->_hitbox.setOutlineColor(sf::Color::Green);
 		this->_hitbox.setOutlineThickness(1.f);
 	}
 
-	HitboxComponent::HitboxComponent(HitboxSettings settings)
-		:_spr(settings.spr), _visible(settings.visible)
+	HitboxComponent::HitboxComponent(Entity* entity, HitboxSettings settings)
+		:Component(entity), _visible(settings.visible)
 	{
 		// setting up hitbox
-		this->_hitbox.setPosition(settings.spr.getPosition() + settings.offset);
+		this->_hitbox.setPosition(entity->getPosition() + settings.offset);
 		this->_hitbox.setSize(settings.size);
 		this->_hitbox.setFillColor(sf::Color(0, 0, 0, 0));
 		this->_hitbox.setOutlineColor(sf::Color::Green);
@@ -40,7 +40,7 @@ namespace Engine
 
 	void HitboxComponent::update(float deltaTime)
 	{
-		this->_hitbox.setPosition(this->_spr.getPosition());
+		this->_hitbox.setPosition(this->_entity->getPosition());
 	}
 
 	void HitboxComponent::render(sf::RenderTarget& target) const

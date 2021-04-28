@@ -1,9 +1,12 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "engine/ecs/ECS.h"
+#include "entities/Entity.h"
 
 namespace Engine
 {
+	class Component;
+
 	struct MovementSettings
 	{
 		float maxVelocity;
@@ -16,14 +19,15 @@ namespace Engine
 		IDLE = 0, LEFT, RIGHT, UP, DOWN
 	};
 
-	class MovementComponent
+	class MovementComponent : 
+		public Component
 	{
 	private:
 		sf::Vector2f _velocity;
 		MovementSettings _settings;
 
 	public:
-		MovementComponent(MovementSettings settings);
+		MovementComponent(Entity* entity, MovementSettings settings);
 		~MovementComponent();
 
 		// Getters
@@ -31,7 +35,7 @@ namespace Engine
 		MovementState getState() const;
 
 		void move(float dir_x, float dir_y);
-		void update(float deltaTime);
+		void update(float deltaTime) override;
 
 	};
 }

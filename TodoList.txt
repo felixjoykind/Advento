@@ -1,8 +1,7 @@
 Game
-	- make components system better!!!
 	- map editor
 	- items
-	 Texture
+	 Textures
 		- tiles
 		- items
 		- gui

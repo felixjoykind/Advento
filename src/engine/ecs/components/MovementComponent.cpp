@@ -3,8 +3,8 @@
 
 namespace Engine
 {
-	MovementComponent::MovementComponent(MovementSettings settings)
-		:_settings(settings)
+	MovementComponent::MovementComponent(Entity* entity, MovementSettings settings)
+		:Component(entity), _settings(settings)
 	{ }
 
 	MovementComponent::~MovementComponent()
@@ -31,6 +31,7 @@ namespace Engine
 
 	void MovementComponent::move(float dir_x, float dir_y)
 	{
+		// accelerating
 		this->_velocity.x += _settings.aceleration * dir_x;
 		this->_velocity.x = Physics::clamp<float>(-_settings.maxVelocity, _settings.maxVelocity, _velocity.x);
 
@@ -62,6 +63,9 @@ namespace Engine
 			_velocity.y += _settings.deceleration;
 			if (_velocity.y > 0.0f) _velocity.y = 0.0f;
 		}
+
+		// moving entity
+		this->_entity->getSpr().move(this->getVelocity() * deltaTime);
 	}
 
 }

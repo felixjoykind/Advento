@@ -1,42 +1,73 @@
 #pragma once
 
+#include "engine/ecs/ECS.h"
+#include <SFML/Graphics.hpp>
+
 #include "Game.h"
-#include "engine/components/MovementComponent.h"
-#include "engine/components/AnimationComponent.h"
-#include "engine/components/HitboxComponent.h"
 
-// Base class for all entities
-class Entity
+namespace Engine
 {
-protected:
-	GameDataRef _data;
-	sf::Sprite* _spr;
+	// Base class for all entities
+	class Entity
+	{
+	protected:
+		// data
+		GameDataRef _data;
+		sf::Sprite* _spr;
+		bool _active = true;
 
-	// Components (nullptr by default, can be overrided)
-	Engine::MovementComponent* _movement = nullptr;
-	Engine::AnimationComponent* _animation = nullptr;
-	Engine::HitboxComponent* _hitbox = nullptr;
+		// components data
+		std::vector<std::unique_ptr<Component>> _components;
+		ComponentArray _componentArray;
+		ComponentBetset _componentBitset;
 
-public:
-	Entity(GameDataRef data, sf::Vector2f pos);
-	virtual  ~Entity();
+	public:
+		Entity(GameDataRef data, sf::Vector2f pos);
+		virtual  ~Entity();
 
-	// loading and creating
-	virtual void loadTexture(const sf::Texture& texture);
-	virtual void createHitboxComponent(Engine::HitboxSettings settings);
-	virtual void createMovementComponent(const Engine::MovementSettings settings);
-	virtual void createAnimationComponent(sf::Sprite& sprite, const sf::Texture& texture);
+		// loading and creating
+		virtual void loadTexture(const sf::Texture& texture);
 
-	// getters
-	virtual Engine::HitboxComponent* getHitbox() const;
-	virtual sf::Vector2f getPosition() const;
-	virtual sf::Vector2u getGridPosition(const unsigned tileSize) const;
+		// getters
+		bool isActive() const;
+		virtual sf::Sprite& getSpr() const;
+		virtual sf::Vector2f getPosition() const;
+		virtual sf::Vector2u getGridPosition(const unsigned tileSize) const;
 
-	// additions
-	virtual void move(const float dir_x, const float dir_y, float deltaTime);
+		// ECS
+		template<class T>
+		bool hasComponent() const
+		{
+			return this->_componentBitset[getComponentTypeID<T>()];
+		}
 
-	// base functions
-	virtual void update(float deltaTime);
-	virtual void render() const;
+		template<class T>
+		T& getComponent() const
+		{
+			auto ptr(_componentArray[getComponentTypeID<T>()]);
+			return *static_cast<T*>(ptr);
+		}
 
-};
+		template<class T, class... TArgs>
+		T& addComponent(TArgs&&... mArgs)
+		{
+			T* c = new T(std::forward<TArgs>(mArgs)...);
+			c->_entity = this;
+			std::unique_ptr<Component> uPtr{ c };
+			_components.emplace_back(std::move(uPtr));
+
+			// now component is added and active
+			_componentArray[getComponentTypeID<T>()] = c;
+			_componentBitset[getComponentTypeID<T>()] = true;
+
+			return *c;
+		}
+
+		// base functions
+		virtual void update(float deltaTime);
+		virtual void render() const;
+
+		void destroy() { this->_active = true; }
+
+	};
+}

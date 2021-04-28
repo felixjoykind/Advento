@@ -39,7 +39,7 @@
     <ClCompile Include="src\engine\ui\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\components\MovementComponent.cpp">
+    <ClCompile Include="src\engine\ecs\components\MovementComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\Physics.cpp">
@@ -48,10 +48,10 @@
     <ClCompile Include="src\entities\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\components\AnimationComponent.cpp">
+    <ClCompile Include="src\engine\ecs\components\AnimationComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\components\HitboxComponent.cpp">
+    <ClCompile Include="src\engine\ecs\components\HitboxComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\tiles\TileMap.cpp">
@@ -61,6 +61,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\ui\PauseMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ecs\EntitiesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +95,7 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\components\MovementComponent.h">
+    <ClInclude Include="src\engine\ecs\components\MovementComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\Physics.h">
@@ -101,10 +104,10 @@
     <ClInclude Include="src\entities\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\components\AnimationComponent.h">
+    <ClInclude Include="src\engine\ecs\components\AnimationComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\components\HitboxComponent.h">
+    <ClInclude Include="src\engine\ecs\components\HitboxComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\tiles\TileMap.h">
@@ -114,6 +117,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ui\PauseMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\ECS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\EntitiesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

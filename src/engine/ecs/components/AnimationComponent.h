@@ -1,10 +1,12 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "engine/ecs/ECS.h"
+#include "entities/Entity.h"
 
 namespace Engine
 {
 	class AnimationComponent
+		: public Component
 	{
 	private:
 		class Animation
@@ -63,18 +65,17 @@ namespace Engine
 		};
 
 		// animations data
-		sf::Sprite& _spr;
 		const sf::Texture& _texture;
 		std::map<std::string, Animation*> _animations; // all animations
 		Animation* _lastAnimation; // last played animation
 
 	public:
-		AnimationComponent(sf::Sprite& sprite, const sf::Texture& texture);
+		AnimationComponent(Entity* entity, const sf::Texture& texture);
 		~AnimationComponent();
 
-		void Add(std::string name, float speed, float delay, 
+		void add(std::string name, float speed, float delay, 
 			sf::Vector2i start_pos, sf::Vector2i end_pos, sf::Vector2i size);
-		void Update(std::string animation_name, float deltaTime);
+		void update(std::string animation_name, float deltaTime);
 
 	};
 }

@@ -2,8 +2,12 @@
 
 #include "entities/Entity.h"
 
+#include "engine/ecs/components/MovementComponent.h"
+#include "engine/ecs/components/AnimationComponent.h"
+#include "engine/ecs/components/HitboxComponent.h"
+
 class Player
-	: public Entity
+	: public Engine::Entity
 {
 public:
 	Player(GameDataRef data, sf::Vector2f pos);

@@ -1,29 +1,30 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "entities/Entity.h"
 
 namespace Engine
 {
+	class Component;
+
 	struct HitboxSettings
 	{
-		sf::Sprite& spr;
 		sf::Vector2f offset;
 		sf::Vector2f size;
 		bool visible;
 	};
 
-	class HitboxComponent
+	class HitboxComponent : 
+		public Component
 	{
 	private:
-		const sf::Sprite& _spr;
 		sf::RectangleShape _hitbox;
 
 		// visual
 		bool _visible;
 
 	public:
-		HitboxComponent(HitboxSettings settings);
-		HitboxComponent(sf::Sprite& spr, sf::Vector2f offset, sf::Vector2f size, bool visible);
+		HitboxComponent(Entity* entity, HitboxSettings settings);
+		HitboxComponent(Entity* entity, sf::Vector2f offset, sf::Vector2f size, bool visible);
 		~HitboxComponent();
 
 		// setters
@@ -33,8 +34,8 @@ namespace Engine
 		bool collides(const HitboxComponent& other);
 
 		// basic functionality
-		void update(float deltaTime);
-		void render(sf::RenderTarget& target) const;
+		void update(float deltaTime) override;
+		void render(sf::RenderTarget& target) const override;
 	};
 }
 

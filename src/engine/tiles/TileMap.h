@@ -16,7 +16,7 @@ namespace Engine
 		std::vector<std::vector<Tile*>> _map;
 		const Entity& _trackEntity;
 
-		unsigned nVisibleTiles; // TODO: make x and y variants
+		sf::Vector2u nVisibleTiles; // TODO: make x and y variants
 
 		mutable int fromX, toX;
 		mutable int fromY, toY;

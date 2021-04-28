@@ -1,90 +1,62 @@
 #include "Entity.h"
 
-Entity::Entity(GameDataRef data, sf::Vector2f pos)
-	:_data(data), _spr(new sf::Sprite())
+namespace Engine
 {
-	this->_spr->setPosition(pos);
-}
-
-Entity::~Entity()
-{
-	delete this->_spr;
-	delete this->_movement;
-}
-
-void Entity::loadTexture(const sf::Texture& texture)
-{
-	this->_spr->setTexture(texture);
-}
-
-void Entity::createHitboxComponent(Engine::HitboxSettings settings)
-{
-	this->_hitbox = new Engine::HitboxComponent(settings);
-}
-
-void Entity::createMovementComponent(const Engine::MovementSettings settings)
-{
-	this->_movement = new Engine::MovementComponent(settings);
-}
-
-void Entity::createAnimationComponent(sf::Sprite& spr, const sf::Texture& texture)
-{
-	this->_animation = new Engine::AnimationComponent(spr, texture);
-}
-
-Engine::HitboxComponent* Entity::getHitbox() const
-{
-	return this->_hitbox;
-}
-
-sf::Vector2f Entity::getPosition() const
-{
-	return this->_spr->getPosition();
-}
-
-sf::Vector2u Entity::getGridPosition(const unsigned tileSize) const
-{
-	return sf::Vector2u(
-		static_cast<unsigned>(this->getPosition().x) / gridSize,
-		static_cast<unsigned>(this->getPosition().y) / gridSize
-	);
-}
-
-void Entity::move(const float dir_x, const float dir_y, float deltaTime)
-{
-	if (this->_movement) // if movement components != nullptr
+	Entity::Entity(GameDataRef data, sf::Vector2f pos)
+		:_data(data), _spr(new sf::Sprite())
 	{
-		this->_movement->move(dir_x, dir_y);
-		this->_spr->move(_movement->getVelocity() * deltaTime);
-	}
-	else
-	{
-		throw("[!] Movement component is not inisialized");
-	}
-}
-
-void Entity::update(float deltaTime)
-{
-	if (this->_movement) // if components != nullptr
-	{
-		// moving
-		this->_movement->update(deltaTime);
-		this->_spr->move(_movement->getVelocity() * deltaTime);
+		this->_spr->setPosition(pos);
 	}
 
-	if (this->_hitbox)
+	Entity::~Entity()
 	{
-		// updating hitbox
-		this->_hitbox->update(deltaTime);
+		delete this->_spr;
 	}
-}
 
-void Entity::render() const
-{
-	this->_data->window.draw(*this->_spr);
-
-	if (this->_hitbox) // drawing component if != nullptr
+	void Entity::loadTexture(const sf::Texture& texture)
 	{
-		this->_hitbox->render(_data->window);
+		this->_spr->setTexture(texture);
 	}
+
+	sf::Sprite& Entity::getSpr() const
+	{
+		return *this->_spr;
+	}
+
+	sf::Vector2f Entity::getPosition() const
+	{
+		return this->_spr->getPosition();
+	}
+
+	sf::Vector2u Entity::getGridPosition(const unsigned tileSize) const
+	{
+		return sf::Vector2u(
+			static_cast<unsigned>(this->getPosition().x) / tileSize,
+			static_cast<unsigned>(this->getPosition().y) / tileSize
+		);
+	}
+
+	bool Entity::isActive() const
+	{
+		return this->_active;
+	}
+
+	void Entity::update(float deltaTime)
+	{
+		// new components system
+		for (auto& c : _components)
+			c->update(deltaTime);
+	}
+
+	void Entity::render() const
+	{
+		this->_data->window.draw(*this->_spr);
+
+		// TODO: draw hitbox if enabled
+
+		// new components system
+		for (const auto& c : _components)
+			c->render(_data->window);
+	}
+
 }
