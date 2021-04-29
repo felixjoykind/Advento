@@ -13,7 +13,7 @@ namespace Engine
     }
 
     void AnimationComponent::add(std::string name, float speed, float delay, 
-        sf::Vector2i start_pos, sf::Vector2i end_pos, sf::Vector2i size)
+        sf::Vector2u start_pos, sf::Vector2u end_pos, sf::Vector2u size)
     {
         // adding new animation with custom parameters
         this->_animations[name] = new Animation(this->_entity->getSpr(), this->_texture, 
@@ -22,12 +22,14 @@ namespace Engine
 
     void AnimationComponent::update(std::string animation_name, float deltaTime)
     {
+        // if new animation is not old then set _lastAnimation
         if (this->_lastAnimation != _animations.at(animation_name))
         {
-            if (this->_lastAnimation != nullptr)
+            if (this->_lastAnimation != nullptr) // reset if != nullptr
             {
                 this->_lastAnimation->reset();
             }
+            // update last animation
             this->_lastAnimation = _animations.at(animation_name);
         }
 

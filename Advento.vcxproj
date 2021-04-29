@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ui\DebugInfo.cpp" />
     <ClCompile Include="src\engine\ecs\EntitiesManager.cpp" />
     <ClCompile Include="src\engine\ui\PauseMenu.cpp" />
     <ClCompile Include="src\engine\ecs\components\HitboxComponent.cpp" />
@@ -161,7 +162,7 @@
     <ClCompile Include="src\engine\ui\Button.cpp" />
     <ClCompile Include="src\states\MainMenuState.cpp" />
     <ClCompile Include="src\gamedata\AssetManager.cpp" />
-    <ClCompile Include="src\entities\Entity.cpp" />
+    <ClCompile Include="src\engine\ecs\Entity.cpp" />
     <ClCompile Include="src\states\GameState.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src\engine\tiles\Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ui\DebugInfo.h" />
     <ClInclude Include="src\engine\ecs\EntitiesManager.h" />
     <ClInclude Include="src\engine\ecs\ECS.h" />
     <ClInclude Include="src\engine\ui\PauseMenu.h" />
@@ -182,7 +184,7 @@
     <ClInclude Include="src\engine\ui\Button.h" />
     <ClInclude Include="src\states\MainMenuState.h" />
     <ClInclude Include="src\gamedata\AssetManager.h" />
-    <ClInclude Include="src\entities\Entity.h" />
+    <ClInclude Include="src\engine\ecs\Entity.h" />
     <ClInclude Include="src\states\GameState.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\gamedata\StateMachine.h" />

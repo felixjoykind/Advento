@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entities/Entity.h"
+#include "engine/ecs/Entity.h"
 
 #include "engine/ecs/components/MovementComponent.h"
 #include "engine/ecs/components/AnimationComponent.h"

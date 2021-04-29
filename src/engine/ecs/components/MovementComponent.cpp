@@ -17,9 +17,7 @@ namespace Engine
 
 	MovementState MovementComponent::getState() const
 	{
-		if (_velocity.x == 0.f && _velocity.y == 0.f)
-			return MovementState::IDLE;
-		else if (_velocity.x < 0.f)
+		if (_velocity.x < 0.f)
 			return MovementState::LEFT;
 		else if (_velocity.x > 0.f)
 			return MovementState::RIGHT;
@@ -27,6 +25,8 @@ namespace Engine
 			return MovementState::UP;
 		else if (_velocity.y > 0.f)
 			return MovementState::DOWN;
+		else
+			return MovementState::IDLE;
 	}
 
 	void MovementComponent::move(float dir_x, float dir_y)
@@ -42,6 +42,7 @@ namespace Engine
 	void MovementComponent::update(float deltaTime)
 	{
 		// decceleration and clamping
+		// x
 		if (_velocity.x > 0.0f)
 		{
 			_velocity.x -= _settings.deceleration;
@@ -53,6 +54,7 @@ namespace Engine
 			if (_velocity.x > 0.0f) _velocity.x = 0.0f;
 		}
 
+		// y
 		if (_velocity.y > 0.0f)
 		{
 			_velocity.y -= _settings.deceleration;

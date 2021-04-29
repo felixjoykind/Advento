@@ -3,7 +3,7 @@
 Player::Player(GameDataRef data, sf::Vector2f pos)
 	:Entity(data, pos)
 {
-	// creating components
+	// loading texture sheet
 	this->loadTexture(_data->assets.GetTexture("player anim"));
 	
 	// creating components

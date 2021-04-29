@@ -27,7 +27,7 @@
     <ClCompile Include="src\states\GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Entity.cpp">
+    <ClCompile Include="src\engine\ecs\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gamedata\AssetManager.cpp">
@@ -66,6 +66,9 @@
     <ClCompile Include="src\engine\ecs\EntitiesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\ui\DebugInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -80,7 +83,7 @@
     <ClInclude Include="src\states\GameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\Entity.h">
+    <ClInclude Include="src\engine\ecs\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gamedata\AssetManager.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ecs\EntitiesManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\DebugInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

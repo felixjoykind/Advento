@@ -3,7 +3,9 @@
 #include "entities/Player.h"
 #include "states/MainMenuState.h"
 #include "engine/tiles/TileMap.h"
+
 #include "engine/ui/PauseMenu.h"
+#include "engine/ui/DebugInfo.h"
 
 class GameState 
 	: public State
@@ -16,13 +18,15 @@ private:
 	// game objects
 	Player* _player;
 
-	PauseMenu* _pauseMenu;
-
 	// camera
 	sf::View _camera;
 
 	// map
 	Engine::TileMap* _map;
+
+	// panels
+	PauseMenu* _pauseMenu;
+	Engine::DebugInfo* _debugInfo;
 
 public:
 	GameState(GameDataRef data);

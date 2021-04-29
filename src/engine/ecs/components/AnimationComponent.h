@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/ecs/ECS.h"
-#include "entities/Entity.h"
+#include "engine/ecs/Entity.h"
 
 namespace Engine
 {
@@ -26,7 +26,7 @@ namespace Engine
 			float _delay;
 
 		public:
-			Animation(sf::Sprite& spr, const sf::Texture& texture, float speed, float delay, sf::Vector2i start_pos, sf::Vector2i end_pos, sf::Vector2i size)
+			Animation(sf::Sprite& spr, const sf::Texture& texture, float speed, float delay, sf::Vector2u start_pos, sf::Vector2u end_pos, sf::Vector2u size)
 				:_spr(spr), _texture(texture), 
 				_start(sf::IntRect(start_pos.x * size.x, start_pos.y * size.y, size.x, size.y)), 
 				_end(sf::IntRect(end_pos.x * size.x, end_pos.y * size.y, size.x, size.y)), _current(_start),
@@ -74,7 +74,7 @@ namespace Engine
 		~AnimationComponent();
 
 		void add(std::string name, float speed, float delay, 
-			sf::Vector2i start_pos, sf::Vector2i end_pos, sf::Vector2i size);
+			sf::Vector2u start_pos, sf::Vector2u end_pos, sf::Vector2u size);
 		void update(std::string animation_name, float deltaTime);
 
 	};

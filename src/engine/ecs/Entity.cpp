@@ -41,18 +41,22 @@ namespace Engine
 		return this->_active;
 	}
 
+	void Entity::destroy()
+	{
+		this->_active = false;
+	}
+
 	void Entity::update(float deltaTime)
 	{
-		// new components system
+		// updating components
 		for (auto& c : _components)
 			c->update(deltaTime);
 	}
 
 	void Entity::render() const
 	{
+		// drawing sprite
 		this->_data->window.draw(*this->_spr);
-
-		// TODO: draw hitbox if enabled
 
 		// new components system
 		for (const auto& c : _components)

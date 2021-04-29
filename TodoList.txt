@@ -1,18 +1,21 @@
 Game
-	- map editor
-	- items
+	Map editor
+		- saving
+		- loading
+	- items and stuff
+	- inventory system
 	 Textures
 		- tiles
 		- items
 		- gui
 UI
-	Game
-		- debug menu
 	Menu
 		- Background image
 		- Title
 	Settings
 		- Settings system
+			Sets
+				- screen settings
 			- saving
 			- loading
 		- Buttons

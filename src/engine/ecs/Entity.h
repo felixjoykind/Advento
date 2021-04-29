@@ -18,7 +18,7 @@ namespace Engine
 
 		// components data
 		std::vector<std::unique_ptr<Component>> _components;
-		ComponentArray _componentArray;
+		ComponentArray _componentArray {  };
 		ComponentBetset _componentBitset;
 
 	public:
@@ -29,7 +29,7 @@ namespace Engine
 		virtual void loadTexture(const sf::Texture& texture);
 
 		// getters
-		bool isActive() const;
+		virtual bool isActive() const;
 		virtual sf::Sprite& getSpr() const;
 		virtual sf::Vector2f getPosition() const;
 		virtual sf::Vector2u getGridPosition(const unsigned tileSize) const;
@@ -67,7 +67,8 @@ namespace Engine
 		virtual void update(float deltaTime);
 		virtual void render() const;
 
-		void destroy() { this->_active = true; }
+		// destroy
+		virtual void destroy();
 
 	};
 }

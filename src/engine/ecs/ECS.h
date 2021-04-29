@@ -7,8 +7,9 @@
 
 namespace Engine
 {
-	class Entity; // entity class include (solution for double include)
+	class Entity; // include entity class (solution for double include)
 
+	// Base class for all components
 	class Component
 	{
 	protected:
@@ -22,6 +23,7 @@ namespace Engine
 		virtual void update(float deltaTime) {  }
 		virtual void render(sf::RenderTarget& target) const {  }
 
+		// giving entity access to private functions and variables
 		friend class Entity;
 	};
 

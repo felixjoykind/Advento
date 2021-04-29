@@ -6,8 +6,9 @@
 namespace Engine
 {
 	TileMap::TileMap(GameDataRef data, const Entity& entity, unsigned int rows, unsigned int cols)
-		:_data(data), _mapSize({ rows, cols }), _trackEntity(entity), 
-		nVisibleTiles({ _data->winConfig.width / 128, _data->winConfig.height / 128 })
+		:_data(data), _mapSize({ rows, cols }), _trackEntity(entity),
+		nVisibleTiles({ _data->winConfig.width / 128, _data->winConfig.height / 128 }),
+		_tilesRendered(0)
 	{
 		// creating tilemap
 		for (unsigned int x = 0; x < rows; x++)
@@ -47,30 +48,36 @@ namespace Engine
 	void TileMap::render() const
 	{
 		// rendering tiles
-		this->fromX = _trackEntity.getGridPosition(128).x - nVisibleTiles.x / 2 - 1;
-		this->fromX = Physics::clamp<int>(0, _mapSize.x, fromX);
+		int fromX, toX;
+		int fromY, toY;
 
-		this->fromY = _trackEntity.getGridPosition(128).y - nVisibleTiles.y / 2 - 1;
-		this->fromY = Physics::clamp<int>(0, _mapSize.y, fromY);
+		fromX = _trackEntity.getGridPosition(128).x - nVisibleTiles.x / 2 - 1;
+		fromX = Physics::clamp<int>(0, _mapSize.x, fromX);
 
-		this->toX = _trackEntity.getGridPosition(128).x + nVisibleTiles.x / 2 + 2;
-		this->toX = Physics::clamp<int>(0, _mapSize.x, toX);
+		fromY = _trackEntity.getGridPosition(128).y - nVisibleTiles.y / 2 - 1;
+		fromY = Physics::clamp<int>(0, _mapSize.y, fromY);
 
-		this->toY = _trackEntity.getGridPosition(128).y + nVisibleTiles.y / 2 + 2;
-		this->toY = Physics::clamp<int>(0, _mapSize.y, toY);
+		toX = _trackEntity.getGridPosition(128).x + nVisibleTiles.x / 2 + 2;
+		toX = Physics::clamp<int>(0, _mapSize.x, toX);
 
-		unsigned sum = 0;
+		toY = _trackEntity.getGridPosition(128).y + nVisibleTiles.y / 2 + 2;
+		toY = Physics::clamp<int>(0, _mapSize.y, toY);
+
+		this->_tilesRendered = 0;
 		for (size_t x = fromX; x < toX; x++)
 		{
 			for (size_t y = fromY; y < toY; y++)
 			{
 				_map[x][y]->render(_data->window);
-				sum++;
+				this->_tilesRendered++; // updating number of rendered tiles
 			}
 		}
+	}
 
-		system("cls");
-		std::cout << sum << std::endl;
+	// Returns the nimber of rendered tiles
+	unsigned TileMap::tilesRendered() const
+	{
+		return this->_tilesRendered;
 	}
 
 }

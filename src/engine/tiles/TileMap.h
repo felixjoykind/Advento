@@ -2,7 +2,7 @@
 
 #include "Game.h"
 #include "Tile.h"
-#include <entities/Entity.h>
+#include "engine/ecs/Entity.h"
 
 namespace Engine
 {
@@ -16,14 +16,16 @@ namespace Engine
 		std::vector<std::vector<Tile*>> _map;
 		const Entity& _trackEntity;
 
-		sf::Vector2u nVisibleTiles; // TODO: make x and y variants
-
-		mutable int fromX, toX;
-		mutable int fromY, toY;
+		// tiles reendering data
+		sf::Vector2u nVisibleTiles;
+		mutable unsigned _tilesRendered;
 
 	public:
 		TileMap(GameDataRef data, const Entity& entity, unsigned int rows, unsigned int cols);
 		~TileMap();
+
+		// getters
+		unsigned tilesRendered() const;
 
 		// basic functions
 		void update(float deltaTime);
