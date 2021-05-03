@@ -12,6 +12,7 @@ struct WindowSettings
 	std::string title;
 	unsigned int width, height;
 	bool fullscreen;
+	float fps;
 };
 
 struct GameData
@@ -28,7 +29,9 @@ class Game
 {
 private:
 	GameDataRef _data = std::make_shared<GameData>();
+	// clocks
 	sf::Clock _deltaClock;
+	sf::Clock _fpsClock;
 
 	void read_cfg();
 

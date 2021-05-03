@@ -12,7 +12,7 @@ Game::Game()
 	// loading textures
 	this->_data->assets.AddTexture("player", "./assets/sprites/player/player.png");
 	this->_data->assets.AddTexture("grass tile", "./assets/sprites/tiles/grass.png");
-	this->_data->assets.AddTexture("ocean tile", "./assets/sprites/tiles/ocean.png");
+	this->_data->assets.AddTexture("water tile", "./assets/sprites/tiles/ocean.png");
 
 	// loading animations
 	this->_data->assets.AddTexture("player anim", "./assets/sprites/player/player_anim.png");
@@ -31,12 +31,16 @@ Game::~Game()
 void Game::run()
 {
 	this->_deltaClock.restart();
+	this->_fpsClock.restart();
 	while (_data->window.isOpen())
 	{
 		_data->states.ProcessStateChanges();
 		_data->states.GetActiveState()->HandleInput();
 		_data->states.GetActiveState()->Update(_deltaClock.restart().asSeconds());
 		_data->states.GetActiveState()->Render();
+
+		// updating fps
+		_data->winConfig.fps = 1.0f / this->_fpsClock.restart().asSeconds();
 	}
 }
 

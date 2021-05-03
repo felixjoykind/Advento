@@ -13,10 +13,6 @@ Player::Player(GameDataRef data, sf::Vector2f pos)
 		Entity*, const sf::Texture&>(this, *this->_spr->getTexture());
 	this->addComponent<Engine::HitboxComponent, 
 		Entity*, Engine::HitboxSettings>(this, { { 0.f, 0.f }, { 64.f, 128.f } });
-
-	// DEBUG
-	// TODO: run if enabled in debug menu aka panel
-	this->getComponent<Engine::HitboxComponent>().setVisible(true);
 	
 	// adding animation
 	auto& animation = this->getComponent<Engine::AnimationComponent>();

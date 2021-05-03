@@ -1,4 +1,6 @@
 Game
+	- entity manager
+		- do everything from there
 	Map editor
 		- saving
 		- loading
@@ -16,7 +18,11 @@ UI
 		- Settings system
 			Sets
 				- screen settings
+					- size
+					- type
+				- fps
 			- saving
 			- loading
 		- Buttons
 		- Other ui elements
+	Generation state !!!

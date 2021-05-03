@@ -6,6 +6,12 @@ namespace Engine
 		:_data(data), _debugData(debugData), _active(false)
 	{
 		// adding data to _texts
+		this->_texts["FPS"] = new sf::Text(
+			"FPS: " + std::to_string((int)_data->winConfig.fps),
+			_data->assets.GetFont("menu font"), 24
+		);
+		this->_texts["FPS"]->setPosition(5.f, float((_texts.size() - 1) * 28));
+
 		this->_texts["TILES"] = new sf::Text(
 			"Tiles rendered: " + std::to_string(_debugData._map.tilesRendered()),
 			_data->assets.GetFont("menu font"), 24
@@ -47,6 +53,7 @@ namespace Engine
 	void DebugInfo::update(float deltaTime)
 	{
 		// updating texts data
+		this->_texts["FPS"]->setString("FPS: " + std::to_string((int)_data->winConfig.fps));
 		this->_texts["TILES"]->setString("Tiles rendered: " + std::to_string(_debugData._map.tilesRendered()));
 		this->_texts["POSITION_GLOBAL"]->setString(
 			"Global position (X:Y): " + std::to_string((int)_debugData._trackEntity.getPosition().x)

@@ -1,7 +1,6 @@
 #include "TileMap.h"
 
 #include "engine/Physics.h"
-#include <iostream>
 
 namespace Engine
 {
@@ -10,39 +9,51 @@ namespace Engine
 		nVisibleTiles({ _data->winConfig.width / 128, _data->winConfig.height / 128 }),
 		_tilesRendered(0)
 	{
-		// creating tilemap
-		for (unsigned int x = 0; x < rows; x++)
-		{
-			std::vector<Tile*> row; // new row
-			for (unsigned int y = 0; y < cols; y++) // filling row
-			{
-				// TODO: remake system of choosing tile texture
-				// generate or something
-				const sf::Texture& texture = _data->assets.GetTexture("grass tile");
-				row.push_back(new Tile(texture, { float(x * texture.getSize().x), float(y * texture.getSize().y) }));
-			}
-			_map.push_back(row); // adding row to map
-		}
 	}
 
 	TileMap::~TileMap()
 	{
 		// deleting all tiles
-		for (auto& row : _map)
+		for (auto& row : this->_map)
 		{
 			for (auto& tile : row)
 				delete tile;
+		}
+		this->_map.clear();
+	}
+
+	void TileMap::generate(GenerationSettings settings)
+	{
+		// getting char map and clearing previous
+		auto gen_map = std::move(MapGenerator::Generate(settings));
+		this->_map.clear();
+		
+		// initializing map
+		this->_map = std::vector<std::vector<Tile*>>(settings.width);
+		for (auto& row : _map)
+			row = std::vector<Tile*>(settings.height);
+
+		// filling map based on input
+		for (size_t x = 0; x < settings.width; x++)
+		{
+			for (size_t y = 0; y < settings.height; y++)
+			{
+				switch (gen_map[x][y])
+				{
+				case 'g':
+					this->_map[x][y] = new Tile(_data->assets.GetTexture("grass tile"), {(float)x * 128.f, (float)y * 128.f });
+					break;
+				case '.':
+					this->_map[x][y] = new Tile(_data->assets.GetTexture("water tile"), { (float)x * 128.f, (float)y * 128.f });
+					break;
+				}
+			}
 		}
 	}
 
 	void TileMap::update(float deltaTime)
 	{
-		// updating all tiles
-		for (auto& row : _map)
-		{
-			for (auto& tile : row)
-				tile->update(deltaTime);
-		}
+		// update tile map
 	}
 
 	void TileMap::render() const
@@ -64,17 +75,17 @@ namespace Engine
 		toY = Physics::clamp<int>(0, _mapSize.y, toY);
 
 		this->_tilesRendered = 0;
-		for (size_t x = fromX; x < toX; x++)
+		for (int x = fromX; x < toX; x++)
 		{
-			for (size_t y = fromY; y < toY; y++)
+			for (int y = fromY; y < toY; y++)
 			{
-				_map[x][y]->render(_data->window);
+				this->_map[x][y]->render(_data->window);
 				this->_tilesRendered++; // updating number of rendered tiles
 			}
 		}
 	}
 
-	// Returns the nimber of rendered tiles
+	// Returns the number of rendered tiles
 	unsigned TileMap::tilesRendered() const
 	{
 		return this->_tilesRendered;

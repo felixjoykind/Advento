@@ -58,7 +58,7 @@ namespace Engine
 		// drawing sprite
 		this->_data->window.draw(*this->_spr);
 
-		// new components system
+		// rendering components
 		for (const auto& c : _components)
 			c->render(_data->window);
 	}

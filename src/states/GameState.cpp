@@ -1,12 +1,10 @@
 #include "GameState.h"
 
-#include <iostream>
-
 GameState::GameState(GameDataRef data)
 	:_data(data), _paused(false),
 	_camera(sf::View({ 0.f, 0.f }, { (float)_data->winConfig.width, (float)_data->winConfig.height })),
 	_player(new Player(_data, { float(_data->winConfig.width / 2), float(_data->winConfig.height / 2) })),
-	_map(new Engine::TileMap(_data, *_player, 16, 16)),
+	_map(new Engine::TileMap(_data, *_player, 256, 256)),
 	_pauseMenu(new PauseMenu(_data)), _debugInfo(new Engine::DebugInfo(_data, { *_player, *_map }))
 {
 }
@@ -22,6 +20,9 @@ GameState::~GameState()
 void GameState::Init()
 {
 	// state init
+
+	// creating/generating map
+	this->_map->generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
 }
 
 void GameState::HandleInput()
@@ -53,7 +54,9 @@ void GameState::HandleInput()
 			else if (ev.key.code == sf::Keyboard::F3)
 			{
 				this->_debugInfo->setActive(!_debugInfo->isActive());
-				std::cout << "F3 : " << _debugInfo->isActive() << std::endl;
+
+				auto& player_hitbox = _player->getComponent<Engine::HitboxComponent>();
+				player_hitbox.setVisible(!player_hitbox.getVisible());
 			}
 		}
 	}

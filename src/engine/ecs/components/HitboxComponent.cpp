@@ -27,6 +27,11 @@ namespace Engine
 	HitboxComponent::~HitboxComponent()
 	{ }
 
+	bool HitboxComponent::getVisible() const
+	{
+		return this->_visible;
+	}
+
 	bool HitboxComponent::collides(const HitboxComponent& other)
 	{
 		// collision detection

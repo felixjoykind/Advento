@@ -27,6 +27,9 @@ namespace Engine
 		HitboxComponent(Entity* entity, sf::Vector2f offset, sf::Vector2f size, bool visible);
 		~HitboxComponent();
 
+		// getters
+		bool getVisible() const;
+
 		// setters
 		void setVisible(bool value);
 

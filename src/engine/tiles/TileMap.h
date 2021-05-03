@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Tile.h"
 #include "engine/ecs/Entity.h"
+#include "engine/generator/MapGenerator.h"
 
 namespace Engine
 {
@@ -13,10 +14,10 @@ namespace Engine
 		// data
 		GameDataRef _data;
 		sf::Vector2u _mapSize;
-		std::vector<std::vector<Tile*>> _map;
+		std::vector<std::vector<Tile*>> _map; // map
 		const Entity& _trackEntity;
 
-		// tiles reendering data
+		// tiles rendering data
 		sf::Vector2u nVisibleTiles;
 		mutable unsigned _tilesRendered;
 
@@ -24,8 +25,11 @@ namespace Engine
 		TileMap(GameDataRef data, const Entity& entity, unsigned int rows, unsigned int cols);
 		~TileMap();
 
-		// getters
+		// Returns the number of rendered tiles
 		unsigned tilesRendered() const;
+
+		// Generates new map based on settings
+		void generate(GenerationSettings settings);
 
 		// basic functions
 		void update(float deltaTime);
