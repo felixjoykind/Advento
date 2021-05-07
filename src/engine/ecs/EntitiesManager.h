@@ -1,23 +1,41 @@
 #pragma once
 
+#include "Game.h"
 #include "Entity.h"
 
 namespace Engine
 {
+	using EntitiesVector = std::vector<std::unique_ptr<Entity>>;
+
 	class EntityManager
 	{
 	private:
-		std::vector<std::unique_ptr<Entity>> _entities;
+		GameDataRef _data;
+		EntitiesVector _entities;
 
 	public:
-		EntityManager() { }
+		EntityManager(GameDataRef data) :_data(data) { }
 		~EntityManager() { }
 
-		void update(float deltaTime);
-		void render(sf::RenderTarget& target) const;
+		// getters
+		const EntitiesVector& getEntities() const;
 
 		// setters
-		Entity& createEntity(Entity* new_entity);
+		template<class T, class... TArgs>
+		Entity& createEntity(TArgs&&... args)
+		{
+			static_assert(std::is_base_of<Entity, T>::value,
+				"Type T must be inherited from Entity class.");
+
+			T* e = new T(_data, std::forward<TArgs>(args)...);
+			std::unique_ptr<Entity> uPtr{ e };
+			_entities.emplace_back(std::move(uPtr));
+			return *e;
+		}
+
+		void refresh();
+		void update(float deltaTime);
+		void render() const;
 
 	};
 }

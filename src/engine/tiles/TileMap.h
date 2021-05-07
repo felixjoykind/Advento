@@ -28,6 +28,9 @@ namespace Engine
 		// Returns the number of rendered tiles
 		unsigned tilesRendered() const;
 
+		// Returns the size of the map
+		sf::Vector2u getSize() const;
+
 		// Generates new map based on settings
 		void generate(GenerationSettings settings);
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entities/Player.h"
+#include "engine/ecs/EntitiesManager.h"
 #include "states/MainMenuState.h"
 #include "engine/tiles/TileMap.h"
 
@@ -16,8 +16,9 @@ private:
 	bool _paused;
 
 	// game objects
-	Player* _player;
-
+	Engine::EntityManager* _manager;
+	Engine::Entity& _player;
+	
 	// camera
 	sf::View _camera;
 

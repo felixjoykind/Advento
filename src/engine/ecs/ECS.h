@@ -42,6 +42,9 @@ namespace Engine
 	template<class T>
 	inline ComponentID getComponentTypeID() noexcept
 	{
+		static_assert(std::is_base_of<Component, T>::value,
+			"Type T must be inherited from Component class.");
+
 		static ComponentID typeID = getComponentTypeID();
 		return typeID;
 	}

@@ -2,8 +2,8 @@
 
 namespace Engine
 {
-    AnimationComponent::AnimationComponent(Entity* entity, const sf::Texture& texture)
-        :Component(entity), _texture(texture), _lastAnimation(nullptr)
+    AnimationComponent::AnimationComponent(Entity* entity, SpriteComponent& sprComponent)
+        :Component(entity), _sprComponent(sprComponent), _lastAnimation(nullptr)
     { }
 
     AnimationComponent::~AnimationComponent()
@@ -16,7 +16,7 @@ namespace Engine
         sf::Vector2u start_pos, sf::Vector2u end_pos, sf::Vector2u size)
     {
         // adding new animation with custom parameters
-        this->_animations[name] = new Animation(this->_entity->getSpr(), this->_texture, 
+        this->_animations[name] = new Animation(this->_sprComponent, 
             speed, delay, start_pos, end_pos, size);
     }
 

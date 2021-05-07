@@ -1,25 +1,38 @@
 #include "GameState.h"
 
+#include "entities/Player.h"
+#include <iostream>
+
 GameState::GameState(GameDataRef data)
 	:_data(data), _paused(false),
-	_camera(sf::View({ 0.f, 0.f }, { (float)_data->winConfig.width, (float)_data->winConfig.height })),
-	_player(new Player(_data, { float(_data->winConfig.width / 2), float(_data->winConfig.height / 2) })),
-	_map(new Engine::TileMap(_data, *_player, 256, 256)),
-	_pauseMenu(new PauseMenu(_data)), _debugInfo(new Engine::DebugInfo(_data, { *_player, *_map }))
+	_manager(new Engine::EntityManager(_data)),
+	_player(_manager->createEntity<Player, sf::Vector2f>({ 0.f, 0.f })),
+	_camera(sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) })),
+	_map(new Engine::TileMap(_data, _player, 256, 256)),
+	_pauseMenu(new PauseMenu(_data)), _debugInfo(new Engine::DebugInfo(_data, { _player, *_map }))
 {
+	// setting player position to the center of the map
+	this->_player.getComponent<Engine::PositionComponent>().setPosition(
+		float(_map->getSize().x / 2 * 128),
+		float(_map->getSize().y / 2 * 128)
+	);
 }
 
 GameState::~GameState()
 {
-	delete this->_player;
-	delete this->_pauseMenu;
+	// deleting pointers
+	delete this->_manager;
 	delete this->_map;
+	delete this->_pauseMenu;
 	delete this->_debugInfo;
 }
 
 void GameState::Init()
 {
 	// state init
+	
+	// view
+	this->_camera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
 
 	// creating/generating map
 	this->_map->generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
@@ -53,10 +66,18 @@ void GameState::HandleInput()
 			}
 			else if (ev.key.code == sf::Keyboard::F3)
 			{
+				// showing all debug info
 				this->_debugInfo->setActive(!_debugInfo->isActive());
-
-				auto& player_hitbox = _player->getComponent<Engine::HitboxComponent>();
-				player_hitbox.setVisible(!player_hitbox.getVisible());
+				for (const auto& e : _manager->getEntities())
+				{
+					// if entity has hitbox
+					if (e->hasComponent<Engine::HitboxComponent>())
+					{
+						// enable/disable hitbox
+						auto& hitbox = e->getComponent<Engine::HitboxComponent>();
+						hitbox.setVisible(!hitbox.getVisible());
+					}
+				}
 			}
 		}
 	}
@@ -80,10 +101,10 @@ void GameState::Update(float deltaTime)
 	}
 
 	// updating player
-	this->_player->update(deltaTime);
+	this->_player.update(deltaTime);
 
 	// updating camera
-	this->_camera.setCenter(_player->getPosition());
+	this->_camera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
 
 	// updating map
 	this->_map->update(deltaTime);
@@ -105,7 +126,7 @@ void GameState::Render() const
 	this->_map->render();
 
 	// rendering player
-	this->_player->render();
+	this->_player.render();
 
 	this->_data->window.setView(_data->window.getDefaultView()); // setting default view
 	// if paused

@@ -16,7 +16,7 @@ void AssetManager::AddTexture(std::string name, std::string filepath)
 	}
 	else
 	{
-		throw "Can't load texture from " + filepath;
+		throw("Can't load texture from " + filepath);
 	}
 }
 
@@ -29,7 +29,7 @@ void AssetManager::AddFont(std::string name, std::string filepath)
 	}
 	else
 	{
-		throw "Ca't load font from" + filepath;
+		throw("Ca't load font from" + filepath);
 	}
 }
 

@@ -1,6 +1,7 @@
 #include "TileMap.h"
 
 #include "engine/Physics.h"
+#include "engine/ecs/components/PositionComponent.h"
 
 namespace Engine
 {
@@ -38,17 +39,31 @@ namespace Engine
 		{
 			for (size_t y = 0; y < settings.height; y++)
 			{
+				std::string texture_name; // texture name
+				// choosing texture name based on input
 				switch (gen_map[x][y])
 				{
 				case 'g':
-					this->_map[x][y] = new Tile(_data->assets.GetTexture("grass tile"), {(float)x * 128.f, (float)y * 128.f });
+					texture_name = "grass tile";
 					break;
 				case '.':
-					this->_map[x][y] = new Tile(_data->assets.GetTexture("water tile"), { (float)x * 128.f, (float)y * 128.f });
+					texture_name = "water tile";
 					break;
 				}
+				// adding new tile
+				this->_map[x][y] = new Tile(_data->assets.GetTexture(texture_name), { (float)x * 128.f, (float)y * 128.f });
 			}
 		}
+	}
+
+	sf::Vector2u TileMap::getSize() const
+	{
+		return this->_mapSize;
+	}
+
+	unsigned TileMap::tilesRendered() const
+	{
+		return this->_tilesRendered;
 	}
 
 	void TileMap::update(float deltaTime)
@@ -62,16 +77,19 @@ namespace Engine
 		int fromX, toX;
 		int fromY, toY;
 
-		fromX = _trackEntity.getGridPosition(128).x - nVisibleTiles.x / 2 - 1;
+		// quick acess variables
+		auto& entity_pos = _trackEntity.getComponent<Engine::PositionComponent>();
+
+		fromX = entity_pos.getGridPosition(128).x - nVisibleTiles.x / 2 - 1;
 		fromX = Physics::clamp<int>(0, _mapSize.x, fromX);
 
-		fromY = _trackEntity.getGridPosition(128).y - nVisibleTiles.y / 2 - 1;
+		fromY = entity_pos.getGridPosition(128).y - nVisibleTiles.y / 2 - 1;
 		fromY = Physics::clamp<int>(0, _mapSize.y, fromY);
 
-		toX = _trackEntity.getGridPosition(128).x + nVisibleTiles.x / 2 + 2;
+		toX = entity_pos.getGridPosition(128).x + nVisibleTiles.x / 2 + 2;
 		toX = Physics::clamp<int>(0, _mapSize.x, toX);
 
-		toY = _trackEntity.getGridPosition(128).y + nVisibleTiles.y / 2 + 2;
+		toY = entity_pos.getGridPosition(128).y + nVisibleTiles.y / 2 + 2;
 		toY = Physics::clamp<int>(0, _mapSize.y, toY);
 
 		this->_tilesRendered = 0;
@@ -85,10 +103,5 @@ namespace Engine
 		}
 	}
 
-	// Returns the number of rendered tiles
-	unsigned TileMap::tilesRendered() const
-	{
-		return this->_tilesRendered;
-	}
 
 }

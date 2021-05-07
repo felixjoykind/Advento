@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Game.h"
 #include "engine/ecs/ECS.h"
 #include <SFML/Graphics.hpp>
-
-#include "Game.h"
+#include <cassert>
 
 namespace Engine
 {
@@ -13,26 +13,19 @@ namespace Engine
 	protected:
 		// data
 		GameDataRef _data;
-		sf::Sprite* _spr;
-		bool _active = true;
+		bool _alive = true;
 
 		// components data
 		std::vector<std::unique_ptr<Component>> _components;
-		ComponentArray _componentArray {  };
+		ComponentArray _componentArray { };
 		ComponentBetset _componentBitset;
 
 	public:
-		Entity(GameDataRef data, sf::Vector2f pos);
+		Entity(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f });
 		virtual  ~Entity();
 
-		// loading and creating
-		virtual void loadTexture(const sf::Texture& texture);
-
 		// getters
-		virtual bool isActive() const;
-		virtual sf::Sprite& getSpr() const;
-		virtual sf::Vector2f getPosition() const;
-		virtual sf::Vector2u getGridPosition(const unsigned tileSize) const;
+		virtual bool isAlive() const;
 
 		// ECS
 		template<class T>
@@ -44,6 +37,7 @@ namespace Engine
 		template<class T>
 		T& getComponent() const
 		{
+			assert(this->hasComponent<T>());
 			auto ptr(_componentArray[getComponentTypeID<T>()]);
 			return *static_cast<T*>(ptr);
 		}
@@ -51,6 +45,8 @@ namespace Engine
 		template<class T, class... TArgs>
 		T& addComponent(TArgs&&... mArgs)
 		{
+			assert(!this->hasComponent<T>());
+
 			T* c = new T(std::forward<TArgs>(mArgs)...);
 			c->_entity = this;
 			std::unique_ptr<Component> uPtr{ c };

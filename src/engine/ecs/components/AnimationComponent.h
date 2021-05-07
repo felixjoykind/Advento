@@ -2,6 +2,7 @@
 
 #include "engine/ecs/ECS.h"
 #include "engine/ecs/Entity.h"
+#include "engine/ecs/components/SpriteComponent.h"
 
 namespace Engine
 {
@@ -12,8 +13,7 @@ namespace Engine
 		class Animation
 		{
 		private:
-			sf::Sprite& _spr;
-			const sf::Texture& _texture;
+			SpriteComponent& _sprComponent;
 			
 			const sf::IntRect _start;
 			const sf::IntRect _end;
@@ -26,14 +26,13 @@ namespace Engine
 			float _delay;
 
 		public:
-			Animation(sf::Sprite& spr, const sf::Texture& texture, float speed, float delay, sf::Vector2u start_pos, sf::Vector2u end_pos, sf::Vector2u size)
-				:_spr(spr), _texture(texture), 
+			Animation(SpriteComponent& sprComponent, float speed, float delay, sf::Vector2u start_pos, sf::Vector2u end_pos, sf::Vector2u size)
+				:_sprComponent(sprComponent),
 				_start(sf::IntRect(start_pos.x * size.x, start_pos.y * size.y, size.x, size.y)), 
 				_end(sf::IntRect(end_pos.x * size.x, end_pos.y * size.y, size.x, size.y)), _current(_start),
 				_speed(speed), _timer(0.f), _delay(delay), _size(size)
 			{
-				this->_spr.setTexture(texture);
-				this->_spr.setTextureRect(this->_start);
+				this->_sprComponent.getSpr().setTextureRect(this->_start);
 			}
 
 			void update(float deltaTime)
@@ -53,7 +52,7 @@ namespace Engine
 					{
 						this->_current = this->_start;
 					}
-					this->_spr.setTextureRect(this->_current); // update sprite texture
+					this->_sprComponent.getSpr().setTextureRect(this->_current); // update sprite texture
 				}
 			}
 
@@ -65,12 +64,12 @@ namespace Engine
 		};
 
 		// animations data
-		const sf::Texture& _texture;
+		SpriteComponent& _sprComponent;
 		std::map<std::string, Animation*> _animations; // all animations
 		Animation* _lastAnimation; // last played animation
 
 	public:
-		AnimationComponent(Entity* entity, const sf::Texture& texture);
+		AnimationComponent(Entity* entity, SpriteComponent& sprComponent);
 		~AnimationComponent();
 
 		void add(std::string name, float speed, float delay, 

@@ -3,47 +3,22 @@
 namespace Engine
 {
 	Entity::Entity(GameDataRef data, sf::Vector2f pos)
-		:_data(data), _spr(new sf::Sprite())
+		:_data(data)
 	{
-		this->_spr->setPosition(pos);
 	}
 
 	Entity::~Entity()
 	{
-		delete this->_spr;
 	}
 
-	void Entity::loadTexture(const sf::Texture& texture)
+	bool Entity::isAlive() const
 	{
-		this->_spr->setTexture(texture);
-	}
-
-	sf::Sprite& Entity::getSpr() const
-	{
-		return *this->_spr;
-	}
-
-	sf::Vector2f Entity::getPosition() const
-	{
-		return this->_spr->getPosition();
-	}
-
-	sf::Vector2u Entity::getGridPosition(const unsigned tileSize) const
-	{
-		return sf::Vector2u(
-			static_cast<unsigned>(this->getPosition().x) / tileSize,
-			static_cast<unsigned>(this->getPosition().y) / tileSize
-		);
-	}
-
-	bool Entity::isActive() const
-	{
-		return this->_active;
+		return this->_alive;
 	}
 
 	void Entity::destroy()
 	{
-		this->_active = false;
+		this->_alive = false;
 	}
 
 	void Entity::update(float deltaTime)
@@ -56,7 +31,7 @@ namespace Engine
 	void Entity::render() const
 	{
 		// drawing sprite
-		this->_data->window.draw(*this->_spr);
+		//_data->window.draw(*this->_spr);
 
 		// rendering components
 		for (const auto& c : _components)

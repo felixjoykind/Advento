@@ -1,6 +1,4 @@
 Game
-	- entity manager
-		- do everything from there
 	Map editor
 		- saving
 		- loading
@@ -11,7 +9,10 @@ Game
 		- items
 		- gui
 UI
+	Pause Menu
+		- remake
 	Menu
+		- remake
 		- Background image
 		- Title
 	Settings

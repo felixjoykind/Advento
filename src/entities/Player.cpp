@@ -1,18 +1,25 @@
 #include "Player.h"
 
-Player::Player(GameDataRef data, sf::Vector2f pos)
+Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 	:Entity(data, pos)
 {
-	// loading texture sheet
-	this->loadTexture(_data->assets.GetTexture("player anim"));
-	
+	using namespace Engine;
+
 	// creating components
-	this->addComponent<Engine::MovementComponent, 
-		Entity*, Engine::MovementSettings>(this, { 250.f, 20.f, 10.f });
-	this->addComponent<Engine::AnimationComponent,
-		Entity*, const sf::Texture&>(this, *this->_spr->getTexture());
-	this->addComponent<Engine::HitboxComponent, 
-		Entity*, Engine::HitboxSettings>(this, { { 0.f, 0.f }, { 64.f, 128.f } });
+	this->addComponent<PositionComponent,
+		Entity*, float, float>(this, 0.f, 0.f);
+
+	this->addComponent<SpriteComponent,
+		Entity*, const sf::Texture&>(this, _data->assets.GetTexture("player anim"));
+
+	this->addComponent<MovementComponent, 
+		Entity*, MovementSettings>(this, { 250.f, 20.f, 10.f });
+
+	this->addComponent<AnimationComponent,
+		Entity*, SpriteComponent&>(this, this->getComponent<SpriteComponent>());
+
+	this->addComponent<HitboxComponent, 
+		Entity*, HitboxSettings>(this, { { 0.f, 0.f }, { 64.f, 128.f } });
 	
 	// adding animation
 	auto& animation = this->getComponent<Engine::AnimationComponent>();
@@ -29,6 +36,7 @@ Player::~Player()
 void Player::update(float deltaTime)
 {
 	using namespace Engine;
+
 	// auto variables for quick access
 	auto& movement = this->getComponent<MovementComponent>();
 	auto& animation = this->getComponent<AnimationComponent>();
@@ -52,7 +60,7 @@ void Player::update(float deltaTime)
 	}
 	
 	// playing animation based on movement
-	switch (this->getComponent<Engine::MovementComponent>().getState())
+	switch (this->getComponent<MovementComponent>().getState())
 	{
 	case MovementState::IDLE:
 		animation.update("idle", deltaTime);

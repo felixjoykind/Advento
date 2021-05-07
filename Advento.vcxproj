@@ -151,6 +151,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ecs\components\PositionComponent.cpp" />
+    <ClCompile Include="src\engine\ecs\components\SpriteComponent.cpp" />
+    <ClCompile Include="src\states\GenerationState.cpp" />
     <ClCompile Include="src\engine\generator\MapGenerator.cpp" />
     <ClCompile Include="src\engine\ui\DebugInfo.cpp" />
     <ClCompile Include="src\engine\ecs\EntitiesManager.cpp" />
@@ -171,6 +174,9 @@
     <ClCompile Include="src\engine\tiles\Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ecs\components\PositionComponent.h" />
+    <ClInclude Include="src\engine\ecs\components\SpriteComponent.h" />
+    <ClInclude Include="src\states\GenerationState.h" />
     <ClInclude Include="src\engine\generator\MapGenerator.h" />
     <ClInclude Include="src\engine\Random.h" />
     <ClInclude Include="src\engine\ui\DebugInfo.h" />

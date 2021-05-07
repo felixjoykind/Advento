@@ -1,4 +1,7 @@
 #include "MovementComponent.h"
+
+#include "PositionComponent.h"
+#include "SpriteComponent.h"
 #include "engine/Physics.h"
 
 namespace Engine
@@ -67,7 +70,6 @@ namespace Engine
 		}
 
 		// moving entity
-		this->_entity->getSpr().move(this->getVelocity() * deltaTime);
+		this->_entity->getComponent<PositionComponent>().move(this->getVelocity() * deltaTime);
 	}
-
 }
