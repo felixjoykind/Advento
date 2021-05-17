@@ -1,5 +1,6 @@
 #pragma once
 
+#include "UIElement.h"
 #include "engine/ecs/ECS.h"
 #include "engine/tiles/TileMap.h"
 
@@ -13,10 +14,10 @@ namespace Engine
 
 	// Debug info panel (like in Minecraft)
 	class DebugInfo
+		: public UI::UIElement
 	{
 	private:
 		// data
-		GameDataRef _data;
 		DebugData _debugData;
 		bool _active;
 
@@ -34,8 +35,8 @@ namespace Engine
 		void setActive(bool value);
 
 		// basic functions
-		void update(float deltaTime);
-		void render(sf::RenderTarget& target) const;
+		void update(float deltaTime) override;
+		void render() const override;
 
 	};
 }

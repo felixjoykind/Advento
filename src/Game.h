@@ -39,7 +39,7 @@ public:
 	Game();
 	~Game();
 
-	void run();
+	void Run();
 
 };
 

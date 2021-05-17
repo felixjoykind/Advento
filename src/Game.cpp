@@ -1,7 +1,12 @@
 #include "Game.h"
-#include <fstream>
 
+#include <fstream>
+#include <filesystem>
 #include "states/MainMenuState.h"
+
+// config files paths
+#define WINDOW_CFG_FULL_FILEPATH "C:\\Users\\User\\AppData\\Roaming\\.advento\\cfg\\window_cfg.ini"
+#define WINDOW_CFG_DIR_FILEPATH "C:\\Users\\User\\AppData\\Roaming\\.advento\\cfg" // directories path (for creating)
 
 Game::Game()
 {
@@ -28,7 +33,7 @@ Game::Game()
 Game::~Game()
 { }
 
-void Game::run()
+void Game::Run()
 {
 	this->_deltaClock.restart();
 	this->_fpsClock.restart();
@@ -44,17 +49,17 @@ void Game::run()
 	}
 }
 
-
 void Game::read_cfg()
 {
 	std::fstream cfg_file;
-	cfg_file.open("./window_cfg.ini", std::fstream::in | std::fstream::out | std::fstream::app);
+	std::filesystem::create_directories(WINDOW_CFG_DIR_FILEPATH); // creating directories
+	cfg_file.open(WINDOW_CFG_FULL_FILEPATH, std::fstream::in | std::fstream::out | std::fstream::app);
 	if (cfg_file.peek() == std::fstream::traits_type::eof()) // if file doesn't exist
 	{
 		// creating cfg file and writing default values
 		cfg_file.seekg(0, std::fstream::beg); // going to beginning
 		cfg_file << "Advento" << std::endl;
-		cfg_file << 1920 << " " << 1080;
+		cfg_file << 1920 << " " << 1080 << std::endl;
 		cfg_file << 1;
 	}
 

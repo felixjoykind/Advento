@@ -1,29 +1,22 @@
 Game
 	Map editor
-		- saving
-		- loading
-	- items and stuff
-	- inventory system
-	 Textures
-		- tiles
-		- items
-		- gui
 UI
 	Pause Menu
-		- remake
+		- redesign
 	Menu
-		- remake
-		- Background image
-		- Title
+		- redesign
+			- Background image
+			- Title
 	Settings
 		- Settings system
 			Sets
 				- screen settings
 					- size
 					- type
-				- fps
+					- fps
 			- saving
 			- loading
-		- Buttons
-		- Other ui elements
-	Generation state !!!
+	 UI - text box !!!!!!!!!!
+
+Other notes
+	- delete all states when adding GameState

@@ -5,7 +5,7 @@
 namespace Engine
 {
 	DebugInfo::DebugInfo(GameDataRef data, DebugData debugData)
-		:_data(data), _debugData(debugData), _active(false)
+		:UIElement(data, {}, {}), _debugData(debugData), _active(false)
 	{
 		// quick acess variables
 		auto& entity_pos = this->_debugData._trackEntity.getComponent<PositionComponent>();
@@ -76,9 +76,9 @@ namespace Engine
 		);
 	}
 
-	void DebugInfo::render(sf::RenderTarget& target) const
+	void DebugInfo::render() const
 	{
 		for (const auto& [name, t] : _texts)
-			target.draw(*t);
+			this->_data->window.draw(*t);
 	}
 }

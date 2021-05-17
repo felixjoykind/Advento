@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-	const EntitiesVector& EntityManager::getEntities() const
+	const EntityVector& EntityManager::getEntities() const
 	{
 		return this->_entities;
 	}

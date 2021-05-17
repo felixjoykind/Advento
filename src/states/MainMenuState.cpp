@@ -15,10 +15,10 @@ void MainMenuState::Init()
 {
 	// init buttons
 	this->_buttons["PLAY"] = new UI::Button(_data, 
-		{ float(_data->winConfig.width / 2 - 125), float(_data->winConfig.height / 2 - 150) }, { 250.f, 60.f }, // position and size
+		{ float(_data->winConfig.width / 2 - 125), float(_data->winConfig.height / 2 - 100) }, { 250.f, 60.f }, // position and size
 		sf::Color(141, 153, 174, 0), sf::Color(141, 153, 174, 0), sf::Color(141, 153, 174, 0), // background colors
 		sf::Color(255, 255, 255, 180), sf::Color(255, 255, 255), sf::Color(255, 255, 255, 100), // text colors
-		sf::Text("New Game", _data->assets.GetFont("menu font"), 46)); // content and font
+		sf::Text("Play", _data->assets.GetFont("menu font"), 46)); // content and font
 
 	this->_buttons["SETTINGS"] = new UI::Button(_data,
 		{ float(_data->winConfig.width / 2 - 125), float(_data->winConfig.height - 370) }, { 250.f, 60.f },
@@ -53,7 +53,7 @@ void MainMenuState::Update(float deltaTime)
 	}
 	if (_buttons["PLAY"]->isPressed(sf::Mouse::Left))
 	{
-		_data->states.AddState(StateRef(new GameState(_data)), true); // start game
+		_data->states.AddState(StateRef(new SavesState(_data)), false); // start game
 	}
 	
 	// updating all buttons

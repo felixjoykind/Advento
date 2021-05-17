@@ -5,20 +5,20 @@
 
 namespace Engine
 {
-	using EntitiesVector = std::vector<std::unique_ptr<Entity>>;
+	using EntityVector = std::vector<std::unique_ptr<Entity>>;
 
 	class EntityManager
 	{
 	private:
 		GameDataRef _data;
-		EntitiesVector _entities;
+		EntityVector _entities;
 
 	public:
 		EntityManager(GameDataRef data) :_data(data) { }
 		~EntityManager() { }
 
 		// getters
-		const EntitiesVector& getEntities() const;
+		const EntityVector& getEntities() const;
 
 		// setters
 		template<class T, class... TArgs>

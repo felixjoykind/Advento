@@ -1,18 +1,16 @@
 #pragma once
 
-#include "Game.h"
+#include "UIELement.h"
 
 enum class ButtonState { BTN_IDLE = 0, BTN_HOVER, BTN_CLICK };
 
 namespace UI
 {
 	class Button
+		: public UIElement
 	{
 	private:
-		GameDataRef _data;
-
 		// button components
-		sf::RectangleShape* _background;
 		sf::Text* _content;
 
 		// button colors
@@ -37,8 +35,8 @@ namespace UI
 		// Getters
 		bool isPressed(sf::Mouse::Button button) const;
 
-		void update(float deltaTime);
-		void render() const;
+		void update(float deltaTime) override;
+		void render() const override;
 
 	};
 }

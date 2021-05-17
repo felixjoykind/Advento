@@ -30,9 +30,6 @@ namespace Engine
 
 	void Entity::render() const
 	{
-		// drawing sprite
-		//_data->window.draw(*this->_spr);
-
 		// rendering components
 		for (const auto& c : _components)
 			c->render(_data->window);

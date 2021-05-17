@@ -22,7 +22,6 @@ namespace Engine
 
 	public:
 		static char** Generate(GenerationSettings s);
-		
 	};
 }
 

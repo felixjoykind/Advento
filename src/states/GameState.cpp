@@ -1,16 +1,31 @@
 #include "GameState.h"
 
 #include "entities/Player.h"
-#include <iostream>
+#include <fstream>
+#include "engine/defenitions/PATH_DEFENTITIONS.h"
 
 GameState::GameState(GameDataRef data)
 	:_data(data), _paused(false),
 	_manager(new Engine::EntityManager(_data)),
 	_player(_manager->createEntity<Player, sf::Vector2f>({ 0.f, 0.f })),
 	_camera(sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) })),
-	_map(new Engine::TileMap(_data, _player, 256, 256)),
-	_pauseMenu(new PauseMenu(_data)), _debugInfo(new Engine::DebugInfo(_data, { _player, *_map }))
+	_pauseMenu(new PauseMenu(_data))
 {
+	// loading map (test) REMOVE LATER!!!
+	/*std::fstream file;
+	nlohmann::json j{};
+	file.open("test_world.wrld", std::fstream::in | std::fstream::out);
+	if (file.is_open())
+	{
+		file >> j;
+	}
+	file.close();*/
+
+	this->_map = new Engine::TileMap(this->_data, 256, 256);
+	this->_map->load_from(GAME_DIR + std::string("\\test_world"));
+
+	this->_debugInfo = new Engine::DebugInfo(_data, { _player, *_map });
+
 	// setting player position to the center of the map
 	this->_player.getComponent<Engine::PositionComponent>().setPosition(
 		float(_map->getSize().x / 2 * 128),
@@ -35,7 +50,7 @@ void GameState::Init()
 	this->_camera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
 
 	// creating/generating map
-	this->_map->generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
+	//this->_map->generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
 }
 
 void GameState::HandleInput()
@@ -123,7 +138,7 @@ void GameState::Render() const
 	_data->window.setView(_camera);
 
 	// map
-	this->_map->render();
+	this->_map->render(this->_player);
 
 	// rendering player
 	this->_player.render();
@@ -140,7 +155,7 @@ void GameState::Render() const
 	if (this->_debugInfo->isActive())
 	{
 		// rednering debug information
-		this->_debugInfo->render(_data->window);
+		this->_debugInfo->render();
 	}
 
 	_data->window.display();
