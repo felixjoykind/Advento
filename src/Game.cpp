@@ -3,10 +3,7 @@
 #include <fstream>
 #include <filesystem>
 #include "states/MainMenuState.h"
-
-// config files paths
-#define WINDOW_CFG_FULL_FILEPATH "C:\\Users\\User\\AppData\\Roaming\\.advento\\cfg\\window_cfg.ini"
-#define WINDOW_CFG_DIR_FILEPATH "C:\\Users\\User\\AppData\\Roaming\\.advento\\cfg" // directories path (for creating)
+#include "engine/defenitions/PATH_DEFENTITIONS.h"
 
 Game::Game()
 {
@@ -18,13 +15,17 @@ Game::Game()
 	this->_data->assets.AddTexture("player", "./assets/sprites/player/player.png");
 	this->_data->assets.AddTexture("grass tile", "./assets/sprites/tiles/grass.png");
 	this->_data->assets.AddTexture("water tile", "./assets/sprites/tiles/ocean.png");
+	this->_data->assets.AddTexture("main menu background", "./assets/sprites/menus and panels/main menu/background.png");
+	this->_data->assets.AddTexture("saves menu background", "./assets/sprites/menus and panels/saves menu/background.jpg");
 
 	// loading animations
 	this->_data->assets.AddTexture("player anim", "./assets/sprites/player/player_anim.png");
 
 	// loading fonts
 	this->_data->assets.AddFont("menu font", "./assets/fonts/Jura-Regular.ttf");
+	this->_data->assets.AddFont("menu title font", "./assets/fonts/Comfortaa-Light.ttf");
 
+	// starting game with main menu state
 	this->_data->states.AddState(StateRef(new MainMenuState(this->_data)), false);
 
 	this->_data->window.setFramerateLimit(60);
@@ -51,9 +52,11 @@ void Game::Run()
 
 void Game::read_cfg()
 {
+	if (!std::filesystem::exists(std::filesystem::path(CFG_DIR)))
+		std::filesystem::create_directories(CFG_DIR); // creating directories
+
 	std::fstream cfg_file;
-	std::filesystem::create_directories(WINDOW_CFG_DIR_FILEPATH); // creating directories
-	cfg_file.open(WINDOW_CFG_FULL_FILEPATH, std::fstream::in | std::fstream::out | std::fstream::app);
+	cfg_file.open(WINDOW_CFG_FILEPATH, std::fstream::in | std::fstream::out | std::fstream::app);
 	if (cfg_file.peek() == std::fstream::traits_type::eof()) // if file doesn't exist
 	{
 		// creating cfg file and writing default values

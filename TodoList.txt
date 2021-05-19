@@ -3,10 +3,6 @@ Game
 UI
 	Pause Menu
 		- redesign
-	Menu
-		- redesign
-			- Background image
-			- Title
 	Settings
 		- Settings system
 			Sets

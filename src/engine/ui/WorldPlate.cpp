@@ -24,14 +24,28 @@ namespace UI
 
 	void WorldPlate::update(float deltaTime)
 	{
-		if (InputManager::isElementHovered(*this, this->_data->window))
+		// choosing plate state (hovered / selected)
+		if (!_selected)
 		{
-			this->_shape->setOutlineThickness(5.f);
+			if (InputManager::isElementPressed(*this, this->_data->window, sf::Mouse::Left))
+			{
+				this->_selected = true;
+				this->_shape->setOutlineColor(sf::Color::White);
+				this->_shape->setOutlineThickness(2.f);
+			}
+			else if (InputManager::isElementHovered(*this, this->_data->window))
+			{
+				this->_shape->setOutlineColor(sf::Color(190, 190, 190));
+				this->_shape->setOutlineThickness(2.f);
+			}
+			else
+			{
+				this->_shape->setOutlineThickness(0.f);
+			}
 		}
-		else
-		{
-			this->_shape->setOutlineThickness(0.f);
-		}
+		else if (InputManager::isMouseButtonPressed(sf::Mouse::Left)
+			&& !InputManager::isElementHovered(*this, this->_data->window))
+			this->_selected = false;
 	}
 
 	void WorldPlate::render() const

@@ -3,8 +3,8 @@
 #include <fstream>
 #include <filesystem>
 
-#include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/Physics.h"
+#include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/ecs/components/PositionComponent.h"
 
 namespace Engine
@@ -67,9 +67,12 @@ namespace Engine
 
 	void TileMap::save_to(const WorldSaveSettings settings) const
 	{
+		if (!std::filesystem::exists(std::filesystem::path(settings.dir_path)))
+			std::filesystem::create_directories(settings.dir_path); // creating directories
+
 		// opening wrld_info file (.json)
 		std::fstream wrld_info;
-		std::filesystem::create_directories(settings.dir_path); // creating directories
+
 		wrld_info.open(settings.dir_path + "\\world_info.json", std::fstream::app | std::fstream::out);
 		if (wrld_info.is_open())
 		{

@@ -13,7 +13,9 @@ class SavesState :
 private:
     GameDataRef _data;
 
-    //UI::Panel<>... TODO: finish (add worlds list)
+    // background
+    sf::Sprite* _background;
+
     std::vector<UI::WorldPlate*> _worlds;
     std::map<std::string, UI::Button*> _buttons; // buttons container
 

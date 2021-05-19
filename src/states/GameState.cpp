@@ -11,16 +11,6 @@ GameState::GameState(GameDataRef data)
 	_camera(sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) })),
 	_pauseMenu(new PauseMenu(_data))
 {
-	// loading map (test) REMOVE LATER!!!
-	/*std::fstream file;
-	nlohmann::json j{};
-	file.open("test_world.wrld", std::fstream::in | std::fstream::out);
-	if (file.is_open())
-	{
-		file >> j;
-	}
-	file.close();*/
-
 	this->_map = new Engine::TileMap(this->_data, 256, 256);
 	this->_map->load_from(GAME_DIR + std::string("\\test_world"));
 
@@ -48,9 +38,6 @@ void GameState::Init()
 	
 	// view
 	this->_camera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
-
-	// creating/generating map
-	//this->_map->generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
 }
 
 void GameState::HandleInput()
