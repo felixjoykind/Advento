@@ -5,7 +5,6 @@
 #include "GenerationState.h"
 #include "engine/ui/Button.h"
 #include "engine/ui/WorldPlate.h"
-//#include "engine/ui/List.h"
 
 class SavesState :
     public State
@@ -15,6 +14,10 @@ private:
 
     // background
     sf::Sprite* _background;
+
+    // keytime
+    bool _canClick = true;
+    sf::Clock _keytimeClock;
 
     std::vector<UI::WorldPlate*> _worlds;
     std::map<std::string, UI::Button*> _buttons; // buttons container

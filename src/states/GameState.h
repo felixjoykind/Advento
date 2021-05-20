@@ -30,7 +30,7 @@ private:
 	Engine::DebugInfo* _debugInfo;
 
 public:
-	GameState(GameDataRef data);
+	GameState(GameDataRef data, Engine::WorldSaveSettings world_settings);
 	~GameState();
 
 	void Init() override;

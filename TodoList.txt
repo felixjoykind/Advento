@@ -2,7 +2,7 @@ Game
 	Map editor
 UI
 	Pause Menu
-		- redesign
+		- redesign (maybe)
 	Settings
 		- Settings system
 			Sets
@@ -13,6 +13,3 @@ UI
 			- saving
 			- loading
 	 UI - text box !!!!!!!!!!
-
-Other notes
-	- delete all states when adding GameState

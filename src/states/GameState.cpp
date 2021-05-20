@@ -4,7 +4,7 @@
 #include <fstream>
 #include "engine/defenitions/PATH_DEFENTITIONS.h"
 
-GameState::GameState(GameDataRef data)
+GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 	:_data(data), _paused(false),
 	_manager(new Engine::EntityManager(_data)),
 	_player(_manager->createEntity<Player, sf::Vector2f>({ 0.f, 0.f })),
@@ -12,7 +12,7 @@ GameState::GameState(GameDataRef data)
 	_pauseMenu(new PauseMenu(_data))
 {
 	this->_map = new Engine::TileMap(this->_data, 256, 256);
-	this->_map->load_from(GAME_DIR + std::string("\\test_world"));
+	this->_map->load_from(world_settings.dir_path);
 
 	this->_debugInfo = new Engine::DebugInfo(_data, { _player, *_map });
 

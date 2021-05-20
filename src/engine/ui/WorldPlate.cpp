@@ -4,10 +4,11 @@
 
 namespace UI
 {
-	WorldPlate::WorldPlate(GameDataRef data, std::string title, 
+	WorldPlate::WorldPlate(GameDataRef data, Engine::WorldSaveSettings settings,
 		sf::Vector2f size, sf::Vector2f pos, sf::Color backgroundColor)
-		:UIElement(data, size, pos), 
-		_title(new sf::Text(title, this->_data->assets.GetFont("menu font"), 30U))
+		:UIElement(data, size, pos),
+		_title(new sf::Text(settings.name, this->_data->assets.GetFont("menu font"), 30U)),
+		_settings(settings)
 	{
 		// init title
 		this->_title->setPosition(_shape->getPosition().x + 10.f, _shape->getPosition().y + 10.f);
@@ -20,6 +21,11 @@ namespace UI
 	UI::WorldPlate::~WorldPlate()
 	{
 		delete this->_title;
+	}
+
+	Engine::WorldSaveSettings WorldPlate::getSettings() const
+	{
+		return this->_settings;
 	}
 
 	void WorldPlate::update(float deltaTime)

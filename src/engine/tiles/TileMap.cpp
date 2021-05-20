@@ -19,6 +19,10 @@ namespace Engine
 	TileMap::~TileMap()
 	{
 		// deleting all tiles
+		for (size_t i = 0; i < BASIC_WORLD_SIZE_Y; i++)
+			delete[] this->_rawMap[i];
+		delete[] this->_rawMap;
+
 		for (auto& row : this->_map)
 		{
 			for (auto& tile : row)
@@ -212,6 +216,4 @@ namespace Engine
 			}
 		}
 	}
-
-
 }

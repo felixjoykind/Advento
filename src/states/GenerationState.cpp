@@ -28,11 +28,11 @@ void GenerationState::HandleInput()
 		if (ev.type == sf::Event::KeyPressed)
 		{
 			if (ev.key.code == sf::Keyboard::Escape)
-				this->_data->states.RemoveState();
+				this->_data->states.RemoveState(); // removing current state
 
 			//	DEBUG CODE REMOVE LATER!!!
-			if (ev.key.code == sf::Keyboard::Space)
-				this->_data->states.AddState(StateRef(new GameState(this->_data)), true);
+			/*if (ev.key.code == sf::Keyboard::Space)
+				this->_data->states.AddState(StateRef(new GameState(this->_data)), true);*/
 		}
 	}
 }

@@ -4,7 +4,9 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+#include "gamedata/InputManager.h"
 #include "engine/tiles/TileMap.h"
+#include "states/GameState.h"
 #include "engine/defenitions/PATH_DEFENTITIONS.h"
 
 #define BLANK_COLOR sf::Color(0, 0, 0, 0)
@@ -39,11 +41,12 @@ void SavesState::Init()
 			info_file >> json;
 
 			// getting world name from json
-			std::string world_name;
-			json.at("name").get_to(world_name);
+			Engine::WorldSaveSettings world_settings;
+			json.at("name").get_to(world_settings.name);
+			json.at("dir_path").get_to(world_settings.dir_path);
 
 			// adding new world plate
-			this->_worlds.push_back(new UI::WorldPlate(this->_data, world_name,
+			this->_worlds.push_back(new UI::WorldPlate(this->_data, world_settings,
 				{ float(this->_data->winConfig.width / 2), 100.f },
 				{
 					float(this->_data->winConfig.width / 2 - this->_data->winConfig.width / 4) ,
@@ -55,6 +58,9 @@ void SavesState::Init()
 		info_file.close();
 		++i;
 	}
+
+	// start keytime clock
+	this->_keytimeClock.restart();
 
 	// init background
 	this->_background->setTexture(this->_data->assets.GetTexture("saves menu background"));
@@ -94,6 +100,29 @@ void SavesState::HandleInput()
 			if (ev.key.code == sf::Keyboard::Escape)
 				this->_data->states.RemoveState();
 		}
+
+		if (ev.type == sf::Event::MouseButtonPressed)
+		{
+			// checking every world plate for double click
+			for (auto& plate : this->_worlds)
+			{
+				if (InputManager::isElementPressed(*plate, _data->window, sf::Mouse::Left))
+				{
+					// if double click
+					if (this->_keytimeClock.getElapsedTime().asSeconds() < 0.5f)
+					{
+						// start game with selected world
+						this->_data->states.AddState(StateRef(new GameState(this->_data, plate->getSettings())), true);
+					}
+					else
+					{
+						// do nothing
+					}
+
+					this->_keytimeClock.restart();
+				}
+			}
+		}
 	}
 }
 
@@ -105,7 +134,7 @@ void SavesState::Update(float deltaTime)
 		map.generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
 		map.save_to({ "test_world", WORLDS_DIR + std::string("\\test_world") });
 
-		this->_data->states.AddState(StateRef(new GenerationState(this->_data)), true);
+		this->_data->states.AddState(StateRef(new GenerationState(this->_data)), false);
 	}
 
 	// updating worlds plates

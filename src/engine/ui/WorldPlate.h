@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UIElement.h"
+#include "engine/tiles/TileMap.h"
 #include <SFML/Graphics.hpp>
 
 namespace UI
@@ -11,12 +12,17 @@ namespace UI
     private:
         sf::Text* _title;
 
+        // data
+        Engine::WorldSaveSettings _settings;
         bool _selected = false;
 
     public:
-        WorldPlate(GameDataRef data, std::string title, 
+        WorldPlate(GameDataRef data, Engine::WorldSaveSettings settings, 
             sf::Vector2f size, sf::Vector2f pos, sf::Color backgroundColor);
         ~WorldPlate();
+
+        // getters
+        Engine::WorldSaveSettings getSettings() const;
 
         void update(float deltaTime) override;
         void render() const override;
