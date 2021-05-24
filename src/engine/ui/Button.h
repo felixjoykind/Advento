@@ -1,13 +1,13 @@
 #pragma once
 
-#include "UIELement.h"
+#include "engine/ui/IClickable.h"
 
 enum class ButtonState { BTN_IDLE = 0, BTN_HOVER, BTN_CLICK };
 
 namespace UI
 {
 	class Button
-		: public UIElement
+		: public UIElement, public IClickable
 	{
 	private:
 		// button components
@@ -33,7 +33,7 @@ namespace UI
 		~Button();
 
 		// Getters
-		bool isPressed(sf::Mouse::Button button) const;
+		bool isPressed(sf::Mouse::Button button);
 
 		void update(float deltaTime) override;
 		void render() const override;

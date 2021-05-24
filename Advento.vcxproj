@@ -178,6 +178,7 @@
     <ClCompile Include="src\engine\ui\WorldPlate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ui\IClickable.h" />
     <ClInclude Include="src\gamedata\InputManager.h" />
     <ClInclude Include="src\engine\defenitions\BASIC_WORLD_SETTINGS.h" />
     <ClInclude Include="src\engine\defenitions\PATH_DEFENTITIONS.h" />

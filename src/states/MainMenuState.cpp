@@ -82,7 +82,7 @@ void MainMenuState::Update(float deltaTime)
 	}
 	if (_buttons["PLAY"]->isPressed(sf::Mouse::Left))
 	{
-		_data->states.AddState(StateRef(new SavesState(_data)), false); // start game
+		_data->states.AddState(StateRef(new SavesState(_data)), true); // start game
 	}
 	
 	// updating all buttons

@@ -15,10 +15,6 @@ private:
     // background
     sf::Sprite* _background;
 
-    // keytime
-    bool _canClick = true;
-    sf::Clock _keytimeClock;
-
     std::vector<UI::WorldPlate*> _worlds;
     std::map<std::string, UI::Button*> _buttons; // buttons container
 

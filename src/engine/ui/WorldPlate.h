@@ -1,13 +1,14 @@
 #pragma once
 
-#include "UIElement.h"
-#include "engine/tiles/TileMap.h"
 #include <SFML/Graphics.hpp>
+
+#include "IClickable.h"
+#include "engine/tiles/TileMap.h"
 
 namespace UI
 {
     class WorldPlate :
-        public UIElement
+        public UIElement, public IClickable
     {
     private:
         sf::Text* _title;

@@ -1,5 +1,6 @@
 #include "SavesState.h"
 
+#include <iostream>
 #include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -59,9 +60,6 @@ void SavesState::Init()
 		++i;
 	}
 
-	// start keytime clock
-	this->_keytimeClock.restart();
-
 	// init background
 	this->_background->setTexture(this->_data->assets.GetTexture("saves menu background"));
 
@@ -106,20 +104,11 @@ void SavesState::HandleInput()
 			// checking every world plate for double click
 			for (auto& plate : this->_worlds)
 			{
-				if (InputManager::isElementPressed(*plate, _data->window, sf::Mouse::Left))
+				// if double click
+				if (plate->GetClick(this->_data->window, sf::Mouse::Left) == UI::ClickType::DOUBLE)
 				{
-					// if double click
-					if (this->_keytimeClock.getElapsedTime().asSeconds() < 0.5f)
-					{
-						// start game with selected world
-						this->_data->states.AddState(StateRef(new GameState(this->_data, plate->getSettings())), true);
-					}
-					else
-					{
-						// do nothing
-					}
-
-					this->_keytimeClock.restart();
+					// start game with selected world
+					this->_data->states.AddState(StateRef(new GameState(this->_data, plate->getSettings())), true);
 				}
 			}
 		}
@@ -130,9 +119,9 @@ void SavesState::Update(float deltaTime)
 {
 	if (this->_buttons["NEW_WORLD"]->isPressed(sf::Mouse::Button::Left))
 	{
-		Engine::TileMap map(this->_data, 256, 256);
+		/*Engine::TileMap map(this->_data, 256, 256);
 		map.generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
-		map.save_to({ "test_world", WORLDS_DIR + std::string("\\test_world") });
+		map.save_to({ "test_world", WORLDS_DIR + std::string("\\test_world") });*/
 
 		this->_data->states.AddState(StateRef(new GenerationState(this->_data)), false);
 	}

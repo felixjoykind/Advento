@@ -7,7 +7,7 @@ namespace UI
 		sf::Color back_idle, sf::Color back_hover, sf::Color back_click,
 		sf::Color text_idle, sf::Color text_hover, sf::Color text_click,
 		sf::Text content)
-		:UIElement(data, size, pos), _content(new sf::Text(content)),
+		:UIElement(data, size, pos), _content(new sf::Text(content)), IClickable(this, 0.2f),
 		idle_color(back_idle), hover_color(back_hover), click_color(back_click),
 		text_idle(text_idle), text_hover(text_hover), text_click(text_click)
 	{
@@ -29,10 +29,11 @@ namespace UI
 		delete this->_content;
 	}
 
-	bool Button::isPressed(sf::Mouse::Button button) const
+	bool Button::isPressed(sf::Mouse::Button button)
 	{
-		return this->_shape->getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(_data->window)))
-			&& sf::Mouse::isButtonPressed(button);
+		return this->GetClick(this->_data->window, button) == ClickType::SINGLE;
+		/*return this->_shape->getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(_data->window)))
+			&& sf::Mouse::isButtonPressed(button);*/
 	}
 
 	void Button::update(float deltaTime)

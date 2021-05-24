@@ -105,7 +105,7 @@ void GameState::Update(float deltaTime)
 	// updating player
 	this->_player.update(deltaTime);
 
-	// updating camera
+	// updating camera (moving with player)
 	this->_camera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
 
 	// updating map
