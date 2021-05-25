@@ -29,5 +29,8 @@ namespace UI
 		virtual void update(float deltaTime) { }
 		virtual void render() const { };
 
+		friend class IClickable;
+		friend class ISelectable;
+
 	};
 }

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include "Game.h"
+#include "elements/UIElement.h"
 #include "gamedata/InputManager.h"
 
 namespace UI
@@ -14,9 +13,7 @@ namespace UI
 		UIElement* _element;
 
 	protected:
-
 		float _keyTime;
-
 		sf::Clock _keytimeClock;
 
 	public:
@@ -30,7 +27,7 @@ namespace UI
 
 		ClickType GetClick(const sf::Window& window, sf::Mouse::Button button)
 		{
-			if (InputManager::isElementPressed(*_element, window, button))
+			if (InputManager::isElementPressed(_element, window, button))
 			{
 				// if double click
 				if (this->_keytimeClock.getElapsedTime().asSeconds() < this->_keyTime)

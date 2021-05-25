@@ -32,8 +32,6 @@ namespace UI
 	bool Button::isPressed(sf::Mouse::Button button)
 	{
 		return this->GetClick(this->_data->window, button) == ClickType::SINGLE;
-		/*return this->_shape->getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(_data->window)))
-			&& sf::Mouse::isButtonPressed(button);*/
 	}
 
 	void Button::update(float deltaTime)
@@ -41,7 +39,7 @@ namespace UI
 		this->_state = ButtonState::BTN_IDLE;;
 
 		// if button is hovered
-		if (this->_shape->getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(_data->window))))
+		if (InputManager::isElementHovered(this, this->_data->window))
 		{
 			this->_state = ButtonState::BTN_HOVER;
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))

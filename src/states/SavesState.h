@@ -3,8 +3,8 @@
 #include "State.h"
 #include "MainMenuState.h"
 #include "GenerationState.h"
-#include "engine/ui/Button.h"
-#include "engine/ui/WorldPlate.h"
+#include "engine/ui/elements/Button.h"
+#include "engine/ui/elements/WorldPlate.h"
 
 class SavesState :
     public State

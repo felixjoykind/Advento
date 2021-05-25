@@ -151,7 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\ui\UIElement.cpp" />
+    <ClCompile Include="src\engine\ui\elements\UIElement.cpp" />
     <ClCompile Include="src\gamedata\InputManager.cpp" />
     <ClCompile Include="src\states\SavesState.cpp" />
     <ClCompile Include="src\engine\ecs\components\PositionComponent.cpp" />
@@ -165,7 +165,7 @@
     <ClCompile Include="src\engine\ecs\components\AnimationComponent.cpp" />
     <ClCompile Include="src\entities\Player.cpp" />
     <ClCompile Include="src\engine\ecs\components\MovementComponent.cpp" />
-    <ClCompile Include="src\engine\ui\Button.cpp" />
+    <ClCompile Include="src\engine\ui\elements\Button.cpp" />
     <ClCompile Include="src\states\MainMenuState.cpp" />
     <ClCompile Include="src\gamedata\AssetManager.cpp" />
     <ClCompile Include="src\engine\ecs\Entity.cpp" />
@@ -175,10 +175,12 @@
     <ClCompile Include="src\gamedata\StateMachine.cpp" />
     <ClCompile Include="src\engine\tiles\TileMap.cpp" />
     <ClCompile Include="src\engine\tiles\Tile.cpp" />
-    <ClCompile Include="src\engine\ui\WorldPlate.cpp" />
+    <ClCompile Include="src\engine\ui\elements\WorldPlate.cpp" />
+    <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\ui\IClickable.h" />
+    <ClInclude Include="src\engine\ui\ISelectable.h" />
     <ClInclude Include="src\gamedata\InputManager.h" />
     <ClInclude Include="src\engine\defenitions\BASIC_WORLD_SETTINGS.h" />
     <ClInclude Include="src\engine\defenitions\PATH_DEFENTITIONS.h" />
@@ -199,7 +201,7 @@
     <ClInclude Include="src\engine\Physics.h" />
     <ClInclude Include="src\engine\ecs\components\MovementComponent.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\engine\ui\Button.h" />
+    <ClInclude Include="src\engine\ui\elements\Button.h" />
     <ClInclude Include="src\states\MainMenuState.h" />
     <ClInclude Include="src\gamedata\AssetManager.h" />
     <ClInclude Include="src\engine\ecs\Entity.h" />
@@ -209,8 +211,9 @@
     <ClInclude Include="src\states\State.h" />
     <ClInclude Include="src\engine\tiles\TileMap.h" />
     <ClInclude Include="src\engine\tiles\Tile.h" />
-    <ClInclude Include="src\engine\ui\UIElement.h" />
-    <ClInclude Include="src\engine\ui\WorldPlate.h" />
+    <ClInclude Include="src\engine\ui\elements\UIElement.h" />
+    <ClInclude Include="src\engine\ui\elements\WorldPlate.h" />
+    <ClInclude Include="src\engine\ui\elements\Textbox.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TodoList.txt" />

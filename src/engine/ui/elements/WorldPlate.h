@@ -1,21 +1,19 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-#include "IClickable.h"
+#include "engine/ui/IClickable.h"
+#include "engine/ui/ISelectable.h"
 #include "engine/tiles/TileMap.h"
 
 namespace UI
 {
     class WorldPlate :
-        public UIElement, public IClickable
+        public UIElement, public IClickable, public ISelectable
     {
     private:
         sf::Text* _title;
 
         // data
         Engine::WorldSaveSettings _settings;
-        bool _selected = false;
 
     public:
         WorldPlate(GameDataRef data, Engine::WorldSaveSettings settings, 

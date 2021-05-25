@@ -36,7 +36,7 @@
     <ClCompile Include="src\states\MainMenuState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\ui\Button.cpp">
+    <ClCompile Include="src\engine\ui\elements\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\ecs\components\MovementComponent.cpp">
@@ -81,13 +81,16 @@
     <ClCompile Include="src\states\SavesState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\ui\WorldPlate.cpp">
+    <ClCompile Include="src\engine\ui\elements\WorldPlate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gamedata\InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\ui\UIElement.cpp">
+    <ClCompile Include="src\engine\ui\elements\UIElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ui\elements\Textbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,7 +116,7 @@
     <ClInclude Include="src\states\MainMenuState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ui\Button.h">
+    <ClInclude Include="src\engine\ui\elements\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -170,7 +173,7 @@
     <ClInclude Include="src\states\SavesState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ui\UIElement.h">
+    <ClInclude Include="src\engine\ui\elements\UIElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ui\List.h">
@@ -182,13 +185,19 @@
     <ClInclude Include="src\engine\defenitions\BASIC_WORLD_SETTINGS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ui\WorldPlate.h">
+    <ClInclude Include="src\engine\ui\elements\WorldPlate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gamedata\InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ui\IClickable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\elements\Textbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\ISelectable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
