@@ -25,6 +25,12 @@ namespace UI
 			return *this->_shape;
 		}
 
+		// setters
+		void setBackgroundColor(const sf::Color& color)
+		{
+			this->_shape->setFillColor(color);
+		}
+
 		// basic functions
 		virtual void update(float deltaTime) { }
 		virtual void render() const { };

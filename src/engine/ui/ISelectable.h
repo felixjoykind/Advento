@@ -6,6 +6,7 @@ namespace UI
 {
 	enum class SelectionType { NONE = 0, HOVERED, SELECTED };
 
+	// Provides selection logic
 	class ISelectable
 	{
 	private:

@@ -3,7 +3,7 @@
 #include "GameState.h"
 
 GenerationState::GenerationState(GameDataRef data)
-	:_data(data)
+	:_data(data), _seedTextBox(new UI::Textbox(this->_data, { 100.f, 100.f }, { 400.f, 60.f }))
 {
 }
 
@@ -13,6 +13,7 @@ GenerationState::~GenerationState()
 
 void GenerationState::Init()
 {
+	// init textbox
 }
 
 void GenerationState::HandleInput()
@@ -27,26 +28,28 @@ void GenerationState::HandleInput()
 		// if key pressed
 		if (ev.type == sf::Event::KeyPressed)
 		{
+			// exit
 			if (ev.key.code == sf::Keyboard::Escape)
 				this->_data->states.RemoveState(); // removing current state
-
-			//	DEBUG CODE REMOVE LATER!!!
-			/*if (ev.key.code == sf::Keyboard::Space)
-				this->_data->states.AddState(StateRef(new GameState(this->_data)), true);*/
 		}
+
+		// textbox input handleing
+		this->_seedTextBox->handleInput(ev);
 	}
 }
 
 void GenerationState::Update(float deltaTime)
 {
-	// TODO: delete all states when adding game state
-
-	// update
+	// update textbox
+	this->_seedTextBox->update(deltaTime);
 }
 
 void GenerationState::Render() const
 {
-	this->_data->window.clear();
+	this->_data->window.clear(sf::Color(115, 115, 115));
+
+	// render textbox
+	this->_seedTextBox->render();
 
 	this->_data->window.display();
 }
