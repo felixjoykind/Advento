@@ -22,6 +22,7 @@ namespace UI
 
 		// setters
 		void setMaxCharacters(unsigned int maxCharacters);
+		void setString(const std::string content);
 
 		void handleInput(const sf::Event ev);
 

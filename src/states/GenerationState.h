@@ -13,7 +13,8 @@ private:
     GameDataRef _data;
 
     // ui
-    UI::Textbox* _seedTextBox;
+    std::map<std::string, UI::Textbox*> _textboxes;
+    //UI::Textbox* _seedTextBox;
 
 public:
     GenerationState(GameDataRef data);

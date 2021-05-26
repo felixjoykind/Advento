@@ -39,6 +39,12 @@ namespace UI
 		this->_maxCharacters = maxCharacters;
 	}
 
+	void Textbox::setString(const std::string content)
+	{
+		this->_content = content;
+		this->_text->setString(content);
+	}
+
 	void Textbox::handleInput(const sf::Event ev)
 	{
 		if (ev.type == sf::Event::TextEntered)
@@ -56,14 +62,6 @@ namespace UI
 						this->_content += ev.text.unicode;
 				}
 				this->_text->setString(this->_content);
-
-				// update cursor position
-				this->_cursor->setPosition(
-					{
-						this->_text->getPosition().x + this->_text->getGlobalBounds().width + 3.f,
-						this->_text->getPosition().y
-					}
-				);
 			}
 		}
 	}
@@ -88,6 +86,14 @@ namespace UI
 			this->_shape->setOutlineThickness(2.f);
 			break;
 		}
+
+		// update cursor position
+		this->_cursor->setPosition(
+			{
+				this->_text->getPosition().x + this->_text->getGlobalBounds().width + 3.f,
+				this->_text->getPosition().y
+			}
+		);
 	}
 
 	void Textbox::render() const

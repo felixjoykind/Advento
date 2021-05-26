@@ -5,6 +5,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+#include "MainMenuState.h"
 #include "gamedata/InputManager.h"
 #include "engine/tiles/TileMap.h"
 #include "states/GameState.h"
@@ -96,7 +97,7 @@ void SavesState::HandleInput()
 		if (ev.type == sf::Event::KeyPressed)
 		{
 			if (ev.key.code == sf::Keyboard::Escape)
-				this->_data->states.RemoveState();
+				this->_data->states.AddState(StateRef(new MainMenuState(this->_data)), true);
 		}
 
 		if (ev.type == sf::Event::MouseButtonPressed)
