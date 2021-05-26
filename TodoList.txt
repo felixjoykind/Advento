@@ -13,3 +13,6 @@ UI
 			- saving
 			- loading
 	 UI - text box !!!!!!!!!!
+
+notes:
+	separate shape changing from UI::ISelectable

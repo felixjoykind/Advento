@@ -30,8 +30,24 @@ namespace UI
 
 	void WorldPlate::update(float deltaTime)
 	{
-		// selecting logic
+		// update selection
 		ISelectable::update(deltaTime, this->_data->window);
+
+		// change plate based on selection type
+		switch (ISelectable::getSelectionType())
+		{
+		case SelectionType::NONE:
+			this->_shape->setOutlineThickness(0.f);
+			break;
+		case SelectionType::HOVERED:
+			this->_shape->setOutlineColor(sf::Color(190, 190, 190));
+			this->_shape->setOutlineThickness(2.f);
+			break;
+		case SelectionType::SELECTED:
+			this->_shape->setOutlineColor(sf::Color::White);
+			this->_shape->setOutlineThickness(2.f);
+			break;
+		}
 	}
 
 	void WorldPlate::render() const
