@@ -1,9 +1,11 @@
 #include "MainMenuState.h"
 
+#include "engine/helper/SpriteManipulator.h"
+
 MainMenuState::MainMenuState(GameDataRef data)
 	:_data(data), 
 	_title(new sf::Text("Advento.", this->_data->assets.GetFont("menu title font"), 60U)),
-	_background(new sf::Sprite())
+	_background(new sf::Sprite(this->_data->assets.GetTexture("main menu background")))
 {
 }
 
@@ -27,20 +29,10 @@ void MainMenuState::Init()
 		float(this->_data->winConfig.width - _title->getGlobalBounds().width * 2),
 		float(this->_data->winConfig.height / 2 - _title->getGlobalBounds().height / 2),
 	});
-
-	// init background
-	this->_background->setTexture(this->_data->assets.GetTexture("main menu background"));
 	
 	// stretching background image to window size
-	sf::Vector2f target_background_size
-	{
-		float(this->_data->winConfig.width),
-		float(this->_data->winConfig.height),
-	};
-	this->_background->setScale(
-		target_background_size.x / this->_background->getLocalBounds().width,
-		target_background_size.y / this->_background->getLocalBounds().height
-	);
+	SpriteManipulator::Stretch(this->_background, 
+		{ float(this->_data->winConfig.width), float(this->_data->winConfig.height) });
 
 	// init buttons
 	this->_buttons["PLAY"] = new UI::Button(_data, 

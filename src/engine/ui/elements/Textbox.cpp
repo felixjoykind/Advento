@@ -34,6 +34,11 @@ namespace UI
 		delete this->_cursor;
 	}
 
+	std::string Textbox::getString() const
+	{
+		return this->_content;
+	}
+
 	void Textbox::setMaxCharacters(unsigned int maxCharacters)
 	{
 		this->_maxCharacters = maxCharacters;

@@ -29,5 +29,9 @@ public:
     void Update(float deltaTime) override;
     void Render() const override;
 
+    void RefreshWorldsList();
+
+    void Resume() override;
+
 };
 

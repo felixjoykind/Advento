@@ -40,7 +40,7 @@ namespace Engine
 		{
 			for (int y = 0; y < s.height; y++)
 			{
-				map[x][y] = Random::Float() < s.initChance ? 'g' : '.';
+				map[x][y] = Random::Float() < s.initChance ? '.' : 'g';
 			}
 		}
 

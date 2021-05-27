@@ -4,6 +4,7 @@
 #include "State.h"
 
 #include "engine/ui/elements/Textbox.h"
+#include "engine/ui/elements/Button.h"
 
 // State for choosing world generation settings
 class GenerationState :
@@ -12,9 +13,13 @@ class GenerationState :
 private:
     GameDataRef _data;
 
-    // ui
-    std::map<std::string, UI::Textbox*> _textboxes;
-    //UI::Textbox* _seedTextBox;
+    // background
+    sf::Sprite* _background;
+
+    // ui elements
+    std::map<std::string, UI::Textbox*> _textboxes; // textboxes
+    std::map<std::string, UI::Button*> _buttons; // buttons
+    std::map<std::string, sf::Text*> _titles; // titles
 
 public:
     GenerationState(GameDataRef data);

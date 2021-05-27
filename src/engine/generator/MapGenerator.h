@@ -7,8 +7,8 @@ namespace Engine
 	struct GenerationSettings
 	{
 		std::string seed;
-		unsigned int width; 
-		unsigned int height; 
+		unsigned int width;
+		unsigned int height;
 		float initChance; 
 		int birthLimit;
 		int deathLimit; 

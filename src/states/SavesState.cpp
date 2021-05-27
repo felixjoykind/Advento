@@ -1,20 +1,22 @@
 #include "SavesState.h"
 
-#include <iostream>
-#include <filesystem>
 #include <fstream>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 
-#include "MainMenuState.h"
-#include "gamedata/InputManager.h"
-#include "engine/tiles/TileMap.h"
-#include "states/GameState.h"
 #include "engine/defenitions/PATH_DEFENTITIONS.h"
+#include "engine/defenitions/COLORS.h"
 
-#define BLANK_COLOR sf::Color(0, 0, 0, 0)
+#include "gamedata/InputManager.h"
+#include "engine/helper/SpriteManipulator.h"
+
+#include "engine/tiles/TileMap.h"
+
+#include "MainMenuState.h"
+#include "states/GameState.h"
 
 SavesState::SavesState(GameDataRef data)
-	:_data(data), _background(new sf::Sprite())
+	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background")))
 {
 }
 
@@ -30,50 +32,15 @@ void SavesState::Init()
 	{
 		std::filesystem::create_directories(WORLDS_DIR); // creating directories
 	}
-
-	// load worlds
-	unsigned int i = 0;
-	for (const auto& entry : fs::directory_iterator(WORLDS_DIR))
+	else
 	{
-		nlohmann::json json{};
-		std::fstream info_file;
-		info_file.open(entry.path().string() + "\\world_info.json", std::fstream::in); // world info file
-		if (info_file.is_open())
-		{
-			info_file >> json;
-
-			// getting world name from json
-			Engine::WorldSaveSettings world_settings;
-			json.at("name").get_to(world_settings.name);
-			json.at("dir_path").get_to(world_settings.dir_path);
-
-			// adding new world plate
-			this->_worlds.push_back(new UI::WorldPlate(this->_data, world_settings,
-				{ float(this->_data->winConfig.width / 2), 100.f },
-				{
-					float(this->_data->winConfig.width / 2 - this->_data->winConfig.width / 4) ,
-					float(i * 100.f + 20.f)
-				},
-				sf::Color(70, 63, 58)
-			));
-		}
-		info_file.close();
-		++i;
+		// load worlds
+		this->RefreshWorldsList();
 	}
 
-	// init background
-	this->_background->setTexture(this->_data->assets.GetTexture("saves menu background"));
-
 	// stretching background image to window size
-	sf::Vector2f target_background_size
-	{
-		float(this->_data->winConfig.width),
-		float(this->_data->winConfig.height),
-	};
-	this->_background->setScale(
-		target_background_size.x / this->_background->getLocalBounds().width,
-		target_background_size.y / this->_background->getLocalBounds().height
-	);
+	SpriteManipulator::Stretch(this->_background,
+		{ float(this->_data->winConfig.width), float(this->_data->winConfig.height) });
 
 	// init buttons
 	this->_buttons["NEW_WORLD"] = new UI::Button(
@@ -120,10 +87,6 @@ void SavesState::Update(float deltaTime)
 {
 	if (this->_buttons["NEW_WORLD"]->isPressed(sf::Mouse::Button::Left))
 	{
-		/*Engine::TileMap map(this->_data, 256, 256);
-		map.generate({ "test_seed", 256, 256, 0.4f, 4, 3, 5 });
-		map.save_to({ "test_world", WORLDS_DIR + std::string("\\test_world") });*/
-
 		this->_data->states.AddState(StateRef(new GenerationState(this->_data)), false);
 	}
 
@@ -152,4 +115,44 @@ void SavesState::Render() const
 		button->render();
 
 	this->_data->window.display();
+}
+
+void SavesState::RefreshWorldsList()
+{
+	this->_worlds.clear();
+	namespace fs = std::filesystem;
+	unsigned int i = 0;
+	for (const auto& entry : fs::directory_iterator(WORLDS_DIR))
+	{
+		nlohmann::json json{};
+		std::fstream info_file;
+		info_file.open(entry.path().string() + "\\world_info.json", std::fstream::in); // world info file
+		if (info_file.is_open())
+		{
+			info_file >> json;
+
+			// getting world name from json
+			Engine::WorldSaveSettings world_settings;
+			json.at("name").get_to(world_settings.name);
+			json.at("dir_path").get_to(world_settings.dir_path);
+
+			// adding new world plate
+			this->_worlds.push_back(new UI::WorldPlate(this->_data, world_settings,
+				{ float(this->_data->winConfig.width / 2), 100.f },
+				{
+					float(this->_data->winConfig.width / 2 - this->_data->winConfig.width / 4),
+					float(i * 110.f + 20.f)
+				},
+				sf::Color(70, 63, 58)
+			));
+		}
+		info_file.close();
+		++i;
+	}
+}
+
+void SavesState::Resume()
+{
+	// refresh worlds list
+	this->RefreshWorldsList();
 }

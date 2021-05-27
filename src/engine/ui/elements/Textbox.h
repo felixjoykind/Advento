@@ -20,6 +20,9 @@ namespace UI
 		Textbox(GameDataRef data, sf::Vector2f pos, sf::Vector2f size);
 		~Textbox();
 
+		// getters
+		std::string getString() const;
+
 		// setters
 		void setMaxCharacters(unsigned int maxCharacters);
 		void setString(const std::string content);
