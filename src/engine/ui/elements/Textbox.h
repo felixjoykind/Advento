@@ -22,6 +22,7 @@ namespace UI
 
 		// getters
 		std::string getString() const;
+		bool isEmpty() const;
 
 		// setters
 		void setMaxCharacters(unsigned int maxCharacters);

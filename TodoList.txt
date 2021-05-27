@@ -12,7 +12,8 @@ UI
 					- fps
 			- saving
 			- loading
-	 UI - text box !!!!!!!!!!
 
 notes:
-	separate shape changing from UI::ISelectable
+	create own message boxes
+	add scrolling logic to worlds list
+	add worlds editing

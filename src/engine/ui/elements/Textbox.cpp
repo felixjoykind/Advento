@@ -1,6 +1,7 @@
 #include "Textbox.h"
 
 #include <SFML/Graphics.hpp>
+#include <cassert>
 
 constexpr int GUI_TEXT_BACKSPACE = 8; // backspace unicode
 
@@ -39,6 +40,11 @@ namespace UI
 		return this->_content;
 	}
 
+	bool Textbox::isEmpty() const
+	{
+		return this->_content.length() == 0;
+	}
+
 	void Textbox::setMaxCharacters(unsigned int maxCharacters)
 	{
 		this->_maxCharacters = maxCharacters;
@@ -46,6 +52,9 @@ namespace UI
 
 	void Textbox::setString(const std::string content)
 	{
+		assert(content.length() <= this->_maxCharacters && 
+			"Too big string (Textbox.cpp, setString(std::string))");
+
 		this->_content = content;
 		this->_text->setString(content);
 	}

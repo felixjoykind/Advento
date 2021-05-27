@@ -1,6 +1,8 @@
 #include "GenerationState.h"
 
 #include <filesystem>
+#include <random>
+#include <windows.h>
 
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/defenitions/PATH_DEFENTITIONS.h"
@@ -11,6 +13,8 @@
 #include "engine/helper/SpriteManipulator.h"
 #include "GameState.h"
 
+namespace fs = std::filesystem;
+
 GenerationState::GenerationState(GameDataRef data)
 	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("generation menu background")))
 {
@@ -18,6 +22,19 @@ GenerationState::GenerationState(GameDataRef data)
 
 GenerationState::~GenerationState()
 {
+}
+
+std::string GenerationState::getRandomSeed(unsigned int count) const
+{
+	std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"); // all possible characters in seed
+	assert(count < str.length() && 
+		"Too many characters (GenerationState.cpp, getRandomSeed(unsgined int count) const)");
+
+	std::random_device rd;
+	std::mt19937 generator(rd());
+
+	std::shuffle(str.begin(), str.end(), generator);
+	return str.substr(0, count);
 }
 
 void GenerationState::Init()
@@ -34,20 +51,14 @@ void GenerationState::Init()
 		},
 		{ 400.f, 60.f }
 	);
-	
-	namespace fs = std::filesystem;
 
 	// choosing new world name based on existing worlds
 	std::string world_name = "New World";
-	unsigned int i = 1;
-	if (fs::exists(WORLDS_DIR + std::string("\\") + world_name))
+	unsigned int i = 0;
+	while (fs::exists((WORLDS_DIR + std::string("\\") + world_name)))
 	{
+		++i;
 		world_name = "New World " + std::to_string(i);
-		while (fs::exists((WORLDS_DIR + std::string("\\") + world_name)))
-		{
-			++i;
-			world_name = "New World " + std::to_string(i);
-		}
 	}
 
 	this->_textboxes["WORLD_NAME"]->setString(world_name);
@@ -128,11 +139,43 @@ void GenerationState::Update(float deltaTime)
 
 	if (this->_buttons.at("CREATE")->isPressed(sf::Mouse::Left))
 	{
+		// check if world name contains forbidden characters
+		std::string world_name = this->_textboxes.at("WORLD_NAME")->getString();
+		if (world_name.find('/') != std::string::npos ||
+			world_name.find('\\') != std::string::npos || 
+			world_name.find('|') != std::string::npos || 
+			world_name.find('"') != std::string::npos || 
+			world_name.find('<') != std::string::npos || 
+			world_name.find('>') != std::string::npos ||
+			world_name.find(':') != std::string::npos || 
+			world_name.find('?') != std::string::npos ||
+			world_name.find('*') != std::string::npos)
+		{
+			// tell user that world name is forbidden
+			MessageBoxA(
+				NULL, 
+				"World name can't contain characters like: / \\ | ? * \" < > :", "Forbidden world name", 
+				MB_OK | MB_ICONEXCLAMATION
+			);
+			return;
+		}
+
+		// check if world with same name already exists and edit world name based on the results
+		unsigned int i = 0;
+		while (fs::exists((WORLDS_DIR + std::string("\\") + world_name)))
+		{
+			++i;
+			world_name = this->_textboxes.at("WORLD_NAME")->getString() + std::to_string(i);
+		}
+
+		// generate random seed if empty
+		this->_textboxes.at("WORLD_SEED")->setString(getRandomSeed(16));
+
 		Engine::TileMap map(this->_data, BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y);
 		// generating world with basic world generation settings and custom name, seed
 		map.generate(
-			{ 
-				this->_textboxes.at("WORLD_SEED")->getString(), 
+			{
+				this->_textboxes.at("WORLD_SEED")->getString(),
 				BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y, 
 				0.4f, 4, 4, 5
 			}

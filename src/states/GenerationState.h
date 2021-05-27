@@ -21,6 +21,8 @@ private:
     std::map<std::string, UI::Button*> _buttons; // buttons
     std::map<std::string, sf::Text*> _titles; // titles
 
+    std::string getRandomSeed(unsigned int count) const;
+
 public:
     GenerationState(GameDataRef data);
     ~GenerationState();
