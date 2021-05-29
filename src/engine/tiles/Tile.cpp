@@ -1,6 +1,5 @@
 #include "Tile.h"
 
-#include <iostream>
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 
 namespace Engine

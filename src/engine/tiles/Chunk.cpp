@@ -1,7 +1,5 @@
 #include "Chunk.h"
 
-#include <iostream>
-
 namespace Engine
 {
 	Chunk::Chunk(const AssetManager& assets, sf::Vector2u pos, char* chunkMap)
@@ -35,7 +33,6 @@ namespace Engine
 					float(chunk_to_map_y) * TILE_SIZE
 				};
 				this->_tiles.push_back(new Tile(assets.GetTexture(texture_name), tile_pos)); // adding new tile
-				//{ float((x + 1) * pos.x) * TILE_SIZE, float((y + 1) * pos.y) * TILE_SIZE }
 			}
 		}
 	}

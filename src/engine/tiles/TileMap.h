@@ -3,7 +3,6 @@
 #include "Chunk.h"
 #include "engine/ecs/Entity.h"
 #include "engine/generator/MapGenerator.h"
-#include <nlohmann/json.hpp>
 
 namespace Engine
 {
@@ -31,7 +30,8 @@ namespace Engine
 		int fromY = 0, toY = 0;
 
 		// tiles rendering data
-		mutable unsigned _tilesRendered;
+		unsigned _tilesRendered;
+		unsigned _chunksLoaded;
 
 	public:
 		TileMap(GameDataRef data, unsigned int rows, unsigned int cols, const Entity* trackEntity);
@@ -39,6 +39,7 @@ namespace Engine
 
 		// Returns the number of rendered tiles
 		unsigned tilesRendered() const;
+		unsigned chunksLoaded() const;
 
 		// Returns the size of the map
 		sf::Vector2u getSize() const;

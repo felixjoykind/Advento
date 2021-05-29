@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <filesystem>
-#include <iostream>
+#include <nlohmann/json.hpp>
 
 #include "engine/Physics.h"
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
@@ -13,7 +13,7 @@ namespace Engine
 {
 	TileMap::TileMap(GameDataRef data, unsigned int rows, unsigned int cols, const Entity* trackEntity)
 		:_data(data), _mapSize({ rows, cols }), _mapSizeInChunks({ rows / CHUNK_SIZE, cols / CHUNK_SIZE }),
-		_trackEntity(trackEntity), _tilesRendered(0)
+		_trackEntity(trackEntity), _tilesRendered(0), _chunksLoaded(0)
 	{
 	}
 
@@ -28,6 +28,10 @@ namespace Engine
 			delete chunk;
 		this->_changedChunks.clear();
 	}
+
+	unsigned TileMap::tilesRendered() const { return this->_tilesRendered; }
+	unsigned TileMap::chunksLoaded() const { return this->_chunksLoaded; }
+	sf::Vector2u TileMap::getSize() const { return this->_mapSize; }
 
 	void TileMap::generate(GenerationSettings settings)
 	{
@@ -62,11 +66,6 @@ namespace Engine
 
 		// clear generated map
 		delete[] map;
-	}
-
-	sf::Vector2u TileMap::getSize() const
-	{
-		return this->_mapSize;
 	}
 
 	void TileMap::save_to(const WorldSaveSettings settings)
@@ -154,11 +153,6 @@ namespace Engine
 		this->_mapSizeInChunks.y = BASIC_WORLD_SIZE_Y / CHUNK_SIZE; // cols
 	}
 
-	unsigned TileMap::tilesRendered() const
-	{
-		return this->_tilesRendered;
-	}
-
 	void TileMap::update(float deltaTime)
 	{ 
 		// update tile map
@@ -217,11 +211,14 @@ namespace Engine
 				return c->getPosition() != entity_pos.chunkCoordsFromPosition();
 			}
 		);
-
 		if (delete_it != this->_chunks.end())
 		{
 			this->_chunks.erase(delete_it);
 		}
+
+		// updating debug data (chunks loaded, tiles rendered)
+		this->_chunksLoaded = this->_chunks.size();
+		this->_tilesRendered = this->_chunksLoaded * (CHUNK_SIZE * CHUNK_SIZE);
 
 		// update loaded chunks
 		for (auto& chunk : this->_chunks)
@@ -231,8 +228,6 @@ namespace Engine
 	void TileMap::render() const
 	{
 		// rendering tiles
-		
-		// TODO: update _tilesRendered
 
 		for (const auto& chunk : this->_chunks)
 			chunk->render(this->_data->window);

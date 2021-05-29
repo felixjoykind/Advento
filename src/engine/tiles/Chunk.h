@@ -1,14 +1,11 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
 #include "Tile.h"
 #include "gamedata/AssetManager.h"
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 
 namespace Engine
 {
-	class TileMap;
 	class Chunk
 	{
 	private:
