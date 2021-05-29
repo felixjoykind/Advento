@@ -22,6 +22,8 @@ namespace Engine
 
 	public:
 		static char** Generate(GenerationSettings s);
+
+		static std::string getRandomSeed(unsigned int count);
 	};
 }
 

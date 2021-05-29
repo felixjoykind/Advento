@@ -2,7 +2,7 @@
 
 #include "entities/Player.h"
 #include <fstream>
-#include "engine/defenitions/PATH_DEFENTITIONS.h"
+#include "engine/defenitions/PATH_DEFENITIONS.h"
 
 GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 	:_data(data), _paused(false),
@@ -11,7 +11,7 @@ GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 	_camera(sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) })),
 	_pauseMenu(new PauseMenu(_data))
 {
-	this->_map = new Engine::TileMap(this->_data, 256, 256);
+	this->_map = new Engine::TileMap(this->_data, 256, 256, &this->_player);
 	this->_map->load_from(world_settings.dir_path);
 
 	this->_debugInfo = new Engine::DebugInfo(_data, { _player, *_map });
@@ -125,7 +125,7 @@ void GameState::Render() const
 	_data->window.setView(_camera);
 
 	// map
-	this->_map->render(this->_player);
+	this->_map->render();
 
 	// rendering player
 	this->_player.render();

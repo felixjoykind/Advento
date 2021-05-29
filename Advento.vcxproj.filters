@@ -93,6 +93,9 @@
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\tiles\Chunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -179,7 +182,7 @@
     <ClInclude Include="src\engine\ui\List.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\defenitions\PATH_DEFENTITIONS.h">
+    <ClInclude Include="src\engine\defenitions\PATH_DEFENITIONS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\defenitions\BASIC_WORLD_SETTINGS.h">
@@ -204,6 +207,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\defenitions\COLORS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\tiles\Chunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

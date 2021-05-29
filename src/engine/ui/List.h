@@ -4,6 +4,7 @@
 
 namespace UI
 {
+    // TODO: rewrite this class, wtf is that
     template<class T>
     class List :
         public UIElement

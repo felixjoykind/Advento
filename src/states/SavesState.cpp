@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
-#include "engine/defenitions/PATH_DEFENTITIONS.h"
+#include "engine/defenitions/PATH_DEFENITIONS.h"
 #include "engine/defenitions/COLORS.h"
 
 #include "gamedata/InputManager.h"

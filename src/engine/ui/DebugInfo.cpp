@@ -34,9 +34,9 @@ namespace Engine
 
 		// grid position
 		this->_texts["POSITION_GRID"] = new sf::Text(
-			"Grid position (X:Y): " + std::to_string(entity_pos.getGridPosition(128).x)
+			"Grid position (X:Y): " + std::to_string(entity_pos.getGridPosition().x)
 			+ ":"
-			+ std::to_string(entity_pos.getGridPosition(128).y),
+			+ std::to_string(entity_pos.getGridPosition().y),
 			_data->assets.GetFont("menu font"), 24
 		);
 		this->_texts["POSITION_GRID"]->setPosition(5.f, float((_texts.size() - 1) * 28));
@@ -70,9 +70,9 @@ namespace Engine
 		);
 
 		this->_texts["POSITION_GRID"]->setString(
-			"Grid position (X:Y): " + std::to_string(entity_pos.getGridPosition(128).x)
+			"Grid position (X:Y): " + std::to_string(entity_pos.getGridPosition().x)
 			+ ":"
-			+ std::to_string(entity_pos.getGridPosition(128).y)
+			+ std::to_string(entity_pos.getGridPosition().y)
 		);
 	}
 

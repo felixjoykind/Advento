@@ -5,7 +5,7 @@
 #include <windows.h>
 
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
-#include "engine/defenitions/PATH_DEFENTITIONS.h"
+#include "engine/defenitions/PATH_DEFENITIONS.h"
 #include "engine/defenitions/COLORS.h"
 
 #include "engine/tiles/TileMap.h"
@@ -22,19 +22,6 @@ GenerationState::GenerationState(GameDataRef data)
 
 GenerationState::~GenerationState()
 {
-}
-
-std::string GenerationState::getRandomSeed(unsigned int count) const
-{
-	std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"); // all possible characters in seed
-	assert(count < str.length() && 
-		"Too many characters (GenerationState.cpp, getRandomSeed(unsgined int count) const)");
-
-	std::random_device rd;
-	std::mt19937 generator(rd());
-
-	std::shuffle(str.begin(), str.end(), generator);
-	return str.substr(0, count);
 }
 
 void GenerationState::Init()
@@ -169,22 +156,23 @@ void GenerationState::Update(float deltaTime)
 		}
 
 		// generate random seed if empty
-		this->_textboxes.at("WORLD_SEED")->setString(getRandomSeed(16));
+		this->_textboxes.at("WORLD_SEED")->setString(Engine::MapGenerator::getRandomSeed(16));
 
-		Engine::TileMap map(this->_data, BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y);
+		Engine::TileMap map(this->_data, BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y, nullptr); // new map
+
 		// generating world with basic world generation settings and custom name, seed
 		map.generate(
 			{
-				this->_textboxes.at("WORLD_SEED")->getString(),
+				world_name,
 				BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y, 
 				0.4f, 4, 4, 5
 			}
 		);
-		// write tilemap to file
+		// save tilemap into world folder
 		map.save_to(
 			{
-				this->_textboxes.at("WORLD_NAME")->getString(),
-				WORLDS_DIR + std::string("\\") + this->_textboxes.at("WORLD_NAME")->getString()
+				world_name,
+				WORLDS_DIR + std::string("\\") + world_name
 			}
 		);
 

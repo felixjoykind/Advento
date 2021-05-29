@@ -14,9 +14,15 @@ namespace Engine
 		PositionComponent(Entity* e, float _x, float _y);
 		~PositionComponent();
 
-		// getters
+		// Returns current positiobn
 		sf::Vector2f getPosition() const;
-		sf::Vector2u getGridPosition(const unsigned tileSize) const;
+
+		// Returns current grid position
+		sf::Vector2u getGridPosition() const;
+
+		// Returns coordinates of chunk current position is relied to
+		sf::Vector2u chunkCoordsFromPosition() const;
+
 		float getX() const;
 		float getY() const;
 

@@ -1,5 +1,6 @@
 #include "PositionComponent.h"
 
+#include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/ecs/Entity.h"
 #include "SpriteComponent.h"
 
@@ -19,12 +20,21 @@ namespace Engine
 		return sf::Vector2f(this->x, this->y);
 	}
 
-	sf::Vector2u PositionComponent::getGridPosition(const unsigned tileSize) const
+	sf::Vector2u PositionComponent::getGridPosition() const
 	{
 		return sf::Vector2u(
-			static_cast<unsigned>(this->getX()) / tileSize,
-			static_cast<unsigned>(this->getY()) / tileSize
+			static_cast<unsigned>(this->getX()) / TILE_SIZE,
+			static_cast<unsigned>(this->getY()) / TILE_SIZE
 		);
+	}
+
+	sf::Vector2u PositionComponent::chunkCoordsFromPosition() const
+	{
+		return sf::Vector2u
+		{
+			unsigned int(this->getGridPosition().x) / CHUNK_SIZE,
+			unsigned int(this->getGridPosition().y) / CHUNK_SIZE
+		};
 	}
 
 	float PositionComponent::getX() const { return this->x; }

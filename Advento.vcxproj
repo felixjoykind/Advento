@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\tiles\Chunk.cpp" />
     <ClCompile Include="src\engine\ui\elements\UIElement.cpp" />
     <ClCompile Include="src\gamedata\InputManager.cpp" />
     <ClCompile Include="src\states\SavesState.cpp" />
@@ -179,13 +180,14 @@
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\tiles\Chunk.h" />
     <ClInclude Include="src\engine\defenitions\COLORS.h" />
     <ClInclude Include="src\engine\helper\SpriteManipulator.h" />
     <ClInclude Include="src\engine\ui\IClickable.h" />
     <ClInclude Include="src\engine\ui\ISelectable.h" />
     <ClInclude Include="src\gamedata\InputManager.h" />
     <ClInclude Include="src\engine\defenitions\BASIC_WORLD_SETTINGS.h" />
-    <ClInclude Include="src\engine\defenitions\PATH_DEFENTITIONS.h" />
+    <ClInclude Include="src\engine\defenitions\PATH_DEFENITIONS.h" />
     <ClInclude Include="src\engine\ui\List.h" />
     <ClInclude Include="src\states\SavesState.h" />
     <ClInclude Include="src\engine\ecs\components\PositionComponent.h" />

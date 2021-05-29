@@ -3,7 +3,7 @@
 #include <fstream>
 #include <filesystem>
 #include "states/MainMenuState.h"
-#include "engine/defenitions/PATH_DEFENTITIONS.h"
+#include "engine/defenitions/PATH_DEFENITIONS.h"
 
 Game::Game()
 {

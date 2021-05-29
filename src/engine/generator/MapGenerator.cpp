@@ -1,5 +1,7 @@
 #include "MapGenerator.h"
 
+#include <cassert>
+
 #include "engine/tiles/Tile.h"
 #include "engine/Random.h"
 
@@ -69,5 +71,18 @@ namespace Engine
 		}
 
 		return map;
+	}
+
+	std::string MapGenerator::getRandomSeed(unsigned int count)
+	{
+		std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"); // all possible characters in seed
+		assert(count < str.length() &&
+			"Too many characters (GenerationState.cpp, getRandomSeed(unsgined int count) const)");
+
+		std::random_device rd;
+		std::mt19937 generator(rd());
+
+		std::shuffle(str.begin(), str.end(), generator);
+		return str.substr(0, count);
 	}
 }
