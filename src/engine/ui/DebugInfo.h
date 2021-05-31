@@ -8,8 +8,8 @@ namespace Engine
 {
 	struct DebugData
 	{
-		Entity& _trackEntity;
-		TileMap& _map;
+		Entity& trackEntity;
+		TileMap& map;
 	};
 
 	// Debug info panel (like in Minecraft)

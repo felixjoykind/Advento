@@ -15,14 +15,6 @@ namespace Engine
 		delete this->_spr;
 	}
 
-	sf::Vector2u Tile::getGridPosition() const
-	{
-		return sf::Vector2u(
-			static_cast<unsigned>(this->_spr->getPosition().x / TILE_SIZE),
-			static_cast<unsigned>(this->_spr->getPosition().y / TILE_SIZE)
-		);
-	}
-
 	void Tile::update(float deltaTime)
 	{
 	}
