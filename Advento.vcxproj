@@ -180,6 +180,9 @@
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\defenitions\UI_DEFENITIONS.h" />
+    <ClInclude Include="src\engine\ui\IHoverable.h" />
+    <ClInclude Include="src\engine\ui\elements\Scroller.h" />
     <ClInclude Include="src\engine\LOG.h" />
     <ClInclude Include="src\engine\tiles\Chunk.h" />
     <ClInclude Include="src\engine\defenitions\COLORS.h" />
@@ -189,7 +192,6 @@
     <ClInclude Include="src\gamedata\InputManager.h" />
     <ClInclude Include="src\engine\defenitions\BASIC_WORLD_SETTINGS.h" />
     <ClInclude Include="src\engine\defenitions\PATH_DEFENITIONS.h" />
-    <ClInclude Include="src\engine\ui\List.h" />
     <ClInclude Include="src\states\SavesState.h" />
     <ClInclude Include="src\engine\ecs\components\PositionComponent.h" />
     <ClInclude Include="src\engine\ecs\components\SpriteComponent.h" />
@@ -203,7 +205,7 @@
     <ClInclude Include="src\engine\ecs\components\HitboxComponent.h" />
     <ClInclude Include="src\engine\ecs\components\AnimationComponent.h" />
     <ClInclude Include="src\entities\Player.h" />
-    <ClInclude Include="src\engine\Physics.h" />
+    <ClInclude Include="src\engine\Math.h" />
     <ClInclude Include="src\engine\ecs\components\MovementComponent.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\engine\ui\elements\Button.h" />

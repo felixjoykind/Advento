@@ -33,10 +33,11 @@ namespace UI
 
 		// basic functions
 		virtual void update(float deltaTime) { }
-		virtual void render() const { };
+		virtual void render() const { this->_data->window.draw(*this->_shape); };
 
 		friend class IClickable;
 		friend class ISelectable;
+		friend class IHoverable;
 
 	};
 }

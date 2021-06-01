@@ -13,7 +13,6 @@ UI
 			- saving
 			- loading
 
-notes:
 	create own message boxes
 	add scrolling logic to worlds list
 	add worlds editing

@@ -12,7 +12,6 @@ Game::Game()
 		_data->winConfig.title,  _data->winConfig.fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar | sf::Style::Close);
 
 	// loading textures
-	this->_data->assets.AddTexture("player", "./assets/sprites/player/player.png");
 	this->_data->assets.AddTexture("grass tile", "./assets/sprites/tiles/grass.png");
 	this->_data->assets.AddTexture("water tile", "./assets/sprites/tiles/ocean.png");
 	this->_data->assets.AddTexture("main menu background", "./assets/sprites/menus and panels/main menu/background.png");

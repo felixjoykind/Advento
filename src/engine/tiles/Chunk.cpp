@@ -67,7 +67,6 @@ namespace Engine
 		{
 			for (size_t y = 0; y < CHUNK_SIZE; y++)
 			{
-				// TODO: refactor
 				auto& tile = this->_tiles[y * CHUNK_SIZE + x];
 				auto target_size = target.getSize();
 				auto target_center = target.getView().getCenter();

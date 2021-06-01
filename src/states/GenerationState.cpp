@@ -145,6 +145,15 @@ void GenerationState::Update(float deltaTime)
 			);
 			return;
 		}
+		else if (world_name.length() == 0)
+		{
+			MessageBoxA(
+				NULL,
+				"World name cannot be empty", "Forbidden world name",
+				MB_OK | MB_ICONEXCLAMATION
+			);
+			return;
+		}
 
 		// check if world with same name already exists and edit world name based on the results
 		unsigned int i = 0;

@@ -1,13 +1,12 @@
 #pragma once
 
 #include "engine/ui/IClickable.h"
-
-enum class ButtonState { BTN_IDLE = 0, BTN_HOVER, BTN_CLICK };
+#include "engine/ui/IHoverable.h"
 
 namespace UI
 {
 	class Button
-		: public UIElement, public IClickable
+		: public UIElement, public IHoverable, public IClickable
 	{
 	private:
 		// button components
@@ -21,9 +20,6 @@ namespace UI
 		sf::Color text_idle;
 		sf::Color text_hover;
 		sf::Color text_click;
-
-		// button state
-		ButtonState _state;
 
 	public:
 		Button(GameDataRef data, sf::Vector2f pos, sf::Vector2f size,

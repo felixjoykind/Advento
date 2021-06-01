@@ -1,7 +1,9 @@
 #pragma once
 
-// Game directories path
-constexpr const char* GAME_DIR = "C:\\Users\\User\\AppData\\Roaming\\.advento";
-constexpr const char* WORLDS_DIR = "C:\\Users\\User\\AppData\\Roaming\\.advento\\worlds";
-constexpr const char* CFG_DIR = "C:\\Users\\User\\AppData\\Roaming\\.advento\\cfg";
-constexpr const char* WINDOW_CFG_FILEPATH = "C:\\Users\\User\\AppData\\Roaming\\.advento\\cfg\\window_cfg.ini";
+#include <string>
+
+// Game directories paths
+const std::string GAME_DIR = std::string("C:\\Users\\User\\AppData\\Roaming\\.advento");
+const std::string WORLDS_DIR = GAME_DIR + "\\worlds";
+const std::string CFG_DIR = GAME_DIR + "\\cfg";
+const std::string WINDOW_CFG_FILEPATH = CFG_DIR + "\\window_cfg.ini";

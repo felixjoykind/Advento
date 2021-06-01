@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
-#include "engine/Physics.h"
+#include "engine/Math.h"
 #include "engine/LOG.h"
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/defenitions/PATH_DEFENITIONS.h"
@@ -200,21 +200,23 @@ namespace Engine
 		{
 			// calculating what chunks needs to be loaded
 			this->fromX = entity_pos.chunkCoordsFromPosition().x - this->_chunksDistance;
-			this->fromX = Physics::clamp<int>(0, _mapSizeInChunks.x, fromX);
+			this->fromX = Math::clamp<int>(0, _mapSizeInChunks.x, fromX);
 
 			this->fromY = entity_pos.chunkCoordsFromPosition().y - this->_chunksDistance;
-			this->fromY = Physics::clamp<int>(0, _mapSizeInChunks.y, fromY);
+			this->fromY = Math::clamp<int>(0, _mapSizeInChunks.y, fromY);
 
 			this->toX = entity_pos.chunkCoordsFromPosition().x + this->_chunksDistance;
-			this->toX = Physics::clamp<int>(0, _mapSizeInChunks.x, toX);
+			this->toX = Math::clamp<int>(0, _mapSizeInChunks.x, toX);
 
 			this->toY = entity_pos.chunkCoordsFromPosition().y + this->_chunksDistance;
-			this->toY = Physics::clamp<int>(0, _mapSizeInChunks.y, toY);
+			this->toY = Math::clamp<int>(0, _mapSizeInChunks.y, toY);
 
+			// loop through range
 			for (int x = fromX; x <= toX; x++)
 			{
 				for (int y = fromY; y <= toY; y++)
 				{
+					// if chunk that should be loaded is not loaded yet
 					if (std::find_if(_loadedChunks.begin(), _loadedChunks.end(),
 						[&](Chunk* c)
 						{
@@ -222,17 +224,18 @@ namespace Engine
 						}
 					) == this->_loadedChunks.end())
 					{
-						LOG("Added chunk: (" << x << ", " << y << ")");
+						LOG("Loaded chunk: (" << x << ", " << y << ")"); // debug info
+						// get new chunk from file
 						auto new_chunk = this->getChunkFromFile(
 							_worldSaveSettings.dir_path + "\\chunks\\chunk " + std::to_string(x) + " " + std::to_string(y) + ".chunk",
 							sf::Vector2u((unsigned int)x, (unsigned int)y));
-						// add new chunk
+						// load new chunk
 						this->_loadedChunks.push_back(new_chunk);
 					}
 				}
 			}
 
-			// lamda to check if chunk is in bounds
+			// lambda to check if chunk is in bounds
 			auto isChunkInBounds = [&](Chunk* c)
 			{
 				return c->getPosition().x <= toX && c->getPosition().x >= fromX
@@ -246,6 +249,8 @@ namespace Engine
 				if (!isChunkInBounds(this->_loadedChunks[i]))
 				{
 					// delete it
+					auto chunk_pos = this->_loadedChunks[i]->getPosition();
+					LOG("Unloaded chunk: (" << chunk_pos.x << ", " << chunk_pos.y << ")"); // debug info
 					this->_loadedChunks.erase(this->_loadedChunks.begin() + i);
 				}
 			}

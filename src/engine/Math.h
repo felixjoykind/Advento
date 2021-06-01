@@ -1,6 +1,6 @@
 #pragma once
 
-class Physics
+class Math
 {
 public:
 	template<class T>
@@ -8,7 +8,7 @@ public:
 };
 
 template<class T>
-inline T Physics::clamp(T min, T max, T value)
+inline T Math::clamp(T min, T max, T value)
 {
 	if (value > max)
 		return max;

@@ -4,8 +4,6 @@
 
 namespace UI
 {
-	enum class SelectionType { NONE = 0, HOVERED, SELECTED };
-
 	// Provides selection logic
 	class ISelectable
 	{
@@ -13,38 +11,29 @@ namespace UI
 		UIElement* _element;
 
 	protected:
-		SelectionType _type = SelectionType::NONE;
+		bool _isSelected;
 
 	public:
 		ISelectable(UIElement* element)
-			:_element(element)
+			:_element(element), _isSelected(false)
 		{ }
 		~ISelectable() { }
 
-		// Returns current UI element state
-		SelectionType getSelectionType() const
-		{
-			return this->_type;
-		}
+		// Returns true if UIElement is selected
+		bool isSelected() const { return this->_isSelected; }
 
 		void update(float deltaTime, const sf::Window& window)
 		{
 			// choosing state (hovered / selected)
-			if (this->_type != SelectionType::SELECTED)
+			if (InputManager::isElementPressed(this->_element, window, sf::Mouse::Left))
 			{
-				if (InputManager::isElementPressed(this->_element, window, sf::Mouse::Left))
-				{
-					this->_type = SelectionType::SELECTED;
-				}
-				else if (InputManager::isElementHovered(this->_element, window))
-				{
-					this->_type = SelectionType::HOVERED;
-				}
-				else { this->_type = SelectionType::NONE; }
+				this->_isSelected = true;
 			}
 			else if (InputManager::isMouseButtonPressed(sf::Mouse::Left)
 				&& !InputManager::isElementHovered(this->_element, window))
-				this->_type = SelectionType::NONE;
+			{
+				this->_isSelected = false;
+			}
 		}
 
 	};

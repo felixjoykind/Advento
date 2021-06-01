@@ -1,13 +1,15 @@
 #pragma once
 
+#include "engine/ui/IHoverable.h"
 #include "engine/ui/IClickable.h"
 #include "engine/ui/ISelectable.h"
+
 #include "engine/tiles/TileMap.h"
 
 namespace UI
 {
     class WorldPlate :
-        public UIElement, public IClickable, public ISelectable
+        public UIElement, public IHoverable, public IClickable, public ISelectable
     {
     private:
         sf::Text* _title;

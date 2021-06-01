@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
+#include "engine/defenitions/UI_DEFENITIONS.h"
 #include "engine/defenitions/PATH_DEFENITIONS.h"
 #include "engine/defenitions/COLORS.h"
 
@@ -16,7 +17,13 @@
 #include "states/GameState.h"
 
 SavesState::SavesState(GameDataRef data)
-	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background")))
+	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background"))),
+	_scroller(new UI::Scroller<UI::WorldPlate>(
+		_data, { 15.f, 400.f }, 
+		{ float(_data->winConfig.width / 2 + _data->winConfig.width / 4) + 10.f, 20.f },
+		{ 20.f, float(_data->winConfig.height) },
+		_worlds)
+	)
 {
 }
 
@@ -80,6 +87,9 @@ void SavesState::HandleInput()
 				}
 			}
 		}
+
+		// scroller
+		this->_scroller->handleInput(ev);
 	}
 }
 
@@ -89,6 +99,9 @@ void SavesState::Update(float deltaTime)
 	{
 		this->_data->states.AddState(StateRef(new GenerationState(this->_data)), false);
 	}
+
+	// update world scroller
+	this->_scroller->update(deltaTime);
 
 	// updating worlds plates
 	for (auto& plate : this->_worlds)
@@ -105,6 +118,9 @@ void SavesState::Render() const
 
 	// render background
 	this->_data->window.draw(*this->_background);
+
+	// render scroller
+	this->_scroller->render();
 
 	// rendering worlds plates
 	for (const auto& plate : this->_worlds)
@@ -141,7 +157,7 @@ void SavesState::RefreshWorldsList()
 				{ float(this->_data->winConfig.width / 2), 100.f },
 				{
 					float(this->_data->winConfig.width / 2 - this->_data->winConfig.width / 4),
-					float(i * 110.f + 20.f)
+					float(i * 110.f + WORLD_PLATES_OFFSET)
 				},
 				sf::Color(70, 63, 58)
 			));
@@ -149,6 +165,9 @@ void SavesState::RefreshWorldsList()
 		info_file.close();
 		++i;
 	}
+
+	// reinit scroller
+	this->_scroller->init();
 }
 
 void SavesState::Resume()

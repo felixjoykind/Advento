@@ -8,7 +8,7 @@ constexpr int GUI_TEXT_BACKSPACE = 8; // backspace unicode
 namespace UI
 {
 	Textbox::Textbox(GameDataRef data, sf::Vector2f pos, sf::Vector2f size)
-		:UIElement(data, size, pos), ISelectable(this),
+		:UIElement(data, size, pos), IHoverable(this),  ISelectable(this),
 		_text(new sf::Text("", _data->assets.GetFont("menu font"), 30U)),
 		_cursor(new sf::RectangleShape({ 1.f, float(this->_text->getCharacterSize()) }))
 	{
@@ -63,7 +63,7 @@ namespace UI
 	{
 		if (ev.type == sf::Event::TextEntered)
 		{
-			if (ISelectable::getSelectionType() == SelectionType::SELECTED)
+			if (ISelectable::_isSelected)
 			{
 				if (ev.text.unicode == GUI_TEXT_BACKSPACE) // if backspace
 				{
@@ -82,23 +82,21 @@ namespace UI
 
 	void Textbox::update(float deltaTime)
 	{
-		// update
+		// update selection and hovering
+		IHoverable::update(deltaTime, this->_data->window);
 		ISelectable::update(deltaTime, this->_data->window);
 
-		// change textbox based on selection type
-		switch (ISelectable::getSelectionType())
+		// change plate based on plate state
+		this->_shape->setOutlineThickness(0.f); // idle
+		if (IHoverable::_isHovered)
 		{
-		case SelectionType::NONE:
-			this->_shape->setOutlineThickness(0.f);
-			break;
-		case SelectionType::HOVERED:
 			this->_shape->setOutlineColor(sf::Color(190, 190, 190));
 			this->_shape->setOutlineThickness(2.f);
-			break;
-		case SelectionType::SELECTED:
+		}
+		if (ISelectable::_isSelected)
+		{
 			this->_shape->setOutlineColor(sf::Color::White);
 			this->_shape->setOutlineThickness(2.f);
-			break;
 		}
 
 		// update cursor position
@@ -117,7 +115,7 @@ namespace UI
 		this->_data->window.draw(*this->_text);
 
 		// render cursor of selected
-		if (ISelectable::getSelectionType() == SelectionType::SELECTED)
+		if (ISelectable::_isSelected)
 			this->_data->window.draw(*this->_cursor);
 	}
 }

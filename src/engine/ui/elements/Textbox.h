@@ -1,11 +1,12 @@
 #pragma once
 
+#include "engine/ui/IHoverable.h"
 #include "engine/ui/ISelectable.h"
 
 namespace UI
 {
 	class Textbox :
-		public UIElement, public ISelectable
+		public UIElement, public IHoverable, public ISelectable
 	{
 	private:
 		// text data

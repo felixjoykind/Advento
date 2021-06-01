@@ -1,12 +1,10 @@
 #include "WorldPlate.h"
 
-#include "gamedata/InputManager.h"
-
 namespace UI
 {
 	WorldPlate::WorldPlate(GameDataRef data, Engine::WorldSaveSettings settings,
 		sf::Vector2f size, sf::Vector2f pos, sf::Color backgroundColor)
-		:UIElement(data, size, pos), IClickable(this, 0.2f), ISelectable(this),
+		:UIElement(data, size, pos), IHoverable(this), IClickable(this, 0.2f), ISelectable(this),
 		_title(new sf::Text(settings.name, this->_data->assets.GetFont("menu font"), 30U)),
 		_settings(settings)
 	{
@@ -31,28 +29,26 @@ namespace UI
 	void WorldPlate::update(float deltaTime)
 	{
 		// update selection
+		IHoverable::update(deltaTime, this->_data->window);
 		ISelectable::update(deltaTime, this->_data->window);
 
 		// change plate based on selection type
-		switch (ISelectable::getSelectionType())
+		this->_shape->setOutlineThickness(0.f); // idle
+		if (IHoverable::_isHovered)
 		{
-		case SelectionType::NONE:
-			this->_shape->setOutlineThickness(0.f);
-			break;
-		case SelectionType::HOVERED:
 			this->_shape->setOutlineColor(sf::Color(190, 190, 190));
 			this->_shape->setOutlineThickness(2.f);
-			break;
-		case SelectionType::SELECTED:
+		}
+		if (ISelectable::_isSelected)
+		{
 			this->_shape->setOutlineColor(sf::Color::White);
 			this->_shape->setOutlineThickness(2.f);
-			break;
 		}
 	}
 
 	void WorldPlate::render() const
 	{
-		this->_data->window.draw(*this->_shape);
+		UIElement::render();
 		this->_data->window.draw(*this->_title);
 	}
 }
