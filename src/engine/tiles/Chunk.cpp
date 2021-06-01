@@ -3,7 +3,7 @@
 namespace Engine
 {
 	Chunk::Chunk(const AssetManager& assets, sf::Vector2u pos, char* chunkMap)
-		:_position(pos), _rawTiles(chunkMap)
+		:_position(pos), _rawTiles(chunkMap), _tilesRendered(0)
 	{
 		// filling map based on input
 		for (size_t x = 0; x < CHUNK_SIZE; x++)
@@ -44,10 +44,8 @@ namespace Engine
 		this->_tiles.clear();
 	}
 
-	sf::Vector2u Chunk::getPosition() const
-	{
-		return this->_position;
-	}
+	sf::Vector2u Chunk::getPosition() const { return this->_position; }
+	unsigned Chunk::tilesRendered() const { return this->_tilesRendered; }
 
 	void Chunk::update(float deltaTime)
 	{
@@ -62,11 +60,31 @@ namespace Engine
 
 	void Chunk::render(sf::RenderTarget& target) const
 	{
+		// reset number of rendered tiles
+		this->_tilesRendered = 0;
+
 		for (size_t x = 0; x < CHUNK_SIZE; x++)
 		{
 			for (size_t y = 0; y < CHUNK_SIZE; y++)
 			{
-				this->_tiles[y * CHUNK_SIZE + x]->render(target);
+				// TODO: refactor
+				auto& tile = this->_tiles[y * CHUNK_SIZE + x];
+				auto target_size = target.getSize();
+				auto target_center = target.getView().getCenter();
+
+				auto window_bounds = sf::FloatRect(
+					{ 
+						float(target_center.x -  target_size.x / 2),
+						float(target_center.y - target_size.y / 2)
+					},
+					{ float(target_size.x), float(target_size.y) }
+				);
+
+				if (tile->isInBounds(window_bounds))
+				{
+					tile->render(target);
+					this->_tilesRendered++;
+				}
 			}
 		}
 	}

@@ -180,9 +180,10 @@
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\LOG.h" />
     <ClInclude Include="src\engine\tiles\Chunk.h" />
     <ClInclude Include="src\engine\defenitions\COLORS.h" />
-    <ClInclude Include="src\engine\helper\SpriteManipulator.h" />
+    <ClInclude Include="src\engine\SpriteManipulator.h" />
     <ClInclude Include="src\engine\ui\IClickable.h" />
     <ClInclude Include="src\engine\ui\ISelectable.h" />
     <ClInclude Include="src\gamedata\InputManager.h" />

@@ -17,6 +17,9 @@ namespace Engine
 		void update(float deltaTime);
 		void render(sf::RenderTarget& target);
 
+		// Returns true if tile is in bounds
+		bool isInBounds(const sf::FloatRect bounds);
+
 	};
 }
 

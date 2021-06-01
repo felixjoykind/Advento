@@ -8,7 +8,7 @@
 #include "engine/defenitions/COLORS.h"
 
 #include "gamedata/InputManager.h"
-#include "engine/helper/SpriteManipulator.h"
+#include "engine/SpriteManipulator.h"
 
 #include "engine/tiles/TileMap.h"
 

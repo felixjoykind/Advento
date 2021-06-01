@@ -1,6 +1,6 @@
 #include "MainMenuState.h"
 
-#include "engine/helper/SpriteManipulator.h"
+#include "engine/SpriteManipulator.h"
 
 MainMenuState::MainMenuState(GameDataRef data)
 	:_data(data), 

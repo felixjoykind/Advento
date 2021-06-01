@@ -23,4 +23,9 @@ namespace Engine
 	{
 		target.draw(*this->_spr);
 	}
+
+	bool Tile::isInBounds(const sf::FloatRect bounds)
+	{
+		return bounds.intersects(this->_spr->getGlobalBounds());
+	}
 }

@@ -5,6 +5,7 @@
 #include <nlohmann/json.hpp>
 
 #include "engine/Physics.h"
+#include "engine/LOG.h"
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/defenitions/PATH_DEFENITIONS.h"
 #include "engine/ecs/components/PositionComponent.h"
@@ -13,16 +14,16 @@ namespace Engine
 {
 	TileMap::TileMap(GameDataRef data, unsigned int rows, unsigned int cols, const Entity* trackEntity)
 		:_data(data), _mapSize({ rows, cols }), _mapSizeInChunks({ rows / CHUNK_SIZE, cols / CHUNK_SIZE }),
-		_trackEntity(trackEntity), _tilesRendered(0), _chunksLoaded(0)
+		_chunksDistance(1), _trackEntity(trackEntity), _tilesRendered(0)
 	{
 	}
 
 	TileMap::~TileMap()
 	{
 		// delete all chunks
-		for (auto& chunk : this->_chunks)
+		for (auto& chunk : this->_loadedChunks)
 			delete chunk;
-		this->_chunks.clear();
+		this->_loadedChunks.clear();
 
 		for (auto& chunk : this->_changedChunks)
 			delete chunk;
@@ -30,13 +31,25 @@ namespace Engine
 	}
 
 	unsigned TileMap::tilesRendered() const { return this->_tilesRendered; }
-	unsigned TileMap::chunksLoaded() const { return this->_chunksLoaded; }
+	unsigned TileMap::chunksLoaded() const { return this->_loadedChunks.size(); }
 	sf::Vector2u TileMap::getSize() const { return this->_mapSize; }
+
+	void TileMap::setStartigPosition(sf::Vector2u position)
+	{
+		// validate data
+		if (position.x > this->_mapSizeInChunks.x
+			|| position.y > this->_mapSizeInChunks.y)
+		{
+			throw("Position index is out of map bounds (Tilemap.cpp, in setStartingPosition)");
+		}
+
+		this->_previousChunk = position;
+	}
 
 	void TileMap::generate(GenerationSettings settings)
 	{
 		// getting char map and clearing previous
-		this->_chunks.clear(); // clear chunks
+		this->_loadedChunks.clear(); // clear chunks
 		auto map = std::move(MapGenerator::Generate(settings)); // generated map
 
 		// split map into chunks
@@ -139,8 +152,8 @@ namespace Engine
 		info_file.close(); // end info_file
 
 		// clear all previous chunks
-		this->_chunks.clear();
-		this->_chunks.shrink_to_fit();
+		this->_loadedChunks.clear();
+		this->_loadedChunks.shrink_to_fit();
 		this->_changedChunks.clear();
 		this->_changedChunks.shrink_to_fit();
 
@@ -153,83 +166,107 @@ namespace Engine
 		this->_mapSizeInChunks.y = BASIC_WORLD_SIZE_Y / CHUNK_SIZE; // cols
 	}
 
+	Chunk* TileMap::getChunkFromFile(std::string filepath, sf::Vector2u chunk_pos)
+	{
+		// load it from file
+		std::fstream chunk_file;
+		Chunk* new_chunk = nullptr;
+
+		chunk_file.open(filepath, std::fstream::in); // open for reading
+
+		if (chunk_file.is_open())
+		{
+			char* chunk_map = new char[CHUNK_SIZE * CHUNK_SIZE];
+			for (size_t i = 0; i < CHUNK_SIZE * CHUNK_SIZE; i++)
+			{
+				chunk_file >> chunk_map[i];
+			}
+			new_chunk = new Chunk(this->_data->assets, chunk_pos, chunk_map);
+		}
+		chunk_file.close();
+
+		return new_chunk;
+	}
+
 	void TileMap::update(float deltaTime)
-	{ 
+	{
 		// update tile map
 
 		// quick acess variables
 		auto& entity_pos = this->_trackEntity->getComponent<Engine::PositionComponent>();
 
-		// calculating what chunks needs to be updated and rendereds
-		fromX = entity_pos.chunkCoordsFromPosition().x;
-		fromX = Physics::clamp<int>(0, _mapSizeInChunks.x, fromX);
-
-		fromY = entity_pos.chunkCoordsFromPosition().y;
-		fromY = Physics::clamp<int>(0, _mapSizeInChunks.y, fromY);
-
-		toX = entity_pos.chunkCoordsFromPosition().x;
-		toX = Physics::clamp<int>(0, _mapSizeInChunks.x, toX);
-
-		toY = entity_pos.chunkCoordsFromPosition().y;
-		toY = Physics::clamp<int>(0, _mapSizeInChunks.y, toY);
-
-		// load chunk if _trackEntity goes in unloaded location
-		auto it = std::find_if(_chunks.begin(), _chunks.end(),
-			[&](Chunk* c)
-			{
-				return c->getPosition() == entity_pos.chunkCoordsFromPosition();
-			}
-		);
-		if (it == this->_chunks.end()) // if chunk is not found
+		// if player goes in new location
+		if (this->_previousChunk != entity_pos.chunkCoordsFromPosition())
 		{
-			// load it from file
-			std::fstream chunk_file;
-			auto chunk_pos = entity_pos.chunkCoordsFromPosition();
+			// calculating what chunks needs to be loaded
+			this->fromX = entity_pos.chunkCoordsFromPosition().x - this->_chunksDistance;
+			this->fromX = Physics::clamp<int>(0, _mapSizeInChunks.x, fromX);
 
-			chunk_file.open(
-				this->_worldSaveSettings.dir_path + "\\chunks\\chunk " + std::to_string(chunk_pos.x) + " " + std::to_string(chunk_pos.y) + ".chunk",
-				std::fstream::in); // open for reading
+			this->fromY = entity_pos.chunkCoordsFromPosition().y - this->_chunksDistance;
+			this->fromY = Physics::clamp<int>(0, _mapSizeInChunks.y, fromY);
 
-			if (chunk_file.is_open())
+			this->toX = entity_pos.chunkCoordsFromPosition().x + this->_chunksDistance;
+			this->toX = Physics::clamp<int>(0, _mapSizeInChunks.x, toX);
+
+			this->toY = entity_pos.chunkCoordsFromPosition().y + this->_chunksDistance;
+			this->toY = Physics::clamp<int>(0, _mapSizeInChunks.y, toY);
+
+			for (int x = fromX; x <= toX; x++)
 			{
-				char* chunk_map = new char[CHUNK_SIZE * CHUNK_SIZE];
-				for (size_t i = 0; i < CHUNK_SIZE * CHUNK_SIZE; i++)
+				for (int y = fromY; y <= toY; y++)
 				{
-					chunk_file >> chunk_map[i];
+					if (std::find_if(_loadedChunks.begin(), _loadedChunks.end(),
+						[&](Chunk* c)
+						{
+							return c->getPosition() == sf::Vector2u(x, y);
+						}
+					) == this->_loadedChunks.end())
+					{
+						LOG("Added chunk: (" << x << ", " << y << ")");
+						auto new_chunk = this->getChunkFromFile(
+							_worldSaveSettings.dir_path + "\\chunks\\chunk " + std::to_string(x) + " " + std::to_string(y) + ".chunk",
+							sf::Vector2u((unsigned int)x, (unsigned int)y));
+						// add new chunk
+						this->_loadedChunks.push_back(new_chunk);
+					}
 				}
-				Chunk* new_chunk = new Chunk(this->_data->assets, chunk_pos, chunk_map);
-				this->_chunks.push_back(new_chunk); // add loaded chunk to list
 			}
 
-			chunk_file.close();
-		}
-
-		// unload unnecessary chunks
-		auto delete_it = std::remove_if(_chunks.begin(), _chunks.end(),
-			[&](Chunk* c)
+			// lamda to check if chunk is in bounds
+			auto isChunkInBounds = [&](Chunk* c)
 			{
-				return c->getPosition() != entity_pos.chunkCoordsFromPosition();
-			}
-		);
-		if (delete_it != this->_chunks.end())
-		{
-			this->_chunks.erase(delete_it);
-		}
+				return c->getPosition().x <= toX && c->getPosition().x >= fromX
+					&& c->getPosition().y <= toY && c->getPosition().y >= fromY;
+			};
 
-		// updating debug data (chunks loaded, tiles rendered)
-		this->_chunksLoaded = this->_chunks.size();
-		this->_tilesRendered = this->_chunksLoaded * (CHUNK_SIZE * CHUNK_SIZE);
+			// unload unnecessary chunks
+			for (int i = _loadedChunks.size() - 1; i >= 0; --i)
+			{
+				// if chunk is not in bounds of player vision - it should be deleted
+				if (!isChunkInBounds(this->_loadedChunks[i]))
+				{
+					// delete it
+					this->_loadedChunks.erase(this->_loadedChunks.begin() + i);
+				}
+			}
+
+			// update previous chunk
+			this->_previousChunk = entity_pos.chunkCoordsFromPosition();
+		}
 
 		// update loaded chunks
-		for (auto& chunk : this->_chunks)
+		this->_tilesRendered = 0; // reset
+		for (auto& chunk : this->_loadedChunks)
+		{
+			this->_tilesRendered += chunk->tilesRendered();
 			chunk->update(deltaTime);
+		}
 	}
 
 	void TileMap::render() const
 	{
-		// rendering tiles
-
-		for (const auto& chunk : this->_chunks)
+		// rendering tiles (chunks)
+		for (const auto& chunk : this->_loadedChunks)
 			chunk->render(this->_data->window);
 	}
 }

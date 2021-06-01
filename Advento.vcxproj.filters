@@ -203,13 +203,16 @@
     <ClInclude Include="src\engine\ui\ISelectable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\helper\SpriteManipulator.h">
+    <ClInclude Include="src\engine\SpriteManipulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\defenitions\COLORS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\tiles\Chunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\LOG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

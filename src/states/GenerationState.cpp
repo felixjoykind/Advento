@@ -10,7 +10,7 @@
 
 #include "engine/tiles/TileMap.h"
 
-#include "engine/helper/SpriteManipulator.h"
+#include "engine/SpriteManipulator.h"
 
 namespace fs = std::filesystem;
 
