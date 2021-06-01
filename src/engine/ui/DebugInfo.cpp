@@ -52,7 +52,12 @@ namespace Engine
 	}
 
 	DebugInfo::~DebugInfo()
-	{ }
+	{
+		// clear texts
+		for (auto& [name, text] : this->_texts)
+			delete text;
+		this->_texts.clear();
+	}
 
 	bool DebugInfo::isActive() const
 	{

@@ -70,7 +70,7 @@ namespace Engine
 			}
 		}
 
-		return map;
+		return map; // return generated map
 	}
 
 	std::string MapGenerator::getRandomSeed(unsigned int count)

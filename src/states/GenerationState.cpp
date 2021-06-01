@@ -21,6 +21,22 @@ GenerationState::GenerationState(GameDataRef data)
 
 GenerationState::~GenerationState()
 {
+	delete this->_background;
+
+	// delete all buttons
+	for (auto& [name, button] : this->_buttons)
+		delete button;
+	this->_buttons.clear();
+
+	// delete all textboxes
+	for (auto& [name, textbox] : this->_textboxes)
+		delete textbox;
+	this->_textboxes.clear();
+
+	// delete all titles
+	for (auto& [name, title] : this->_titles)
+		delete title;
+	this->_titles.clear();
 }
 
 void GenerationState::Init()

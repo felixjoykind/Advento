@@ -17,7 +17,11 @@ namespace UI
 		{
 			_shape->setPosition(position);
 		}
-		~UIElement() { }
+		~UIElement()
+		{
+			// delete shape
+			delete this->_shape;
+		}
 
 		// getters
 		const sf::RectangleShape& getShape() const

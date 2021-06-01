@@ -49,7 +49,14 @@ namespace Engine
 	void TileMap::generate(GenerationSettings settings)
 	{
 		// getting char map and clearing previous
-		this->_loadedChunks.clear(); // clear chunks
+		for (auto& chunk : this->_loadedChunks)
+			delete chunk;
+		this->_loadedChunks.clear();
+
+		for (auto& chunk : this->_changedChunks)
+			delete chunk;
+		this->_changedChunks.clear();
+
 		auto map = std::move(MapGenerator::Generate(settings)); // generated map
 
 		// split map into chunks
@@ -78,6 +85,8 @@ namespace Engine
 		}
 
 		// clear generated map
+		for (size_t i = 0; i < settings.height; i++)
+			delete[] map[i];
 		delete[] map;
 	}
 
@@ -152,10 +161,13 @@ namespace Engine
 		info_file.close(); // end info_file
 
 		// clear all previous chunks
+		for (auto& chunk : this->_loadedChunks)
+			delete chunk;
 		this->_loadedChunks.clear();
-		this->_loadedChunks.shrink_to_fit();
+
+		for (auto& chunk : this->_changedChunks)
+			delete chunk;
 		this->_changedChunks.clear();
-		this->_changedChunks.shrink_to_fit();
 
 		// init map size in tiles
 		this->_mapSize.x = BASIC_WORLD_SIZE_X; // rows
@@ -212,9 +224,9 @@ namespace Engine
 			this->toY = Math::clamp<int>(0, _mapSizeInChunks.y, toY);
 
 			// loop through range
-			for (int x = fromX; x <= toX; x++)
+			for (unsigned int x = fromX; x <= toX; x++)
 			{
-				for (int y = fromY; y <= toY; y++)
+				for (unsigned int y = fromY; y <= toY; y++)
 				{
 					// if chunk that should be loaded is not loaded yet
 					if (std::find_if(_loadedChunks.begin(), _loadedChunks.end(),
@@ -251,6 +263,9 @@ namespace Engine
 					// delete it
 					auto chunk_pos = this->_loadedChunks[i]->getPosition();
 					LOG("Unloaded chunk: (" << chunk_pos.x << ", " << chunk_pos.y << ")"); // debug info
+
+					// delete chunk
+					delete this->_loadedChunks[i];
 					this->_loadedChunks.erase(this->_loadedChunks.begin() + i);
 				}
 			}

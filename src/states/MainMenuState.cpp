@@ -11,12 +11,14 @@ MainMenuState::MainMenuState(GameDataRef data)
 
 MainMenuState::~MainMenuState()
 {
+	// delete ui elements
 	delete this->_title;
 	delete this->_background;
 
 	// delete all buttons
 	for (auto const& [name, button] : this->_buttons)
 		delete button;
+	this->_buttons.clear();
 }
 
 void MainMenuState::Init()

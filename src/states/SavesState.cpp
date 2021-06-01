@@ -29,6 +29,21 @@ SavesState::SavesState(GameDataRef data)
 
 SavesState::~SavesState()
 {
+	// delete world plates
+	for (size_t i = 0; i < this->_worlds.size(); i++)
+		delete this->_worlds[i];
+	this->_worlds.clear();
+
+	// delete all buttons
+	for (auto& [name, button] : this->_buttons)
+		delete button;
+	this->_buttons.clear();
+
+	// delete background
+	delete this->_background;
+
+	// delete scrollbar
+	delete this->_scroller;
 }
 
 void SavesState::Init()
@@ -135,7 +150,11 @@ void SavesState::Render() const
 
 void SavesState::RefreshWorldsList()
 {
+	// clear all previous worlds plates
+	for (size_t i = 0; i < this->_worlds.size(); i++)
+		delete this->_worlds[i];
 	this->_worlds.clear();
+
 	namespace fs = std::filesystem;
 	unsigned int i = 0;
 	for (const auto& entry : fs::directory_iterator(WORLDS_DIR))
