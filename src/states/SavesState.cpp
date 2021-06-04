@@ -19,9 +19,9 @@
 SavesState::SavesState(GameDataRef data)
 	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background"))),
 	_scroller(new UI::Scroller<UI::WorldPlate>(
-		_data, { 15.f, 400.f }, 
+		_data, { 15.f, 400.f },
 		{ float(_data->winConfig.width / 2 + _data->winConfig.width / 4) + 10.f, 20.f },
-		{ 20.f, float(_data->winConfig.height) },
+		{ 20.f, float(_data->winConfig.height - 20) },
 		_worlds)
 	)
 {

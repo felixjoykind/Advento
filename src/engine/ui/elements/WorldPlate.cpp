@@ -26,6 +26,16 @@ namespace UI
 		return this->_settings;
 	}
 
+	void WorldPlate::setPosition(sf::Vector2f position)
+	{
+		UIElement::setPosition(position);
+		this->_title->setPosition(
+			this->_shape->getPosition().x + 10.f, 
+			this->_shape->getPosition().y + 10.f
+		);
+
+	}
+
 	void WorldPlate::update(float deltaTime)
 	{
 		// update selection

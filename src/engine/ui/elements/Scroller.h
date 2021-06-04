@@ -5,6 +5,8 @@
 #include "engine/LOG.h"
 #include "engine/Math.h"
 
+#define SCROLL_SPEED 1500
+
 namespace UI
 {
 	struct ScrollbarBounds
@@ -24,11 +26,15 @@ namespace UI
 		bool _gotPressed;
 		bool _isActive;
 		ScrollbarBounds _bounds;
+		int _mouseWheelDelta = 0; // mouse wheel delta (for wheel scrolling logic)
 
 		// colors data
 		sf::Color _idleColor;
 		sf::Color _hoveredColor;
 		sf::Color _pressedColor;
+
+		// max visible elements
+		unsigned int MAX_VISIBLE_ELEMENTS = 8;
 
 	public:
 		Scroller(GameDataRef data, sf::Vector2f size, sf::Vector2f pos, ScrollbarBounds bounds, std::vector<T*>& content);
@@ -54,7 +60,8 @@ namespace UI
 
 	template<class T>
 	Scroller<T>::Scroller(GameDataRef data, sf::Vector2f size, sf::Vector2f pos, ScrollbarBounds bounds, std::vector<T*>& content)
-		:UIElement(data, size, pos), IHoverable(this), _content(content), _gotPressed(false), _isActive(false), _bounds(bounds)
+		:UIElement(data, size, pos), IHoverable(this), _content(content),
+		_gotPressed(false), _isActive(false), _bounds(bounds)
 	{
 		static_assert(std::is_base_of<UIElement, T>::value,
 			"Scroller can only be connected to UIElement or derived from it class (Scroller.h, in contructor)");
@@ -77,17 +84,16 @@ namespace UI
 		if (this->_content.size() > 0)
 		{
 			auto element_height = this->_content[0]->getShape().getSize().y;
+			this->MAX_VISIBLE_ELEMENTS = this->_data->winConfig.height / (unsigned int)element_height;
 			if (this->_content.size() * WORLD_PLATES_OFFSET + this->_content.size() * element_height > this->_bounds.max)
 			{
-				LOG(this->_content.size() * WORLD_PLATES_OFFSET + this->_content.size() * element_height);
-
 				this->_isActive = true;
 
 				// set size based on container size
 				this->_shape->setSize(
 					{
 						this->_shape->getSize().x,
-						float(this->_data->winConfig.height - this->_content.size() * 10)
+						float(element_height)
 					}
 				);
 			}
@@ -119,6 +125,7 @@ namespace UI
 	{
 		if (!this->_isActive) return;
 
+		// for mouse buttons events
 		if (ev.type == sf::Event::MouseButtonPressed)
 		{
 			if (InputManager::isElementPressed(this, this->_data->window, sf::Mouse::Left))
@@ -132,15 +139,19 @@ namespace UI
 			this->setBackgroundColor(this->_idleColor);
 			this->_gotPressed = false;
 		}
+
+		// for mouse wheel events
+		if (ev.type == sf::Event::MouseWheelMoved)
+		{
+			// update wheel delta
+			this->_mouseWheelDelta = ev.mouseWheel.delta;
+		}
 	}
 
 	template<class T>
 	void Scroller<T>::update(float deltaTime)
 	{
 		if (!this->_isActive) return;
-
-		// TODO: move scrollbar with mouse smoothly and corectly
-		// TODO: implement mouse wheel logic
 
 		// hovering logic
 		IHoverable::update(deltaTime, this->_data->window);
@@ -166,7 +177,41 @@ namespace UI
 			);
 		}
 
-		// clamp scrollbar with it bounds
+		// update scrollbar with wheel
+		auto pos_old = this->getPosition();
+		this->setPosition(
+			{
+				this->_shape->getPosition().x,
+				this->_shape->getPosition().y - float(this->_mouseWheelDelta * SCROLL_SPEED) * deltaTime
+			}
+		);
+		// if wheel was moved stop it
+		if (this->getPosition() != pos_old)
+		{
+			this->_mouseWheelDelta = 0;
+		}
+
+		// if we are moving somewhere - update elements positions
+		if (this->getPosition().y > this->_bounds.min &&
+			this->getPosition().y + this->_shape->getSize().y < this->_bounds.max)
+		{
+			// claculate new position for content
+			for (unsigned int i = 0; i < this->_content.size(); i++)
+			{
+				auto& elem = this->_content[i]; // current element
+
+				// calculating element poisition based on scrollbar position
+				elem->setPosition(
+					{
+						elem->getPosition().x,
+						float(i * 110.f + WORLD_PLATES_OFFSET) -
+						(this->getPosition().y - this->_bounds.min) * (this->_content.size() / this->MAX_VISIBLE_ELEMENTS)
+					}
+				);
+			}
+		}
+
+		// clamp scrollbar position with bounds
 		this->_shape->setPosition(
 			{
 				_shape->getPosition().x,

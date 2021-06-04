@@ -23,11 +23,19 @@ namespace UI
 			delete this->_shape;
 		}
 
-		// getters
-		const sf::RectangleShape& getShape() const
+		// Sets element position
+		// Virtual because element may contain other elements like Text 
+		// or something else, that should also be moved
+		virtual void setPosition(sf::Vector2f position)
 		{
-			return *this->_shape;
+			this->_shape->setPosition(position);
 		}
+
+		// Returns element position
+		sf::Vector2f getPosition() const { return this->_shape->getPosition(); }
+
+		// Returns elment shape
+		const sf::RectangleShape& getShape() const { return *this->_shape; }
 
 		// setters
 		void setBackgroundColor(const sf::Color& color)

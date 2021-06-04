@@ -25,6 +25,8 @@ namespace UI
         // getters
         Engine::WorldSaveSettings getSettings() const;
 
+        void setPosition(sf::Vector2f position) override;
+
         void update(float deltaTime) override;
         void render() const override;
 
