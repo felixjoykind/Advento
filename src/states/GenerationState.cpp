@@ -2,7 +2,6 @@
 
 #include <filesystem>
 #include <random>
-#include <windows.h>
 
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/defenitions/PATH_DEFENITIONS.h"
@@ -15,13 +14,15 @@
 namespace fs = std::filesystem;
 
 GenerationState::GenerationState(GameDataRef data)
-	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("generation menu background")))
+	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("generation menu background"))),
+	_messageboxManager(new UI::MessageboxManager(data))
 {
 }
 
 GenerationState::~GenerationState()
 {
 	delete this->_background;
+	delete this->_messageboxManager;
 
 	// delete all buttons
 	for (auto& [name, button] : this->_buttons)
@@ -154,19 +155,23 @@ void GenerationState::Update(float deltaTime)
 			world_name.find('*') != std::string::npos)
 		{
 			// tell user that world name is forbidden
-			MessageBoxA(
-				NULL, 
-				"World name can't contain characters like: / \\ | ? * \" < > :", "Forbidden world name", 
-				MB_OK | MB_ICONEXCLAMATION
+			this->_messageboxManager->show(
+				new UI::MessageBox(
+					this->_data, "Forbidden world name", 
+					"World name can't contain\ncharacters like: / \\ | ? * \" < > :",
+					{ 100.f, 100.f }
+				)
 			);
 			return;
 		}
-		else if (world_name.length() == 0)
+		else if (world_name.length() == 0) // if world name is empty
 		{
-			MessageBoxA(
-				NULL,
-				"World name cannot be empty", "Forbidden world name",
-				MB_OK | MB_ICONEXCLAMATION
+			this->_messageboxManager->show(
+				new UI::MessageBox(
+					this->_data, "Forbidden world name",
+					"World name cannot be empty",
+					{ 100.f, 100.f }
+				)
 			);
 			return;
 		}
@@ -211,6 +216,9 @@ void GenerationState::Update(float deltaTime)
 	// update buttons
 	for (auto& [name, button] : this->_buttons)
 		button->update(deltaTime);
+
+	// update messageboxes
+	this->_messageboxManager->update(deltaTime);
 }
 
 void GenerationState::Render() const
@@ -231,6 +239,9 @@ void GenerationState::Render() const
 	// render buttons
 	for (const auto& [name, button] : this->_buttons)
 		button->render();
+	
+	// render messageboxes
+	this->_messageboxManager->render();
 
 	this->_data->window.display();
 }

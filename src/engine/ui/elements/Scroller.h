@@ -9,12 +9,13 @@
 
 namespace UI
 {
+	// Represents bounds of scrollbar element
 	struct ScrollbarBounds
 	{
 		float min, max;
 	};
 
-	template <class T>
+	template <class T> // type of content (UIElements only)
 	class Scroller :
 		public UIElement, public IHoverable
 	{
@@ -85,7 +86,7 @@ namespace UI
 		{
 			auto element_height = this->_content[0]->getShape().getSize().y;
 			this->MAX_VISIBLE_ELEMENTS = this->_data->winConfig.height / (unsigned int)element_height;
-			if (this->_content.size() * WORLD_PLATES_OFFSET + this->_content.size() * element_height > this->_bounds.max)
+			if (this->_content.size() > this->MAX_VISIBLE_ELEMENTS - 1)
 			{
 				this->_isActive = true;
 
@@ -177,17 +178,17 @@ namespace UI
 			);
 		}
 
-		// update scrollbar with wheel
-		auto pos_old = this->getPosition();
+		// update scrollbar position with wheel input
 		this->setPosition(
 			{
 				this->_shape->getPosition().x,
 				this->_shape->getPosition().y - float(this->_mouseWheelDelta * SCROLL_SPEED) * deltaTime
 			}
 		);
-		// if wheel was moved stop it
-		if (this->getPosition() != pos_old)
+		// if wheel was moved
+		if (this->_mouseWheelDelta != 0)
 		{
+			// stop it
 			this->_mouseWheelDelta = 0;
 		}
 

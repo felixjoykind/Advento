@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ui\elements\messagebox\MessageboxManager.cpp" />
+    <ClCompile Include="src\engine\ui\elements\messagebox\MessageBox.cpp" />
     <ClCompile Include="src\engine\tiles\Chunk.cpp" />
     <ClCompile Include="src\engine\ui\elements\UIElement.cpp" />
     <ClCompile Include="src\gamedata\InputManager.cpp" />
@@ -180,6 +182,8 @@
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ui\elements\messagebox\MessageboxManager.h" />
+    <ClInclude Include="src\engine\ui\elements\messagebox\MessageBox.h" />
     <ClInclude Include="src\engine\defenitions\UI_DEFENITIONS.h" />
     <ClInclude Include="src\engine\ui\IHoverable.h" />
     <ClInclude Include="src\engine\ui\elements\Scroller.h" />

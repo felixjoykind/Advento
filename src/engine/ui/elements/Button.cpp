@@ -28,6 +28,17 @@ namespace UI
 		delete this->_content;
 	}
 
+	void Button::setPosition(sf::Vector2f position)
+	{
+		UIElement::setPosition(position); // base
+		this->_content->setPosition(
+			sf::Vector2f(
+				_shape->getPosition().x + (_shape->getGlobalBounds().width / 2.f) - _content->getGlobalBounds().width / 2.f,
+				_shape->getPosition().y + (_shape->getGlobalBounds().height / 2.f) - _content->getGlobalBounds().height
+			)
+		);
+	}
+
 	bool Button::isPressed(sf::Mouse::Button button)
 	{
 		return IClickable::GetClick(this->_data->window, button) == ClickType::SINGLE;

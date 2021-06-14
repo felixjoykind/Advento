@@ -102,7 +102,7 @@ namespace UI
 		// update cursor position
 		this->_cursor->setPosition(
 			{
-				this->_text->getPosition().x + this->_text->getGlobalBounds().width + 3.f,
+				this->_text->getPosition().x + this->_text->getGlobalBounds().width + 5.f,
 				this->_text->getPosition().y
 			}
 		);

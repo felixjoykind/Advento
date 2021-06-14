@@ -37,7 +37,7 @@ namespace UI
 		// Returns elment shape
 		const sf::RectangleShape& getShape() const { return *this->_shape; }
 
-		// setters
+		// Sets background color
 		void setBackgroundColor(const sf::Color& color)
 		{
 			this->_shape->setFillColor(color);
@@ -46,10 +46,6 @@ namespace UI
 		// basic functions
 		virtual void update(float deltaTime) { }
 		virtual void render() const { this->_data->window.draw(*this->_shape); };
-
-		friend class IClickable;
-		friend class ISelectable;
-		friend class IHoverable;
 
 	};
 }

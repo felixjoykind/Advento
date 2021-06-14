@@ -14,5 +14,4 @@ UI
 			- loading
 
 	create own message boxes
-	add scrolling logic to worlds list
 	add worlds editing

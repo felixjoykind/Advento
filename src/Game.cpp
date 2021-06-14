@@ -1,7 +1,6 @@
 #include "Game.h"
 
 #include <fstream>
-#include <filesystem>
 #include "states/MainMenuState.h"
 #include "engine/defenitions/PATH_DEFENITIONS.h"
 
@@ -24,6 +23,8 @@ Game::Game()
 	// loading fonts
 	this->_data->assets.AddFont("menu font", "./assets/fonts/Jura-Regular.ttf");
 	this->_data->assets.AddFont("menu title font", "./assets/fonts/Comfortaa-Light.ttf");
+	this->_data->assets.AddFont("SegoeUI Regular", "./assets/fonts/SegoeUI.ttf");
+	this->_data->assets.AddFont("SegoeUI Semibold", "./assets/fonts/SegoeUI-SemiBold.ttf");
 
 	// starting game with main menu state
 	this->_data->states.AddState(StateRef(new MainMenuState(this->_data)), false);

@@ -2,7 +2,7 @@
 
 #include "PositionComponent.h"
 #include "SpriteComponent.h"
-#include "engine/Physics.h"
+#include "engine/Math.h"
 
 namespace Engine
 {
@@ -36,10 +36,10 @@ namespace Engine
 	{
 		// accelerating
 		this->_velocity.x += _settings.aceleration * dir_x;
-		this->_velocity.x = Physics::clamp<float>(-_settings.maxVelocity, _settings.maxVelocity, _velocity.x);
+		this->_velocity.x = Math::clamp<float>(-_settings.maxVelocity, _settings.maxVelocity, _velocity.x);
 
 		this->_velocity.y += _settings.aceleration * dir_y;
-		this->_velocity.y = Physics::clamp<float>(-_settings.maxVelocity, _settings.maxVelocity, _velocity.y);
+		this->_velocity.y = Math::clamp<float>(-_settings.maxVelocity, _settings.maxVelocity, _velocity.y);
 	}
 
 	void MovementComponent::update(float deltaTime)

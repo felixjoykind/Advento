@@ -28,6 +28,8 @@ namespace UI
 			sf::Text content);
 		~Button();
 
+		void setPosition(sf::Vector2f position) override;
+
 		// Getters
 		bool isPressed(sf::Mouse::Button button);
 

@@ -4,6 +4,7 @@
 
 #include "engine/ui/elements/Textbox.h"
 #include "engine/ui/elements/Button.h"
+#include "engine/ui/elements/messagebox/MessageboxManager.h"
 
 // State for choosing world generation settings
 class GenerationState :
@@ -14,6 +15,9 @@ private:
 
     // background
     sf::Sprite* _background;
+
+    // messagebox manager
+    UI::MessageboxManager* _messageboxManager;
 
     // ui elements
     std::map<std::string, UI::Textbox*> _textboxes; // textboxes
