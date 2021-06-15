@@ -233,6 +233,9 @@
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageboxManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\ui\IDragable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TodoList.txt" />

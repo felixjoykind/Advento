@@ -6,8 +6,8 @@
 
 namespace Engine
 {
-	PositionComponent::PositionComponent(Entity* e, float _x, float _y)
-		:Component(e), x(_x), y(_y)
+	PositionComponent::PositionComponent(Entity* e, float x, float y)
+		:Component(e), _x(x), _y(y)
 	{
 	}
 
@@ -17,14 +17,14 @@ namespace Engine
 
 	sf::Vector2f PositionComponent::getPosition() const
 	{
-		return sf::Vector2f(this->x, this->y);
+		return sf::Vector2f(this->_x, this->_y);
 	}
 
 	sf::Vector2u PositionComponent::getGridPosition() const
 	{
 		return sf::Vector2u(
-			static_cast<unsigned>(this->getX()) / TILE_SIZE,
-			static_cast<unsigned>(this->getY()) / TILE_SIZE
+			static_cast<unsigned>(this->getX() / TILE_SIZE),
+			static_cast<unsigned>(this->getY() / TILE_SIZE)
 		);
 	}
 
@@ -37,34 +37,34 @@ namespace Engine
 		};
 	}
 
-	float PositionComponent::getX() const { return this->x; }
-	float PositionComponent::getY() const { return this->y; }
-	void PositionComponent::setX(float _x) { this->x = _x; }
-	void PositionComponent::setY(float _y) { this->y = _y; }
+	float PositionComponent::getX() const { return this->_x; }
+	float PositionComponent::getY() const { return this->_y; }
+	void PositionComponent::setX(float x) { this->_x = x; }
+	void PositionComponent::setY(float y) { this->_y = y; }
 
-	void PositionComponent::setPosition(float _x, float _y)
+	void PositionComponent::setPosition(float x, float y)
 	{
-		this->x = _x;
-		this->y = _y;
+		this->_x = x;
+		this->_y = y;
 	}
 
 	void PositionComponent::move(float offset_x, float offset_y)
 	{
-		this->x += offset_x;
-		this->y += offset_y;
+		this->_x += offset_x;
+		this->_y += offset_y;
 	}
 
 	void PositionComponent::move(sf::Vector2f offset)
 	{
-		this->x += offset.x;
-		this->y += offset.y;
+		this->_x += offset.x;
+		this->_y += offset.y;
 
 		// if entity has sprite component
 		if (this->_entity->hasComponent<SpriteComponent>())
 		{
 			// update sprite position
 			// also its a bug fix with sprite moving and rendering
-			this->_entity->getComponent<SpriteComponent>().getSpr().setPosition({ this->x, this->y });
+			this->_entity->getComponent<SpriteComponent>().getSpr().setPosition({ this->_x, this->_y });
 		}
 	}
 }

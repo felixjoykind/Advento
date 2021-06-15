@@ -12,16 +12,51 @@
 
 namespace UI
 {
+	void MessageBox::updateElementsPosition()
+	{
+		auto position = this->getPosition();
+
+		this->_header->setPosition(position);
+
+		this->_texts.at("TITLE")->setPosition(
+			position.x + 5.f,
+			position.y
+		);
+
+		this->_texts.at("INFO")->setPosition(
+			position.x + 5.f,
+			position.y + _header->getSize().y + 5.f
+		);
+
+		// move buttons
+		this->_closeButton->setPosition(
+			{
+				_shape->getPosition().x + _shape->getSize().x - CLOSE_BUTTON_SIZE,
+				_shape->getPosition().y
+			}
+		);
+		for (auto& [name, button] : this->_buttons)
+		{
+			button->setPosition(
+				{
+					_shape->getPosition().x + 10.f + (_buttons.size() - 1) * BUTTON_WIDTH,	// x
+					_shape->getPosition().y + _shape->getSize().y - 50.f				// y
+				}
+			);
+		}
+	}
+
 	MessageBox::MessageBox(GameDataRef data, std::string title, std::string info, sf::Vector2f position)
-		:UIElement(data, { MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT }, position), _dragZone(new sf::RectangleShape({ MIN_WINDOW_WIDTH, DRAGZONE_HEIGHT })),
+		:UIElement(data, { MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT }, position), IDragable(this),
+		_header(new sf::RectangleShape({ MIN_WINDOW_WIDTH, DRAGZONE_HEIGHT })),
 		_isActive(true)
 	{
 		// init main box
 		UIElement::setBackgroundColor(sf::Color(0, 0, 0, 200));
 
 		// init drag zone
-		this->_dragZone->setPosition(position);
-		this->_dragZone->setFillColor(sf::Color::Black);
+		this->_header->setPosition(position);
+		this->_header->setFillColor(sf::Color::Black);
 
 		// init texts
 		this->_texts["TITLE"] = new sf::Text(
@@ -34,7 +69,7 @@ namespace UI
 		);
 		this->_texts.at("INFO")->setPosition(
 			position.x + 5.f,
-			position.y + _dragZone->getSize().y + 5.f
+			position.y + _header->getSize().y + 5.f
 		);
 		
 		// init buttons
@@ -46,7 +81,7 @@ namespace UI
 			sf::Color(255, 255, 255, 200), sf::Color::White, sf::Color::White,
 			sf::Text("X", _data->assets.GetFont("SegoeUI Regular"), 18U)
 		);
-
+		
 		this->_buttons["OK"] = new UI::Button(
 			this->_data,
 			{ _shape->getPosition().x + 10.f + _buttons.size() * BUTTON_WIDTH, _shape->getPosition().y + _shape->getSize().y - 50.f },
@@ -56,7 +91,7 @@ namespace UI
 			sf::Text("OK", _data->assets.GetFont("SegoeUI Regular"), 18U)
 		);
 
-		// if content doesn't fit
+		// if title doesn't fit
 		if (this->_texts.at("TITLE")->getGlobalBounds().width > MIN_WINDOW_WIDTH)
 		{
 			// resize
@@ -64,7 +99,7 @@ namespace UI
 
 			// update content size and position with new width
 			this->_shape->setSize({ new_width, _shape->getSize().y });
-			this->_dragZone->setSize({ new_width, DRAGZONE_HEIGHT });
+			this->_header->setSize({ new_width, DRAGZONE_HEIGHT });
 			this->_closeButton->setPosition(
 				{
 					_shape->getPosition().x + _shape->getSize().x - CLOSE_BUTTON_SIZE,
@@ -72,6 +107,7 @@ namespace UI
 				}
 			);
 		}
+		// if content doesn't fit
 		if (this->_texts.at("INFO")->getGlobalBounds().height > 
 			MIN_WINDOW_HEIGHT - DRAGZONE_HEIGHT - 50.f) // DOESNT WORK!!!
 		{
@@ -83,7 +119,8 @@ namespace UI
 			);
 
 			// update buttons positions
-			this->setPosition(this->getPosition()); // shitty code time
+			// this->setPosition(this->getPosition()); // shitty code time
+			this->updateElementsPosition();
 		}
 	}
 
@@ -108,33 +145,23 @@ namespace UI
 		// move all content
 		UIElement::setPosition(position);
 
-		this->_dragZone->setPosition(position);
-		this->_texts.at("TITLE")->setPosition(position);
-		this->_texts.at("INFO")->setPosition(
-			position.x,
-			position.y + _dragZone->getSize().y + 5.f
-		);
-
-		// move buttons
-		this->_closeButton->setPosition(
-			{ 
-				_shape->getPosition().x + _shape->getSize().x - CLOSE_BUTTON_SIZE, 
-				_shape->getPosition().y
-			}
-		);
-		for (auto& [name, button] : this->_buttons)
-		{
-			button->setPosition(
-				{ 
-					_shape->getPosition().x + 10.f + (_buttons.size() - 1) * BUTTON_WIDTH,	// x
-					_shape->getPosition().y + _shape->getSize().y - 50.f				// y
-				}
-			);
-		}
+		this->updateElementsPosition();
 	}
 
 	void MessageBox::update(float deltaTime)
 	{
+		// drag logic
+		IDragable::update(deltaTime, this->_data->window);
+
+		if (IDragable::dragStarted())
+		{
+			this->_shape->move(IDragable::getOffset()); // move shape
+
+			// also move all elements
+			//this->setPosition(this->getPosition());
+			this->updateElementsPosition();
+		}
+
 		// if OK button is pressed
 		if (this->_buttons.at("OK")->isPressed(sf::Mouse::Button::Left)
 			|| this->_closeButton->isPressed(sf::Mouse::Button::Left))
@@ -153,7 +180,7 @@ namespace UI
 	{
 		// render all content
 		UIElement::render(); // basic render function call
-		this->_data->window.draw(*this->_dragZone); // render frag zone
+		this->_data->window.draw(*this->_header); // render frag zone
 
 		// render texts
 		for (const auto& [name, text] : this->_texts)

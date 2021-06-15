@@ -185,6 +185,7 @@
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageboxManager.h" />
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageBox.h" />
     <ClInclude Include="src\engine\defenitions\UI_DEFENITIONS.h" />
+    <ClInclude Include="src\engine\ui\IDragable.h" />
     <ClInclude Include="src\engine\ui\IHoverable.h" />
     <ClInclude Include="src\engine\ui\elements\Scroller.h" />
     <ClInclude Include="src\engine\LOG.h" />

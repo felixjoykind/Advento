@@ -2,7 +2,7 @@
 
 #include "engine/defenitions/UI_DEFENITIONS.h"
 #include "engine/ui/IHoverable.h"
-#include "engine/LOG.h"
+#include "engine/ui/IDragable.h"
 #include "engine/Math.h"
 
 #define SCROLL_SPEED 1500
@@ -17,17 +17,19 @@ namespace UI
 
 	template <class T> // type of content (UIElements only)
 	class Scroller :
-		public UIElement, public IHoverable
+		public UIElement, public IHoverable, public IDragable
 	{
 	private:
 		// vector of elements scroller is connected to
 		std::vector<T*>& _content;
 
-		// data
-		bool _gotPressed;
-		bool _isActive;
-		ScrollbarBounds _bounds;
+		// input data
+		bool _isActive; // is element active
+		ScrollbarBounds _bounds; // scroller bounds
 		int _mouseWheelDelta = 0; // mouse wheel delta (for wheel scrolling logic)
+
+		// data for dragging element with mouse
+		float _elementHeight; // height of type of element scrollbar is connected to
 
 		// colors data
 		sf::Color _idleColor;
@@ -35,7 +37,7 @@ namespace UI
 		sf::Color _pressedColor;
 
 		// max visible elements
-		unsigned int MAX_VISIBLE_ELEMENTS = 8;
+		unsigned int MAX_VISIBLE_ELEMENTS = 8; // 8 by default
 
 	public:
 		Scroller(GameDataRef data, sf::Vector2f size, sf::Vector2f pos, ScrollbarBounds bounds, std::vector<T*>& content);
@@ -61,8 +63,8 @@ namespace UI
 
 	template<class T>
 	Scroller<T>::Scroller(GameDataRef data, sf::Vector2f size, sf::Vector2f pos, ScrollbarBounds bounds, std::vector<T*>& content)
-		:UIElement(data, size, pos), IHoverable(this), _content(content),
-		_gotPressed(false), _isActive(false), _bounds(bounds)
+		:UIElement(data, size, pos), IHoverable(this), _content(content), IDragable(this),
+		_isActive(false), _bounds(bounds)
 	{
 		static_assert(std::is_base_of<UIElement, T>::value,
 			"Scroller can only be connected to UIElement or derived from it class (Scroller.h, in contructor)");
@@ -81,11 +83,11 @@ namespace UI
 	template<class T>
 	inline void Scroller<T>::init()
 	{
-		// set active based on container input
+		// is active based on container input
 		if (this->_content.size() > 0)
 		{
-			auto element_height = this->_content[0]->getShape().getSize().y;
-			this->MAX_VISIBLE_ELEMENTS = this->_data->winConfig.height / (unsigned int)element_height;
+			this->_elementHeight = this->_content[0]->getShape().getSize().y;
+			this->MAX_VISIBLE_ELEMENTS = this->_data->winConfig.height / (unsigned int)this->_elementHeight;
 			if (this->_content.size() > this->MAX_VISIBLE_ELEMENTS - 1)
 			{
 				this->_isActive = true;
@@ -94,7 +96,7 @@ namespace UI
 				this->_shape->setSize(
 					{
 						this->_shape->getSize().x,
-						float(element_height)
+						float(this->_elementHeight)
 					}
 				);
 			}
@@ -132,13 +134,11 @@ namespace UI
 			if (InputManager::isElementPressed(this, this->_data->window, sf::Mouse::Left))
 			{
 				this->setBackgroundColor(this->_pressedColor); // update background color
-				this->_gotPressed = true;
 			}
 		}
 		else if (ev.type == sf::Event::MouseButtonReleased)
 		{
 			this->setBackgroundColor(this->_idleColor);
-			this->_gotPressed = false;
 		}
 
 		// for mouse wheel events
@@ -166,15 +166,12 @@ namespace UI
 			this->setBackgroundColor(this->_idleColor);
 		}
 
-		if (this->_gotPressed) // if got pressed
+		IDragable::update(deltaTime, this->_data->window);
+		if (IDragable::dragStarted())
 		{
-			this->setBackgroundColor(this->_pressedColor); // update background color
-
-			// move scroller with mouse
-			auto mouse_pos = sf::Mouse::getPosition(this->_data->window);
-			this->_shape->setPosition(
-				this->_shape->getPosition().x,
-				float(mouse_pos.y) - this->_shape->getSize().y / 2.f
+			this->_shape->move(
+				0.f,
+				IDragable::getOffset().y
 			);
 		}
 
@@ -192,7 +189,7 @@ namespace UI
 			this->_mouseWheelDelta = 0;
 		}
 
-		// if we are moving somewhere - update elements positions
+		// if we are moving somewhere - update connected elements positions
 		if (this->getPosition().y > this->_bounds.min &&
 			this->getPosition().y + this->_shape->getSize().y < this->_bounds.max)
 		{
@@ -201,11 +198,11 @@ namespace UI
 			{
 				auto& elem = this->_content[i]; // current element
 
-				// calculating element poisition based on scrollbar position
+				// calculating element y poisition based on scrollbar y position
 				elem->setPosition(
 					{
 						elem->getPosition().x,
-						float(i * 110.f + WORLD_PLATES_OFFSET) -
+						float(i * (this->_elementHeight + 10.f) + WORLD_PLATES_OFFSET) -
 						(this->getPosition().y - this->_bounds.min) * (this->_content.size() / this->MAX_VISIBLE_ELEMENTS)
 					}
 				);

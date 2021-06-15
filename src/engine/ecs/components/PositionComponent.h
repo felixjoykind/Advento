@@ -8,10 +8,10 @@ namespace Engine
 		public Component
 	{
 	private:
-		float x, y;
+		float _x, _y;
 
 	public:
-		PositionComponent(Entity* e, float _x, float _y);
+		PositionComponent(Entity* e, float x, float y);
 		~PositionComponent();
 
 		// Returns current positiobn
@@ -27,9 +27,9 @@ namespace Engine
 		float getY() const;
 
 		//setters
-		void setPosition(float _x, float _y);
-		void setX(float _x);
-		void setY(float _y);
+		void setPosition(float x, float y);
+		void setX(float x);
+		void setY(float y);
 
 		void move(float offset_x, float offset_y);
 		void move(sf::Vector2f offset);

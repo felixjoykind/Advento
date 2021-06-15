@@ -16,6 +16,8 @@
 #include "MainMenuState.h"
 #include "states/GameState.h"
 
+constexpr float WORLD_PLATE_HEIGHT = 100.f;
+
 SavesState::SavesState(GameDataRef data)
 	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background"))),
 	_scroller(new UI::Scroller<UI::WorldPlate>(
@@ -173,10 +175,10 @@ void SavesState::RefreshWorldsList()
 
 			// adding new world plate
 			this->_worlds.push_back(new UI::WorldPlate(this->_data, world_settings,
-				{ float(this->_data->winConfig.width / 2), 100.f },
+				{ float(this->_data->winConfig.width / 2), WORLD_PLATE_HEIGHT },
 				{
 					float(this->_data->winConfig.width / 2 - this->_data->winConfig.width / 4),
-					float(i * 110.f + WORLD_PLATES_OFFSET)
+					float(i * (WORLD_PLATE_HEIGHT + 10.f) + WORLD_PLATES_OFFSET)
 				},
 				sf::Color(70, 63, 58)
 			));
