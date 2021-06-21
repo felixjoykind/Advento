@@ -23,7 +23,7 @@ SavesState::SavesState(GameDataRef data)
 	_scroller(new UI::Scroller<UI::WorldPlate>(
 		_data, { 15.f, 400.f },
 		{ float(_data->winConfig.width / 2 + _data->winConfig.width / 4) + 10.f, 20.f },
-		{ 20.f, float(_data->winConfig.height - 20) },
+		{ WORLD_PLATE_OFFSET_FROM_TOP + WORLD_PLATES_OFFSET, float(_data->winConfig.height - 20) },
 		_worlds)
 	)
 {
@@ -66,12 +66,37 @@ void SavesState::Init()
 	SpriteManipulator::Stretch(this->_background,
 		{ float(this->_data->winConfig.width), float(this->_data->winConfig.height) });
 
+	// init titles
+	this->_titles["WORLDS_TITLE"] = new sf::Text(
+		"Worlds list", this->_data->assets.GetFont("menu title font"), 30U
+	);
+	this->_titles.at("WORLDS_TITLE")->setPosition(
+		{ 
+			float(_data->winConfig.width / 2) - _titles.at("WORLDS_TITLE")->getGlobalBounds().width / 2.f,
+			20.f
+		}
+	); // pisition
+
+	// if there are no worlds
+	if (this->_worlds.size() == 0)
+	{
+		this->_titles["NO_WORLDS_TITLE"] = new sf::Text(
+			"No worlds yet :(", this->_data->assets.GetFont("menu title font"), 60U
+		);
+		this->_titles.at("NO_WORLDS_TITLE")->setPosition(
+			{
+				float(_data->winConfig.width / 2) - _titles.at("NO_WORLDS_TITLE")->getGlobalBounds().width / 2.f,
+				float(_data->winConfig.height / 2) - _titles.at("NO_WORLDS_TITLE")->getGlobalBounds().height / 2.f
+			}
+		); // pisition
+	}
+
 	// init buttons
 	this->_buttons["NEW_WORLD"] = new UI::Button(
 		this->_data, { 100.f, float(this->_data->winConfig.height - 70) }, { 250.f, 55.f },
 		BLANK_COLOR, BLANK_COLOR, BLANK_COLOR,
 		sf::Color(192, 192, 192), sf::Color::White, sf::Color::White,
-		sf::Text("New World", this->_data->assets.GetFont("menu font"), 40)
+		sf::Text("New World", this->_data->assets.GetFont("menu font"), 40U)
 	);
 }
 
@@ -139,6 +164,10 @@ void SavesState::Render() const
 	// render scroller
 	this->_scroller->render();
 
+	// render titles
+	for (const auto& [name, title] : this->_titles)
+		this->_data->window.draw(*title);
+
 	// rendering worlds plates
 	for (const auto& plate : this->_worlds)
 		plate->render();
@@ -173,13 +202,16 @@ void SavesState::RefreshWorldsList()
 			json.at("name").get_to(world_settings.name);
 			json.at("dir_path").get_to(world_settings.dir_path);
 
+			sf::Vector2f plate_pos = 
+			{
+				float(this->_data->winConfig.width / 2 - this->_data->winConfig.width / 4),
+				float(i * (WORLD_PLATE_HEIGHT + 10.f) + WORLD_PLATES_OFFSET) + WORLD_PLATE_OFFSET_FROM_TOP
+			};
+
 			// adding new world plate
 			this->_worlds.push_back(new UI::WorldPlate(this->_data, world_settings,
 				{ float(this->_data->winConfig.width / 2), WORLD_PLATE_HEIGHT },
-				{
-					float(this->_data->winConfig.width / 2 - this->_data->winConfig.width / 4),
-					float(i * (WORLD_PLATE_HEIGHT + 10.f) + WORLD_PLATES_OFFSET)
-				},
+				plate_pos,
 				sf::Color(70, 63, 58)
 			));
 		}
@@ -189,6 +221,21 @@ void SavesState::RefreshWorldsList()
 
 	// reinit scroller
 	this->_scroller->init();
+
+	// if there are some worlds
+	if (this->_worlds.size() > 0)
+	{
+		// delete NO_WORLDS_TITLE
+		for (auto it = this->_titles.begin(); it != this->_titles.end(); ++it)
+		{
+			if (it->first == "NO_WORLDS_TITLE") // if found
+			{
+				delete it->second; // delete text ptr
+				// erase it from map
+				this->_titles.erase(it);
+			}
+		}
+	}
 }
 
 void SavesState::Resume()

@@ -18,7 +18,10 @@ private:
     sf::Sprite* _background;
 
     UI::Scroller<UI::WorldPlate>* _scroller; // worlds list scroller
+
+    // ui containers
     std::vector<UI::WorldPlate*> _worlds;
+    std::map<std::string, sf::Text*> _titles;
     std::map<std::string, UI::Button*> _buttons; // buttons container
 
 public:

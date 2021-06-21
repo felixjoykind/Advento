@@ -1,8 +1,9 @@
 Game
-	Map editor
+	WORLD BORDERS !
+		- make red
+		- forbid to cross the border
+
 UI
-	Pause Menu
-		- redesign (maybe)
 	Settings
 		- Settings system
 			Sets
@@ -13,5 +14,4 @@ UI
 			- saving
 			- loading
 
-	create own message boxes
 	add worlds editing

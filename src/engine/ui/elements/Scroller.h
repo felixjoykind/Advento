@@ -54,6 +54,8 @@ namespace UI
 		// Sets pressed color
 		void setPressedColor(const sf::Color color);
 
+		void updateContentPosition();
+
 		// basic functions
 		void handleInput(sf::Event ev);
 		void update(float deltaTime) override;
@@ -83,6 +85,8 @@ namespace UI
 	template<class T>
 	inline void Scroller<T>::init()
 	{
+		this->setPosition({ this->getPosition().x, this->_bounds.min });
+
 		// is active based on container input
 		if (this->_content.size() > 0)
 		{
@@ -100,6 +104,8 @@ namespace UI
 					}
 				);
 			}
+
+			this->updateContentPosition();
 		}
 		else
 			this->_isActive = false;
@@ -124,7 +130,27 @@ namespace UI
 	}
 
 	template<class T>
-	inline void Scroller<T>::handleInput(sf::Event ev)
+	void Scroller<T>::updateContentPosition()
+	{
+		// claculate new position for content
+		for (unsigned int i = 0; i < this->_content.size(); i++)
+		{
+			auto& elem = this->_content[i]; // current element
+
+			// calculating element y poisition based on scrollbar y position
+			elem->setPosition(
+				{
+					// 2210 - 1950
+					elem->getPosition().x,
+					float(i * (this->_elementHeight + 10.f) + WORLD_PLATES_OFFSET) -
+					(this->getPosition().y - this->_bounds.min) * (this->_content.size() / this->MAX_VISIBLE_ELEMENTS + 1.f) + WORLD_PLATE_OFFSET_FROM_TOP
+				}
+			);
+		}
+	}
+
+	template<class T>
+	void Scroller<T>::handleInput(sf::Event ev)
 	{
 		if (!this->_isActive) return;
 
@@ -194,19 +220,7 @@ namespace UI
 			this->getPosition().y + this->_shape->getSize().y < this->_bounds.max)
 		{
 			// claculate new position for content
-			for (unsigned int i = 0; i < this->_content.size(); i++)
-			{
-				auto& elem = this->_content[i]; // current element
-
-				// calculating element y poisition based on scrollbar y position
-				elem->setPosition(
-					{
-						elem->getPosition().x,
-						float(i * (this->_elementHeight + 10.f) + WORLD_PLATES_OFFSET) -
-						(this->getPosition().y - this->_bounds.min) * (this->_content.size() / this->MAX_VISIBLE_ELEMENTS)
-					}
-				);
-			}
+			this->updateContentPosition();
 		}
 
 		// clamp scrollbar position with bounds
