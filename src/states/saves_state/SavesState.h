@@ -1,12 +1,14 @@
 #pragma once
 
-#include "State.h"
-#include "MainMenuState.h"
-#include "GenerationState.h"
+#include "states/State.h"
+#include "states/MainMenuState.h"
+#include "states/GenerationState.h"
 
 #include "engine/ui/elements/Scroller.h"
 #include "engine/ui/elements/Button.h"
 #include "engine/ui/elements/WorldPlate.h"
+
+#include "UI_DEFENITIONS.h" // including current state ui defenitions
 
 class SavesState :
     public State

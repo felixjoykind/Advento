@@ -10,6 +10,11 @@
 #include "engine/defenitions/PATH_DEFENITIONS.h"
 #include "engine/ecs/components/PositionComponent.h"
 
+// NOTE: 
+// if player is spawned in first chunk (0,0 cords) 
+// chunks wont be loaded until player goes in new chunk
+// TODO: FIX !
+
 namespace Engine
 {
 	TileMap::TileMap(GameDataRef data, unsigned int rows, unsigned int cols, const Entity* trackEntity)
@@ -207,26 +212,25 @@ namespace Engine
 		// quick acess variables
 		auto& entity_pos = this->_trackEntity->getComponent<Engine::PositionComponent>();
 
-		// if player goes in new location
 		if (this->_previousChunk != entity_pos.chunkCoordsFromPosition())
 		{
 			// calculating what chunks needs to be loaded
 			this->fromX = entity_pos.chunkCoordsFromPosition().x - this->_chunksDistance;
-			this->fromX = Math::clamp<int>(0, _mapSizeInChunks.x, fromX);
+			this->fromX = Math::clamp<int>(0, _mapSizeInChunks.x - 1, fromX);
 
 			this->fromY = entity_pos.chunkCoordsFromPosition().y - this->_chunksDistance;
-			this->fromY = Math::clamp<int>(0, _mapSizeInChunks.y, fromY);
+			this->fromY = Math::clamp<int>(0, _mapSizeInChunks.y - 1, fromY);
 
 			this->toX = entity_pos.chunkCoordsFromPosition().x + this->_chunksDistance;
-			this->toX = Math::clamp<int>(0, _mapSizeInChunks.x, toX);
+			this->toX = Math::clamp<int>(0, _mapSizeInChunks.x - 1, toX);
 
 			this->toY = entity_pos.chunkCoordsFromPosition().y + this->_chunksDistance;
-			this->toY = Math::clamp<int>(0, _mapSizeInChunks.y, toY);
+			this->toY = Math::clamp<int>(0, _mapSizeInChunks.y - 1, toY);
 
 			// loop through range
-			for (unsigned int x = fromX; x <= toX; x++)
+			for (int x = fromX; x <= toX; x++)
 			{
-				for (unsigned int y = fromY; y <= toY; y++)
+				for (int y = fromY; y <= toY; y++)
 				{
 					// if chunk that should be loaded is not loaded yet
 					if (std::find_if(_loadedChunks.begin(), _loadedChunks.end(),
@@ -248,8 +252,10 @@ namespace Engine
 			}
 
 			// lambda to check if chunk is in bounds
-			auto isChunkInBounds = [&](Chunk* c)
+			auto isChunkInBounds = [&](const Chunk* c)
 			{
+				/*std::string out = c == nullptr ? "nullptr" : "nope";
+				LOG(out);*/
 				return c->getPosition().x <= toX && c->getPosition().x >= fromX
 					&& c->getPosition().y <= toY && c->getPosition().y >= fromY;
 			};

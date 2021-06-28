@@ -8,6 +8,9 @@
 #include "engine/ecs/components/AnimationComponent.h"
 #include "engine/ecs/components/HitboxComponent.h"
 
+#define PLAYER_HITBOX_SIZE_X 64.f
+#define PLAYER_HITBOX_SIZE_Y 128.f
+
 class Player
 	: public Engine::Entity
 {

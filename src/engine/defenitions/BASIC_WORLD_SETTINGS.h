@@ -5,3 +5,4 @@
 
 #define CHUNK_SIZE 16
 #define TILE_SIZE 128.f
+#define CHUNK_SIZE_PIXEL CHUNK_SIZE * TILE_SIZE

@@ -19,7 +19,7 @@ Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 		Entity*, SpriteComponent&>(this, this->getComponent<SpriteComponent>());
 
 	this->addComponent<HitboxComponent, 
-		Entity*, HitboxSettings>(this, { { 0.f, 0.f }, { 64.f, 128.f } });
+		Entity*, HitboxSettings>(this, { { 0.f, 0.f }, { PLAYER_HITBOX_SIZE_X, PLAYER_HITBOX_SIZE_Y } });
 	
 	// adding animation
 	auto& animation = this->getComponent<Engine::AnimationComponent>();

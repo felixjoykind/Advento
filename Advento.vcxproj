@@ -156,7 +156,7 @@
     <ClCompile Include="src\engine\tiles\Chunk.cpp" />
     <ClCompile Include="src\engine\ui\elements\UIElement.cpp" />
     <ClCompile Include="src\gamedata\InputManager.cpp" />
-    <ClCompile Include="src\states\SavesState.cpp" />
+    <ClCompile Include="src\states\saves_state\SavesState.cpp" />
     <ClCompile Include="src\engine\ecs\components\PositionComponent.cpp" />
     <ClCompile Include="src\engine\ecs\components\SpriteComponent.cpp" />
     <ClCompile Include="src\states\GenerationState.cpp" />
@@ -184,7 +184,6 @@
   <ItemGroup>
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageboxManager.h" />
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageBox.h" />
-    <ClInclude Include="src\engine\defenitions\UI_DEFENITIONS.h" />
     <ClInclude Include="src\engine\ui\IDragable.h" />
     <ClInclude Include="src\engine\ui\IHoverable.h" />
     <ClInclude Include="src\engine\ui\elements\Scroller.h" />
@@ -197,7 +196,7 @@
     <ClInclude Include="src\gamedata\InputManager.h" />
     <ClInclude Include="src\engine\defenitions\BASIC_WORLD_SETTINGS.h" />
     <ClInclude Include="src\engine\defenitions\PATH_DEFENITIONS.h" />
-    <ClInclude Include="src\states\SavesState.h" />
+    <ClInclude Include="src\states\saves_state\SavesState.h" />
     <ClInclude Include="src\engine\ecs\components\PositionComponent.h" />
     <ClInclude Include="src\engine\ecs\components\SpriteComponent.h" />
     <ClInclude Include="src\states\GenerationState.h" />
@@ -220,6 +219,7 @@
     <ClInclude Include="src\states\GameState.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\gamedata\StateMachine.h" />
+    <ClInclude Include="src\states\saves_state\UI_DEFENITIONS.h" />
     <ClInclude Include="src\states\State.h" />
     <ClInclude Include="src\engine\tiles\TileMap.h" />
     <ClInclude Include="src\engine\tiles\Tile.h" />

@@ -18,8 +18,9 @@ GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 
 	// setting player position to the center of the map
 	this->_player.getComponent<Engine::PositionComponent>().setPosition(
-		float(_map->getSize().x / 2 * 128),
-		float(_map->getSize().y / 2 * 128)
+		30000.f, 30000.f
+		//float(_map->getSize().x / 2) * TILE_SIZE,
+		//float(_map->getSize().y / 2) * TILE_SIZE
 	);
 }
 
@@ -101,6 +102,12 @@ void GameState::Update(float deltaTime)
 		}
 		return;
 	}
+
+	// clamp player position
+	auto& player_pos = this->_player.getComponent<Engine::PositionComponent>();
+
+	player_pos.setX(Math::clamp<float>(0.f, this->_map->getSize().x * TILE_SIZE - PLAYER_HITBOX_SIZE_X, player_pos.getX()));
+	player_pos.setY(Math::clamp<float>(0.f, this->_map->getSize().y * TILE_SIZE - PLAYER_HITBOX_SIZE_Y, player_pos.getY()));
 
 	// updating player
 	this->_player.update(deltaTime);

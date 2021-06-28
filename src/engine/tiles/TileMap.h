@@ -28,8 +28,8 @@ namespace Engine
 		std::vector<Chunk*> _loadedChunks;
 		std::vector<Chunk*> _changedChunks; // this vector contains all chunks that have been changed and needs to be saved
 
-		unsigned int fromX = 0, toX = 0;
-		unsigned int fromY = 0, toY = 0;
+		int fromX = 0, toX = 0;
+		int fromY = 0, toY = 0;
 
 		// tiles rendering data
 		unsigned _tilesRendered;

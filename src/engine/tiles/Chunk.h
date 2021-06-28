@@ -13,6 +13,8 @@ namespace Engine
 		sf::Vector2u _position;
 		char* _rawTiles;
 		std::vector<Tile*> _tiles;
+
+		std::vector<sf::RectangleShape*> _borders;
 		
 		mutable unsigned _tilesRendered;
 
@@ -20,8 +22,10 @@ namespace Engine
 		Chunk(const AssetManager& assets, sf::Vector2u pos, char* chunkMap);
 		~Chunk();
 
-		// getters
+		// Returns chunk position in chunks grid
 		sf::Vector2u getPosition() const;
+
+		// Returns the number of rendered tiles
 		unsigned tilesRendered() const;
 
 		void update(float deltaTime);

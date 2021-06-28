@@ -78,7 +78,7 @@
     <ClCompile Include="src\engine\ecs\components\PositionComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\states\SavesState.cpp">
+    <ClCompile Include="src\states\saves_state\SavesState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\ui\elements\WorldPlate.cpp">
@@ -179,7 +179,7 @@
     <ClInclude Include="src\engine\ecs\components\PositionComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\states\SavesState.h">
+    <ClInclude Include="src\states\saves_state\SavesState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ui\elements\UIElement.h">
@@ -224,9 +224,6 @@
     <ClInclude Include="src\engine\ui\IHoverable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\defenitions\UI_DEFENITIONS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -234,6 +231,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ui\IDragable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\states\saves_state\UI_DEFENITIONS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

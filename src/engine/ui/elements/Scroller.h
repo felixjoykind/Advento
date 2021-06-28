@@ -1,6 +1,7 @@
 #pragma once
 
-#include "engine/defenitions/UI_DEFENITIONS.h"
+#include "states/saves_state/UI_DEFENITIONS.h"
+#include "states/saves_state/SavesState.h"
 #include "engine/ui/IHoverable.h"
 #include "engine/ui/IDragable.h"
 #include "engine/Math.h"

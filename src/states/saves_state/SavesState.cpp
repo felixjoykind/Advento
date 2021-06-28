@@ -4,7 +4,6 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
-#include "engine/defenitions/UI_DEFENITIONS.h"
 #include "engine/defenitions/PATH_DEFENITIONS.h"
 #include "engine/defenitions/COLORS.h"
 
@@ -13,10 +12,8 @@
 
 #include "engine/tiles/TileMap.h"
 
-#include "MainMenuState.h"
+#include "states/MainMenuState.h"
 #include "states/GameState.h"
-
-constexpr float WORLD_PLATE_HEIGHT = 100.f;
 
 SavesState::SavesState(GameDataRef data)
 	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background"))),
