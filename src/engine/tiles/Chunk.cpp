@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	Chunk::Chunk(const AssetManager& assets, sf::Vector2u pos, char* chunkMap)
+	Chunk::Chunk(const AssetManager& assets, sf::Vector2u pos, char** chunkMap)
 		:_position(pos), _rawTiles(chunkMap), _tilesRendered(0)
 	{
 		// filling map based on input
@@ -12,18 +12,33 @@ namespace Engine
 		{
 			for (size_t y = 0; y < CHUNK_SIZE; y++)
 			{
-				std::string texture_name; // texture name
-				// choosing texture name based on input
-				switch (this->_rawTiles[y * CHUNK_SIZE + x])
+				std::string block_texture_name; // block texture name
+				std::string tree_texture_name;
+
+				// choosing block and tree texture name based on input
+				switch (this->_rawTiles[y * CHUNK_SIZE + x][0])
 				{
 				case 'g':
-					texture_name = "grass tile";
+					block_texture_name = "grass tile";
 					break;
-				case '.':
-					texture_name = "water tile";
+				case 'w':
+					block_texture_name = "water tile";
 					break;
 
 				}
+
+				switch (this->_rawTiles[y * CHUNK_SIZE + x][1])
+				{
+				case 't':
+					tree_texture_name = "tree tile";
+					break;
+				case '.':
+					tree_texture_name = "empty tile";
+					break;
+
+				}
+
+				std::vector<Tile*> tile_layer;
 
 				// calculating tile position
 				unsigned int chunk_to_map_x = pos.x == 0 ? x : x + CHUNK_SIZE * pos.x;
@@ -34,7 +49,13 @@ namespace Engine
 					float(chunk_to_map_x) * TILE_SIZE,
 					float(chunk_to_map_y) * TILE_SIZE
 				};
-				this->_tiles.push_back(new Tile(assets.GetTexture(texture_name), tile_pos)); // adding new tile
+
+				// push tiles to layer
+				tile_layer.push_back(new Tile(assets.GetTexture(block_texture_name), tile_pos)); // adding new tile
+				tile_layer.push_back(new Tile(assets.GetTexture(tree_texture_name), tile_pos)); // adding new tile
+
+				// push layer
+				this->_tiles.push_back(tile_layer); // adding new tile
 			}
 		}
 
@@ -114,7 +135,8 @@ namespace Engine
 		{
 			for (size_t y = 0; y < CHUNK_SIZE; y++)
 			{
-				this->_tiles[y * CHUNK_SIZE + x]->update(deltaTime);
+				this->_tiles[y * CHUNK_SIZE + x][0]->update(deltaTime);
+				this->_tiles[y * CHUNK_SIZE + x][1]->update(deltaTime);
 			}
 		}
 	}
@@ -129,22 +151,25 @@ namespace Engine
 		{
 			for (size_t y = 0; y < CHUNK_SIZE; y++)
 			{
-				auto& tile = this->_tiles[y * CHUNK_SIZE + x];
-				auto target_size = target.getSize();
-				auto target_center = target.getView().getCenter();
-
-				auto window_bounds = sf::FloatRect(
-					{ 
-						float(target_center.x -  target_size.x / 2),
-						float(target_center.y - target_size.y / 2)
-					},
-					{ float(target_size.x), float(target_size.y) }
-				);
-
-				if (tile->isInBounds(window_bounds))
+				for (size_t z = 0; z < MAP_LAYER_DEPTH; z++)
 				{
-					tile->render(target);
-					this->_tilesRendered++;
+					auto& tile = this->_tiles[y * CHUNK_SIZE + x][z];
+					auto target_size = target.getSize();
+					auto target_center = target.getView().getCenter();
+
+					auto window_bounds = sf::FloatRect(
+						{
+							float(target_center.x - target_size.x / 2),
+							float(target_center.y - target_size.y / 2)
+						},
+						{ float(target_size.x), float(target_size.y) }
+					);
+
+					if (tile->isInBounds(window_bounds))
+					{
+						tile->render(target);
+						this->_tilesRendered++;
+					}
 				}
 			}
 		}

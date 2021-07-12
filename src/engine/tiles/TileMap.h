@@ -2,7 +2,6 @@
 
 #include "Chunk.h"
 #include "engine/ecs/Entity.h"
-#include "engine/generator/MapGenerator.h"
 
 namespace Engine
 {
@@ -48,7 +47,7 @@ namespace Engine
 		sf::Vector2u getSize() const;
 
 		// Sets starting position of track entity
-		void setStartigPosition(sf::Vector2u position);
+		void setStartingPosition(sf::Vector2u position);
 
 		// Generates new map based on settings
 		void generate(GenerationSettings settings);

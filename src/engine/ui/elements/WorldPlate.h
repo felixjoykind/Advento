@@ -22,7 +22,7 @@ namespace UI
             sf::Vector2f size, sf::Vector2f pos, sf::Color backgroundColor);
         ~WorldPlate();
 
-        // getters
+        // Retunrs world save settings
         Engine::WorldSaveSettings getSettings() const;
 
         void setPosition(sf::Vector2f position) override;

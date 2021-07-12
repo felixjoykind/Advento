@@ -10,11 +10,6 @@
 #include "engine/defenitions/PATH_DEFENITIONS.h"
 #include "engine/ecs/components/PositionComponent.h"
 
-// NOTE: 
-// if player is spawned in first chunk (0,0 cords) 
-// chunks wont be loaded until player goes in new chunk
-// TODO: FIX !
-
 namespace Engine
 {
 	TileMap::TileMap(GameDataRef data, unsigned int rows, unsigned int cols, const Entity* trackEntity)
@@ -39,7 +34,7 @@ namespace Engine
 	unsigned TileMap::chunksLoaded() const { return this->_loadedChunks.size(); }
 	sf::Vector2u TileMap::getSize() const { return this->_mapSize; }
 
-	void TileMap::setStartigPosition(sf::Vector2u position)
+	void TileMap::setStartingPosition(sf::Vector2u position)
 	{
 		// validate data
 		if (position.x > this->_mapSizeInChunks.x
@@ -62,14 +57,17 @@ namespace Engine
 			delete chunk;
 		this->_changedChunks.clear();
 
-		auto map = std::move(MapGenerator::Generate(settings)); // generated map
+		//auto map = std::move(MapGenerator::GenerateBlocksMap(settings, 'g', 'w')); // generated map
+		auto map = std::move(MapGenerator::GenerateFullMap(settings)); // generated map
 
 		// split map into chunks
 		for (unsigned int x = 0; x < settings.width / CHUNK_SIZE; x++)
 		{
 			for (unsigned int y = 0; y < settings.height / CHUNK_SIZE; y++)
 			{
-				char* chunkMap = new char[CHUNK_SIZE * CHUNK_SIZE]; // raw chunk data
+				char** chunkMap = new char* [CHUNK_SIZE * CHUNK_SIZE]; // raw chunk data
+				for (unsigned short i = 0; i < CHUNK_SIZE * CHUNK_SIZE; i++)
+					chunkMap[i] = new char[MAP_LAYER_DEPTH];
 
 				// filling chunk with data from global map
 				for (int chunk_x = 0; chunk_x < CHUNK_SIZE; chunk_x++)
@@ -117,7 +115,7 @@ namespace Engine
 		}
 		wrld_info.close();
 
-		// if chunks directory doeen't exist
+		// if chunks directory doesn't exist
 		if (!std::filesystem::exists(std::filesystem::path(settings.dir_path + "\\chunks")))
 			std::filesystem::create_directories(settings.dir_path + "\\chunks"); // creating directory
 
@@ -134,7 +132,12 @@ namespace Engine
 				// writing chunk map to file
 				for (size_t i = 0; i < CHUNK_SIZE * CHUNK_SIZE; i++)
 				{
-					chunk_file.write(static_cast<char*>(&chunk->_rawTiles[i]), sizeof(chunk->_rawTiles[i]));
+					chunk_file.write(static_cast<char*>(&chunk->_rawTiles[i][0]), sizeof(chunk->_rawTiles[i][0]));
+				}
+				chunk_file << std::endl;
+				for (size_t i = 0; i < CHUNK_SIZE * CHUNK_SIZE; i++)
+				{
+					chunk_file.write(static_cast<char*>(&chunk->_rawTiles[i][1]), sizeof(chunk->_rawTiles[i][1]));
 				}
 			}
 
@@ -193,10 +196,19 @@ namespace Engine
 
 		if (chunk_file.is_open())
 		{
-			char* chunk_map = new char[CHUNK_SIZE * CHUNK_SIZE];
+			char** chunk_map = new char* [CHUNK_SIZE * CHUNK_SIZE];
 			for (size_t i = 0; i < CHUNK_SIZE * CHUNK_SIZE; i++)
+				chunk_map[i] = new char[MAP_LAYER_DEPTH];
+
+			std::string layer;
+			unsigned int layer_index = 0;
+			while (std::getline(chunk_file, layer))
 			{
-				chunk_file >> chunk_map[i];
+				for (size_t i = 0; i < layer.length(); i++)
+				{
+					chunk_map[i][layer_index] = layer[i];
+				}
+				++layer_index;
 			}
 			new_chunk = new Chunk(this->_data->assets, chunk_pos, chunk_map);
 		}
@@ -254,8 +266,6 @@ namespace Engine
 			// lambda to check if chunk is in bounds
 			auto isChunkInBounds = [&](const Chunk* c)
 			{
-				/*std::string out = c == nullptr ? "nullptr" : "nope";
-				LOG(out);*/
 				return c->getPosition().x <= toX && c->getPosition().x >= fromX
 					&& c->getPosition().y <= toY && c->getPosition().y >= fromY;
 			};

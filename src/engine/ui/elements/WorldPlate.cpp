@@ -4,7 +4,7 @@ namespace UI
 {
 	WorldPlate::WorldPlate(GameDataRef data, Engine::WorldSaveSettings settings,
 		sf::Vector2f size, sf::Vector2f pos, sf::Color backgroundColor)
-		:UIElement(data, size, pos), IHoverable(this), IClickable(this, 0.2f), ISelectable(this),
+		:UIElement(data, size, pos), IHoverable(this), IClickable(this, 0.15f), ISelectable(this),
 		_title(new sf::Text(settings.name, this->_data->assets.GetFont("menu font"), 30U)),
 		_settings(settings)
 	{

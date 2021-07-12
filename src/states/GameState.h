@@ -7,7 +7,7 @@
 #include "engine/ui/PauseMenu.h"
 #include "engine/ui/DebugInfo.h"
 
-class GameState 
+class GameState
 	: public State
 {
 private:

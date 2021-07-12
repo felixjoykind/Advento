@@ -13,6 +13,8 @@ Game::Game()
 	// loading textures
 	this->_data->assets.AddTexture("grass tile", "./assets/sprites/tiles/grass.png");
 	this->_data->assets.AddTexture("water tile", "./assets/sprites/tiles/ocean.png");
+	this->_data->assets.AddTexture("tree tile", "./assets/sprites/tiles/tree.png");
+	this->_data->assets.AddTexture("empty tile", "./assets/sprites/tiles/empty.png");
 	this->_data->assets.AddTexture("main menu background", "./assets/sprites/menus and panels/main menu/background.png");
 	this->_data->assets.AddTexture("saves menu background", "./assets/sprites/menus and panels/saves menu/background.jpg");
 	this->_data->assets.AddTexture("generation menu background", "./assets/sprites/menus and panels/generation menu/background.jpg");

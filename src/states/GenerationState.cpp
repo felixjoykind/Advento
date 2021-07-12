@@ -185,14 +185,15 @@ void GenerationState::Update(float deltaTime)
 		}
 
 		// generate random seed if empty
-		this->_textboxes.at("WORLD_SEED")->setString(Engine::MapGenerator::getRandomSeed(16));
+		if (this->_textboxes.at("WORLD_SEED")->getString().length() == 0)
+			this->_textboxes.at("WORLD_SEED")->setString(Engine::MapGenerator::getRandomSeed(16));
 
 		Engine::TileMap map(this->_data, BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y, nullptr); // new map
 
 		// generating world with basic world generation settings and custom name, seed
 		map.generate(
 			{
-				world_name,
+				this->_textboxes.at("WORLD_SEED")->getString(),
 				BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y, 
 				0.4f, 4, 4, 5
 			}

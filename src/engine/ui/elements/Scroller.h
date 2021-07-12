@@ -25,12 +25,11 @@ namespace UI
 		std::vector<T*>& _content;
 
 		// input data
-		bool _isActive; // is element active
 		ScrollbarBounds _bounds; // scroller bounds
 		int _mouseWheelDelta = 0; // mouse wheel delta (for wheel scrolling logic)
 
 		// data for dragging element with mouse
-		float _elementHeight; // height of type of element scrollbar is connected to
+		float _elementHeight = 0.f; // height of type of element scrollbar is connected to
 
 		// colors data
 		sf::Color _idleColor;
@@ -66,11 +65,12 @@ namespace UI
 
 	template<class T>
 	Scroller<T>::Scroller(GameDataRef data, sf::Vector2f size, sf::Vector2f pos, ScrollbarBounds bounds, std::vector<T*>& content)
-		:UIElement(data, size, pos), IHoverable(this), _content(content), IDragable(this),
-		_isActive(false), _bounds(bounds)
+		:UIElement(data, size, pos), IHoverable(this), _content(content), IDragable(this), _bounds(bounds)
 	{
 		static_assert(std::is_base_of<UIElement, T>::value,
 			"Scroller can only be connected to UIElement or derived from it class (Scroller.h, in contructor)");
+
+		this->setActive(false);
 
 		// settings colors by default
 		this->_idleColor = sf::Color(34, 29, 28, 200);
@@ -141,10 +141,9 @@ namespace UI
 			// calculating element y poisition based on scrollbar y position
 			elem->setPosition(
 				{
-					// 2210 - 1950
 					elem->getPosition().x,
 					float(i * (this->_elementHeight + 10.f) + WORLD_PLATES_OFFSET) -
-					(this->getPosition().y - this->_bounds.min) * (this->_content.size() / this->MAX_VISIBLE_ELEMENTS + 1.f) + WORLD_PLATE_OFFSET_FROM_TOP
+					(this->getPosition().y - this->_bounds.min) * (this->_content.size() / this->MAX_VISIBLE_ELEMENTS + 0.5f) + WORLD_PLATE_OFFSET_FROM_TOP
 				}
 			);
 		}
@@ -179,7 +178,8 @@ namespace UI
 	template<class T>
 	void Scroller<T>::update(float deltaTime)
 	{
-		if (!this->_isActive) return;
+		// base class update function call
+		UIElement::update(deltaTime);
 
 		// hovering logic
 		IHoverable::update(deltaTime, this->_data->window);
@@ -231,11 +231,29 @@ namespace UI
 				Math::clamp<float>(_bounds.min, _bounds.max - _shape->getSize().y, _shape->getPosition().y)
 			}
 		);
+
+		// update content
+		for (auto& elem : this->_content)
+		{
+			elem->update(deltaTime);
+		}
 	}
 
 	template<class T>
 	void Scroller<T>::render() const
 	{
+		// render connected UIElements
+		for (const auto& elem : this->_content)
+		{
+			// if in bounds
+			if (elem->isInBounds_Y(this->_bounds.min - WORLD_PLATE_OFFSET_FROM_TOP - _elementHeight,
+				this->_bounds.max + SCROLLER_BOTTOM_GAP))
+			{
+				elem->render();
+			}
+		}
+
+		// do not render scroller itself
 		if (!this->_isActive) return;
 
 		// base UIElement class render function call

@@ -18,9 +18,8 @@ GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 
 	// setting player position to the center of the map
 	this->_player.getComponent<Engine::PositionComponent>().setPosition(
-		30000.f, 30000.f
-		//float(_map->getSize().x / 2) * TILE_SIZE,
-		//float(_map->getSize().y / 2) * TILE_SIZE
+		float(_map->getSize().x / 2) * TILE_SIZE,
+		float(_map->getSize().y / 2) * TILE_SIZE
 	);
 }
 

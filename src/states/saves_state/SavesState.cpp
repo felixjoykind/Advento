@@ -17,13 +17,22 @@
 
 SavesState::SavesState(GameDataRef data)
 	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background"))),
+	_downPanel(new sf::RectangleShape({ float(_data->winConfig.width), 95.f })),
 	_scroller(new UI::Scroller<UI::WorldPlate>(
 		_data, { 15.f, 400.f },
 		{ float(_data->winConfig.width / 2 + _data->winConfig.width / 4) + 10.f, 20.f },
-		{ WORLD_PLATE_OFFSET_FROM_TOP + WORLD_PLATES_OFFSET, float(_data->winConfig.height - 20) },
+		{ WORLD_PLATE_OFFSET_FROM_TOP + WORLD_PLATES_OFFSET, float(_data->winConfig.height - 100) },
 		_worlds)
 	)
 {
+	// init down panel
+	this->_downPanel->setPosition(
+		{
+			0.f,
+			float(_data->winConfig.height - 95)
+		}
+	);
+	this->_downPanel->setFillColor(sf::Color(240, 80, 64));
 }
 
 SavesState::~SavesState()
@@ -142,9 +151,9 @@ void SavesState::Update(float deltaTime)
 	// update world scroller
 	this->_scroller->update(deltaTime);
 
-	// updating worlds plates
-	for (auto& plate : this->_worlds)
-		plate->update(deltaTime);
+	// updating worlds plates is going inside scroller class
+	/*for (auto& plate : this->_worlds)
+		plate->update(deltaTime);*/
 
 	// updating buttons
 	for (auto& [name, button] : this->_buttons)
@@ -158,16 +167,18 @@ void SavesState::Render() const
 	// render background
 	this->_data->window.draw(*this->_background);
 
-	// render scroller
-	this->_scroller->render();
-
 	// render titles
 	for (const auto& [name, title] : this->_titles)
 		this->_data->window.draw(*title);
 
-	// rendering worlds plates
-	for (const auto& plate : this->_worlds)
-		plate->render();
+	// render scroller
+	this->_scroller->render();
+
+	this->_data->window.draw(*this->_downPanel);
+
+	// rendering worlds plates is going inside scroller class
+	/*for (const auto& plate : this->_worlds)
+		plate->render();*/
 
 	// rendering buttons
 	for (const auto& [name, button] : this->_buttons)

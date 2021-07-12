@@ -18,6 +18,7 @@ private:
 
     // background
     sf::Sprite* _background;
+    sf::RectangleShape* _downPanel;
 
     UI::Scroller<UI::WorldPlate>* _scroller; // worlds list scroller
 

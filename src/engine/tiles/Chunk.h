@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "gamedata/AssetManager.h"
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
+#include "engine/generator/MapGenerator.h"
 
 namespace Engine
 {
@@ -11,15 +12,15 @@ namespace Engine
 	private:
 		// data
 		sf::Vector2u _position;
-		char* _rawTiles;
-		std::vector<Tile*> _tiles;
+		char** _rawTiles;
+		std::vector<std::vector<Tile*>> _tiles;
 
 		std::vector<sf::RectangleShape*> _borders;
 		
 		mutable unsigned _tilesRendered;
 
 	public:
-		Chunk(const AssetManager& assets, sf::Vector2u pos, char* chunkMap);
+		Chunk(const AssetManager& assets, sf::Vector2u pos, char** chunkMap);
 		~Chunk();
 
 		// Returns chunk position in chunks grid

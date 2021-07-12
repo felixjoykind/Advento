@@ -9,6 +9,8 @@ namespace UI
 		: public UIElement, public IHoverable, public IClickable
 	{
 	private:
+		bool _isActive = true;
+
 		// button components
 		sf::Text* _content;
 
