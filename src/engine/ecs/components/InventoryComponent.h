@@ -3,16 +3,17 @@
 #include "engine/items/Item.h"
 #include "engine/LOG.h"
 
-constexpr float INVENTORY_OFFSET_X = 10.f;
-constexpr float INVENTORY_OFFSET_Y = 50.f;
+constexpr float INVENTORY_OFFSET_X = 32.f;
+constexpr float INVENTORY_OFFSET_Y = 150.f;
 
-constexpr float X_GAP_BETWEEN_SLOTS = 10.f;
-constexpr float Y_GAP_BETWEEN_SLOTS = 10.f;
+constexpr float X_GAP_BETWEEN_SLOTS = 16.f;
+constexpr float Y_GAP_BETWEEN_SLOTS = 16.f;
 
-constexpr float SLOT_SIZE = 64.f + X_GAP_BETWEEN_SLOTS + Y_GAP_BETWEEN_SLOTS;
+constexpr float SLOT_SIZE = 64.f + X_GAP_BETWEEN_SLOTS;
+
 
 constexpr short COLS = 7;
-constexpr short ROWS = 6;
+constexpr short ROWS = 5;
 
 namespace Engine
 {

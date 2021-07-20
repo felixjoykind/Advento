@@ -9,6 +9,9 @@ namespace UI
 		public UIElement
 	{
 	private:
+		// background
+		sf::Sprite* _background;
+
 		// pointer to a player inventory component
 		Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>& _playerInvComponent;
 

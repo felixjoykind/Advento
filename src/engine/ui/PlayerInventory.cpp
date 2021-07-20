@@ -5,10 +5,11 @@
 namespace UI
 {
 	PlayerInventory::PlayerInventory(GameDataRef data, Player& player)
-		:UIElement(data, { 600.f, 600.f }, { 25.f, 100.f }),
+		:UIElement(data, { 600.f, 600.f }, { 25.f, 100.f }), 
+		_background(new sf::Sprite(data->assets.GetTexture("inventory"))),
 		_playerInvComponent(player.getComponent<Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>>())
 	{
-		this->_shape->setFillColor(sf::Color(153, 102, 51));
+		this->_background->setPosition(this->getPosition());
 		this->setActive(false);
 
 		refreshItemsSprites();
@@ -16,6 +17,7 @@ namespace UI
 
 	PlayerInventory::~PlayerInventory()
 	{
+		delete this->_background;
 	}
 
 	void PlayerInventory::refreshItemsSprites()
@@ -40,6 +42,11 @@ namespace UI
 				{
 					// display number of blocks only when its higher than 1
 					std::string ui_item_text = items[i].curr_num_of_blocks_in_stack == 1 ? "" : std::to_string(items[i].curr_num_of_blocks_in_stack);
+					sf::Vector2f ui_item_pos =
+					{
+						this->getPosition().x + INVENTORY_OFFSET_X + x * (SLOT_SIZE),
+						this->getPosition().y + INVENTORY_OFFSET_Y + Y_GAP_BETWEEN_SLOTS - 5.f + y * (SLOT_SIZE)
+					};
 
 					UI_Item ui_item =
 					{
@@ -47,12 +54,7 @@ namespace UI
 						std::make_unique<sf::Text>(ui_item_text, _data->assets.GetFont("SegoeUI Regular"), 20U)
 					};
 
-					ui_item.setPosition(
-						{
-							this->getPosition().x + X_GAP_BETWEEN_SLOTS + x * SLOT_SIZE,
-							this->getPosition().y + 100.f + Y_GAP_BETWEEN_SLOTS + y * SLOT_SIZE
-						}
-					);
+					ui_item.setPosition(ui_item_pos);
 
 					this->_inventoryItems.emplace_back(std::move(ui_item));
 				}
@@ -69,7 +71,7 @@ namespace UI
 
 	void PlayerInventory::render() const
 	{
-		UIElement::render(); // renders background
+		this->_data->window.draw(*this->_background); // renders background
 
 		// render slots
 		for (const auto& ui_item : this->_inventoryItems)

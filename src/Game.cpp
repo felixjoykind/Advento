@@ -20,7 +20,8 @@ Game::Game()
 	this->_data->assets.AddTexture("generation menu background", "./assets/sprites/menus and panels/generation menu/background.jpg");
 
 	// loading items
-	this->_data->assets.AddTexture("test item", "./assets/sprites/items/test_item.png");
+	this->_data->assets.AddTexture("inventory", "./assets/sprites/items/inventory.png"); // inventory
+	this->_data->assets.AddTexture("test item", "./assets/sprites/items/test_item_01.png");
 
 	// loading animations
 	this->_data->assets.AddTexture("player anim", "./assets/sprites/player/player_anim.png");

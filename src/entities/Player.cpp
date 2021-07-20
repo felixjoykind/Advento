@@ -28,7 +28,7 @@ Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 		Entity*>(this);
 
 	// DEBUG ONLY
-	for (size_t i = 0; i < 65; i++)
+	for (size_t i = 0; i < 640; i++)
 	{
 		// TODO: remove
 		this->getComponent<InventoryComponent<PLAYER_INVENTORY_SIZE>>().addItem(
