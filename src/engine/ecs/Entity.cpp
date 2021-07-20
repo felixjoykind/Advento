@@ -21,6 +21,10 @@ namespace Engine
 		this->_alive = false;
 	}
 
+	void Entity::handleInput()
+	{
+	}
+
 	void Entity::update(float deltaTime)
 	{
 		// updating components

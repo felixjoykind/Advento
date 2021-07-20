@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ui\PlayerInventory.cpp" />
+    <ClCompile Include="src\engine\items\Item.cpp" />
     <ClCompile Include="src\engine\ui\elements\messagebox\MessageboxManager.cpp" />
     <ClCompile Include="src\engine\ui\elements\messagebox\MessageBox.cpp" />
     <ClCompile Include="src\engine\tiles\Chunk.cpp" />
@@ -172,7 +174,7 @@
     <ClCompile Include="src\states\MainMenuState.cpp" />
     <ClCompile Include="src\gamedata\AssetManager.cpp" />
     <ClCompile Include="src\engine\ecs\Entity.cpp" />
-    <ClCompile Include="src\states\GameState.cpp" />
+    <ClCompile Include="src\states\game_state\GameState.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\gamedata\StateMachine.cpp" />
@@ -180,8 +182,12 @@
     <ClCompile Include="src\engine\tiles\Tile.cpp" />
     <ClCompile Include="src\engine\ui\elements\WorldPlate.cpp" />
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
+    <ClCompile Include="src\engine\items\TestItem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ui\PlayerInventory.h" />
+    <ClInclude Include="src\engine\ecs\components\InventoryComponent.h" />
+    <ClInclude Include="src\engine\items\Item.h" />
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageboxManager.h" />
     <ClInclude Include="src\engine\ui\elements\messagebox\MessageBox.h" />
     <ClInclude Include="src\engine\ui\IDragable.h" />
@@ -216,7 +222,7 @@
     <ClInclude Include="src\states\MainMenuState.h" />
     <ClInclude Include="src\gamedata\AssetManager.h" />
     <ClInclude Include="src\engine\ecs\Entity.h" />
-    <ClInclude Include="src\states\GameState.h" />
+    <ClInclude Include="src\states\game_state\GameState.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\gamedata\StateMachine.h" />
     <ClInclude Include="src\states\saves_state\UI_DEFENITIONS.h" />
@@ -226,6 +232,7 @@
     <ClInclude Include="src\engine\ui\elements\UIElement.h" />
     <ClInclude Include="src\engine\ui\elements\WorldPlate.h" />
     <ClInclude Include="src\engine\ui\elements\Textbox.h" />
+    <ClInclude Include="src\engine\items\TestItem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TodoList.txt" />

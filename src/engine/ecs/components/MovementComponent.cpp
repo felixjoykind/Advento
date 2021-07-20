@@ -42,32 +42,25 @@ namespace Engine
 		this->_velocity.y = Math::clamp<float>(-_settings.maxVelocity, _settings.maxVelocity, _velocity.y);
 	}
 
+	void MovementComponent::doDecelerationLogic(float& value)
+	{
+		if (value > 0.0f)
+		{
+			value -= this->_settings.deceleration;
+			if (value < 0.0f) value = 0.0f;
+		}
+		else if (value < 0.0f)
+		{
+			value += this->_settings.deceleration;
+			if (value > 0.0f) value = 0.0f;
+		}
+	}
+
 	void MovementComponent::update(float deltaTime)
 	{
 		// decceleration and clamping
-		// x
-		if (_velocity.x > 0.0f)
-		{
-			_velocity.x -= _settings.deceleration;
-			if (_velocity.x < 0.0f) _velocity.x = 0.0f;
-		}
-		else if (_velocity.x < 0.0f)
-		{
-			_velocity.x += _settings.deceleration;
-			if (_velocity.x > 0.0f) _velocity.x = 0.0f;
-		}
-
-		// y
-		if (_velocity.y > 0.0f)
-		{
-			_velocity.y -= _settings.deceleration;
-			if (_velocity.y < 0.0f) _velocity.y = 0.0f;
-		}
-		else if (_velocity.y < 0.0f)
-		{
-			_velocity.y += _settings.deceleration;
-			if (_velocity.y > 0.0f) _velocity.y = 0.0f;
-		}
+		doDecelerationLogic(this->_velocity.x); // x
+		doDecelerationLogic(this->_velocity.y); // y
 
 		// moving entity
 		this->_entity->getComponent<PositionComponent>().move(this->getVelocity() * deltaTime);

@@ -19,6 +19,9 @@ Game::Game()
 	this->_data->assets.AddTexture("saves menu background", "./assets/sprites/menus and panels/saves menu/background.jpg");
 	this->_data->assets.AddTexture("generation menu background", "./assets/sprites/menus and panels/generation menu/background.jpg");
 
+	// loading items
+	this->_data->assets.AddTexture("test item", "./assets/sprites/items/test_item.png");
+
 	// loading animations
 	this->_data->assets.AddTexture("player anim", "./assets/sprites/player/player_anim.png");
 
@@ -31,7 +34,7 @@ Game::Game()
 	// starting game with main menu state
 	this->_data->states.AddState(StateRef(new MainMenuState(this->_data)), false);
 
-	this->_data->window.setFramerateLimit(60);
+	this->_data->window.setFramerateLimit(120);
 }
 
 Game::~Game()

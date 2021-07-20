@@ -4,6 +4,7 @@
 
 #include "engine/tiles/Tile.h"
 #include "engine/Random.h"
+#include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 
 namespace Engine
 {
@@ -96,7 +97,7 @@ namespace Engine
 		}
 
 		auto blocks_map = std::move(GenerateBlocksMap(s, GRASS_TILE_CHAR, WATER_TILE_CHAR)); // blocks map
-		auto trees_map = std::move(GenerateTreeMap({ getRandomSeed(16), 256, 256, 0.5f, 4, 4, 3 })); // trees map
+		auto trees_map = std::move(GenerateTreeMap({ getRandomSeed(16), BASIC_WORLD_SIZE_X, BASIC_WORLD_SIZE_Y, 0.55f, 4, 4, 3 })); // trees map
 
 		// merging blocks and trees
 		for (int i = 0; i < s.width; i++)

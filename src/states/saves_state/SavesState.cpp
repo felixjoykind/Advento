@@ -13,7 +13,7 @@
 #include "engine/tiles/TileMap.h"
 
 #include "states/MainMenuState.h"
-#include "states/GameState.h"
+#include "states/game_state/GameState.h"
 
 SavesState::SavesState(GameDataRef data)
 	:_data(data), _background(new sf::Sprite(this->_data->assets.GetTexture("saves menu background"))),

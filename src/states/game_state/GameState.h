@@ -6,6 +6,7 @@
 
 #include "engine/ui/PauseMenu.h"
 #include "engine/ui/DebugInfo.h"
+#include "engine/ui/PlayerInventory.h"
 
 class GameState
 	: public State
@@ -17,7 +18,10 @@ private:
 
 	// game objects
 	Engine::EntityManager* _manager;
-	Engine::Entity& _player;
+	Player& _player;
+
+	// player inventory data
+	UI::PlayerInventory* _playerInventory;
 	
 	// camera
 	sf::View _camera;

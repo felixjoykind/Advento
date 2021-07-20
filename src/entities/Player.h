@@ -7,9 +7,11 @@
 #include "engine/ecs/components/MovementComponent.h"
 #include "engine/ecs/components/AnimationComponent.h"
 #include "engine/ecs/components/HitboxComponent.h"
+#include "engine/ecs/components/InventoryComponent.h"
 
-#define PLAYER_HITBOX_SIZE_X 64.f
-#define PLAYER_HITBOX_SIZE_Y 128.f
+constexpr float PLAYER_HITBOX_SIZE_X = 64.f;
+constexpr float PLAYER_HITBOX_SIZE_Y = 128.f;
+constexpr int PLAYER_INVENTORY_SIZE = ROWS * COLS;
 
 class Player
 	: public Engine::Entity
@@ -18,6 +20,7 @@ public:
 	Player(GameDataRef data, sf::Vector2f pos);
 	~Player();
 
+	void handleInput() override;
 	void update(float deltaTime) override;
 	void render() const override;
 

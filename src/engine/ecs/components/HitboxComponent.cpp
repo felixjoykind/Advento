@@ -5,7 +5,7 @@
 namespace Engine
 {
 	HitboxComponent::HitboxComponent(Entity* entity, sf::Vector2f offset, sf::Vector2f size, bool visible)
-		:Component(entity), _visible(visible)
+		:Component(entity), _settings({ offset, size, visible })
 	{
 		// setting up hitbox
 		this->_hitbox.setPosition(entity->getComponent<PositionComponent>().getPosition() + offset);
@@ -16,7 +16,7 @@ namespace Engine
 	}
 
 	HitboxComponent::HitboxComponent(Entity* entity, HitboxSettings settings)
-		:Component(entity), _visible(settings.visible)
+		:Component(entity), _settings(settings)
 	{
 		// setting up hitbox
 		this->_hitbox.setPosition(entity->getComponent<PositionComponent>().getPosition() + settings.offset);
@@ -31,7 +31,7 @@ namespace Engine
 
 	bool HitboxComponent::getVisible() const
 	{
-		return this->_visible;
+		return this->_settings.visible;
 	}
 
 	bool HitboxComponent::collides(const HitboxComponent& other)
@@ -42,17 +42,17 @@ namespace Engine
 
 	void HitboxComponent::setVisible(bool value)
 	{
-		this->_visible = value;
+		this->_settings.visible = value;
 	}
 
 	void HitboxComponent::update(float deltaTime)
 	{
-		this->_hitbox.setPosition(this->_entity->getComponent<PositionComponent>().getPosition());
+		this->_hitbox.setPosition(this->_entity->getComponent<PositionComponent>().getPosition() + _settings.offset);
 	}
 
 	void HitboxComponent::render(sf::RenderTarget& target) const
 	{
-		if (this->_visible)
+		if (this->_settings.visible)
 		{
 			target.draw(this->_hitbox);
 		}

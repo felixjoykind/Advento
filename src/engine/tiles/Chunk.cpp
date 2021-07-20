@@ -153,6 +153,12 @@ namespace Engine
 			{
 				for (size_t z = 0; z < MAP_LAYER_DEPTH; z++)
 				{
+					if (z == 1)
+					{
+						if (this->_rawTiles[y * CHUNK_SIZE + x][z] == '.')
+							continue;
+					}
+
 					auto& tile = this->_tiles[y * CHUNK_SIZE + x][z];
 					auto target_size = target.getSize();
 					auto target_center = target.getView().getCenter();

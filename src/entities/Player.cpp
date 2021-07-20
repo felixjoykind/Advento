@@ -1,5 +1,8 @@
 #include "Player.h"
 
+// DEBUG
+#include "engine/items/TestItem.h"
+
 Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 	:Entity(data, pos)
 {
@@ -13,13 +16,25 @@ Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 		Entity*, const sf::Texture&>(this, _data->assets.GetTexture("player anim"));
 
 	this->addComponent<MovementComponent, 
-		Entity*, MovementSettings>(this, { 250.f, 20.f, 10.f });
+		Entity*, MovementSettings>(this, { 250.f, 10.f, 5.f });
 
 	this->addComponent<AnimationComponent,
 		Entity*, SpriteComponent&>(this, this->getComponent<SpriteComponent>());
 
 	this->addComponent<HitboxComponent, 
 		Entity*, HitboxSettings>(this, { { 0.f, 0.f }, { PLAYER_HITBOX_SIZE_X, PLAYER_HITBOX_SIZE_Y } });
+
+	this->addComponent<InventoryComponent<PLAYER_INVENTORY_SIZE>,
+		Entity*>(this);
+
+	// DEBUG ONLY
+	for (size_t i = 0; i < 65; i++)
+	{
+		// TODO: remove
+		this->getComponent<InventoryComponent<PLAYER_INVENTORY_SIZE>>().addItem(
+			std::move(Advento::TestItem())
+		); // add test item
+	}
 	
 	// adding animation
 	auto& animation = this->getComponent<Engine::AnimationComponent>();
@@ -33,13 +48,11 @@ Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 Player::~Player()
 { }
 
-void Player::update(float deltaTime)
+void Player::handleInput()
 {
 	using namespace Engine;
 
-	// auto variables for quick access
 	auto& movement = this->getComponent<MovementComponent>();
-	auto& animation = this->getComponent<AnimationComponent>();
 
 	// moving in different directions based on input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -58,6 +71,13 @@ void Player::update(float deltaTime)
 	{
 		movement.move(1.f, 0.f);
 	}
+}
+
+void Player::update(float deltaTime)
+{
+	using namespace Engine;
+
+	auto& animation = this->getComponent<AnimationComponent>();
 	
 	// playing animation based on movement
 	switch (this->getComponent<MovementComponent>().getState())

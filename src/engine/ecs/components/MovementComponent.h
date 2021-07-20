@@ -26,6 +26,8 @@ namespace Engine
 		sf::Vector2f _velocity;
 		MovementSettings _settings;
 
+		void doDecelerationLogic(float& value);
+
 	public:
 		MovementComponent(Entity* entity, MovementSettings settings);
 		~MovementComponent();

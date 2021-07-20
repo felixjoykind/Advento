@@ -22,7 +22,7 @@ namespace Engine
 
 		// setters
 		template<class T, class... TArgs>
-		Entity& createEntity(TArgs&&... args)
+		T& createEntity(TArgs&&... args)
 		{
 			static_assert(std::is_base_of<Entity, T>::value,
 				"Type T must be inherited from Entity class.");

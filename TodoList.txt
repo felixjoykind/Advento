@@ -1,3 +1,6 @@
+Game
+	- inventory system !
+
 UI
 	Settings
 		- Settings system

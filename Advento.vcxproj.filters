@@ -24,7 +24,7 @@
     <ClCompile Include="src\gamedata\StateMachine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\states\GameState.cpp">
+    <ClCompile Include="src\states\game_state\GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\ecs\Entity.cpp">
@@ -102,6 +102,15 @@
     <ClCompile Include="src\engine\ui\elements\messagebox\MessageboxManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\items\Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\items\TestItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ui\PlayerInventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -113,7 +122,7 @@
     <ClInclude Include="src\states\State.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\states\GameState.h">
+    <ClInclude Include="src\states\game_state\GameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ecs\Entity.h">
@@ -234,6 +243,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\states\saves_state\UI_DEFENITIONS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ecs\components\InventoryComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\items\Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\items\TestItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\PlayerInventory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

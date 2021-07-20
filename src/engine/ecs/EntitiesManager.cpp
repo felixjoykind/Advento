@@ -21,6 +21,8 @@ namespace Engine
 	{
 		this->refresh(); // refreshing entities
 
+		// TODO: update and render only entities near the player
+
 		// updating entitites
 		for (auto& e : _entities)
 			e->update(deltaTime);

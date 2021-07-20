@@ -24,7 +24,6 @@ namespace Engine
 		Entity(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f });
 		virtual  ~Entity();
 
-		// getters
 		virtual bool isAlive() const;
 
 		// ECS
@@ -59,11 +58,10 @@ namespace Engine
 			return *c;
 		}
 
-		// base functions
+		virtual void handleInput();
 		virtual void update(float deltaTime);
 		virtual void render() const;
 
-		// destroy
 		virtual void destroy();
 
 	};

@@ -29,7 +29,7 @@ void AssetManager::AddFont(std::string name, std::string filepath)
 	}
 	else
 	{
-		throw("Ca't load font from" + filepath);
+		throw("Can't load font from" + filepath);
 	}
 }
 

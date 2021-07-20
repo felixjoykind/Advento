@@ -18,9 +18,7 @@ namespace Engine
 	{
 	private:
 		sf::RectangleShape _hitbox;
-
-		// visual
-		bool _visible;
+		HitboxSettings _settings;
 
 	public:
 		HitboxComponent(Entity* entity, HitboxSettings settings);
