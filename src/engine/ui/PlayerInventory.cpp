@@ -1,7 +1,6 @@
 #include "PlayerInventory.h"
 
 #include "engine/ecs/components/InventoryComponent.h"
-#include "engine/LOG.h"
 
 namespace UI
 {
@@ -85,6 +84,8 @@ namespace UI
 					return { x, y };
 			}
 		}
+
+		return { POS_INVALID_VALUE, POS_INVALID_VALUE };
 	}
 
 	void PlayerInventory::handleInput(sf::Event ev)
@@ -108,6 +109,10 @@ namespace UI
 				else
 				{ // we are moving some ui_item and we want to do smth with it
 					sf::Vector2i slot_pos = this->mouseToSlot(mouse_pos); // position of slot we want to move item
+					if (slot_pos.x == POS_INVALID_VALUE || slot_pos.y == POS_INVALID_VALUE)
+					{ // invalid click
+						return;
+					}
 
 					// check if clicked on extisting slot
 					if (slot_pos.x < COLS && slot_pos.y < ROWS && slot_pos.x >= 0 && slot_pos.y >= 0)

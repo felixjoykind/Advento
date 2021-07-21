@@ -4,6 +4,8 @@
 #include "entities/Player.h"
 #include "gamedata/InputManager.h"
 
+constexpr int POS_INVALID_VALUE = -1;
+
 namespace UI
 {
 	class PlayerInventory :
@@ -26,7 +28,9 @@ namespace UI
 		// Represents struct of items for rendering
 		struct UI_Item
 		{
-			sf::Vector2i cords = { -1, -1 };
+			// invalid to cause error if uninitialized
+			sf::Vector2i cords = { POS_INVALID_VALUE, POS_INVALID_VALUE };
+
 			bool following_mouse = false;
 
 			Sprite_Ptr sprite_ptr;
