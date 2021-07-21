@@ -14,6 +14,8 @@ constexpr float SLOT_SIZE = ITEM_SIZE + X_GAP_BETWEEN_SLOTS;
 constexpr short COLS = 7;
 constexpr short ROWS = 5;
 
+constexpr int POS_INVALID_VALUE = -1;
+
 namespace Engine
 {
 	class Component;
@@ -45,6 +47,9 @@ namespace Engine
 		const std::array<Item, inv_size>& getAllItems();
 
 		void swapItems(sf::Vector2i cords1, sf::Vector2i cords2);
+
+		// Splits item if possible and returns position of other half
+		sf::Vector2i splitItem(const sf::Vector2i& item_pos);
 
 		bool addItem(Item&& item);
 
@@ -175,6 +180,20 @@ namespace Engine
 		}
 
 		return false;
+	}
+
+	template<int inv_size>
+	inline sf::Vector2i InventoryComponent<inv_size>::splitItem(const sf::Vector2i& item_pos)
+	{
+		auto& item = this->_items[item_pos.y * COLS + item_pos.x];
+
+		if (item.curr_num_of_blocks_in_stack > 1)
+		{
+			int old_num_of_blocks = item.curr_num_of_blocks_in_stack;
+			item.curr_num_of_blocks_in_stack /= 2;
+		}
+
+		return { POS_INVALID_VALUE, POS_INVALID_VALUE };
 	}
 
 	template<int inv_size>

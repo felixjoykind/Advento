@@ -9,14 +9,13 @@ namespace Engine
 	struct Item
 	{
 		int id = -1;
-		bool is_stackable;
-		int max_num_blocks_in_stack;
-		int curr_num_of_blocks_in_stack;
+		bool is_stackable = true;
+		int max_num_blocks_in_stack = 64;
+		int curr_num_of_blocks_in_stack = 1;
 
 		Item();
 		~Item();
 
 		virtual const sf::Texture& getTexture(const AssetManager& assets) const;
-
 	};
 }

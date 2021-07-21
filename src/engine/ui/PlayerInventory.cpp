@@ -5,7 +5,7 @@
 namespace UI
 {
 	PlayerInventory::PlayerInventory(GameDataRef data, Player& player)
-		:UIElement(data, { 600.f, 600.f }, { 25.f, 25.f }),
+		:UIElement(data, { 607.f, 600.f }, { 25.f, 25.f }),
 		_background(new sf::Sprite(data->assets.GetTexture("inventory"))),
 		_playerInvComponent(player.getComponent<Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>>())
 	{
@@ -30,8 +30,10 @@ namespace UI
 		}
 		this->_inventoryItems.clear();
 
-		if (_movingItem != nullptr)
+		if (this->_movingItem != nullptr)
+		{
 			this->_movingItem = nullptr;
+		}
 
 		// refresh
 		auto& items = this->_playerInvComponent.getAllItems();
@@ -84,8 +86,21 @@ namespace UI
 					return { x, y };
 			}
 		}
-
+		
 		return { POS_INVALID_VALUE, POS_INVALID_VALUE };
+	}
+
+	PlayerInventory::UI_Item* PlayerInventory::getHoveredItem(sf::Vector2i mouse_pos)
+	{
+		for (auto& ui_item : this->_inventoryItems)
+		{
+			if (ui_item.sprite_ptr->getGlobalBounds().contains(float(mouse_pos.x), float(mouse_pos.y)))
+			{ // item is hovered
+				return &ui_item;
+			}
+		}
+
+		return nullptr;
 	}
 
 	void PlayerInventory::handleInput(sf::Event ev)
@@ -97,14 +112,9 @@ namespace UI
 			{
 				if (this->_movingItem == nullptr) // if we are not moving anything
 				{
-					for (auto& ui_item : this->_inventoryItems)
-					{
-						if (ui_item.sprite_ptr->getGlobalBounds().contains(float(mouse_pos.x), float(mouse_pos.y)))
-						{ // item is clicked
-							this->_movingItem = &ui_item;
-							this->_movingItem->following_mouse = true;
-						}
-					}
+					this->_movingItem = getHoveredItem(mouse_pos);
+					if (this->_movingItem != nullptr)
+						this->_movingItem->following_mouse = true;
 				}
 				else
 				{ // we are moving some ui_item and we want to do smth with it
@@ -120,6 +130,18 @@ namespace UI
 						this->_playerInvComponent.swapItems(this->_movingItem->cords, { slot_pos.x, slot_pos.y }); // swap
 						this->refreshItemsSprites(); // refresh
 					}
+				}
+			}
+			else if (ev.mouseButton.button == sf::Mouse::Button::Right)
+			{ // we want to split item
+				if (this->_movingItem == nullptr)
+				{
+					this->_playerInvComponent.splitItem(getHoveredItem(mouse_pos)->cords);
+					this->refreshItemsSprites();
+				}
+				else
+				{
+
 				}
 			}
 		}
