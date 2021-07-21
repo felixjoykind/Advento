@@ -51,7 +51,12 @@ namespace Engine
 		// Splits item if possible and returns position of other half
 		sf::Vector2i splitItem(const sf::Vector2i& item_pos);
 
+		const Item& getItemAt(sf::Vector2i slot) const;
+
+		bool addItemTo(sf::Vector2i slot, int amount = 1);
+
 		bool addItem(Item&& item);
+		bool removeItem(sf::Vector2i slot);
 
 		void update(float deltaTime) override;
 
@@ -183,6 +188,18 @@ namespace Engine
 	}
 
 	template<int inv_size>
+	inline bool InventoryComponent<inv_size>::removeItem(sf::Vector2i slot)
+	{
+		int i = slot.y * COLS + slot.x;
+		if (this->_items[i].id != EMPTY_SLOT_ID)
+		{
+			this->_items[i] = Item{}; // replace with empty item
+			return true;
+		}
+		return false;
+	}
+
+	template<int inv_size>
 	inline sf::Vector2i InventoryComponent<inv_size>::splitItem(const sf::Vector2i& item_pos)
 	{
 		auto& item = this->_items[item_pos.y * COLS + item_pos.x];
@@ -194,6 +211,24 @@ namespace Engine
 		}
 
 		return { POS_INVALID_VALUE, POS_INVALID_VALUE };
+	}
+
+	template<int inv_size>
+	inline const Item& InventoryComponent<inv_size>::getItemAt(sf::Vector2i slot) const
+	{
+		return this->_items[slot.y * COLS + slot.x];
+	}
+
+	template<int inv_size>
+	inline bool InventoryComponent<inv_size>::addItemTo(sf::Vector2i slot, int amount)
+	{
+		auto& item = this->_items[slot.y * COLS + slot.x];
+		if (item.curr_num_of_blocks_in_stack + amount <= item.max_num_blocks_in_stack)
+		{
+			item.curr_num_of_blocks_in_stack += amount;
+			return true;
+		}
+		return false;
 	}
 
 	template<int inv_size>

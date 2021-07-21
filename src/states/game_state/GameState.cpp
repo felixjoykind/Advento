@@ -80,7 +80,10 @@ void GameState::HandleInput()
 			}
 			else if (ev.key.code == sf::Keyboard::E)
 			{ // open inventory
-				this->_playerInventory->setActive(!_playerInventory->isActive());
+				if (this->_playerInventory->isActive())
+					this->_playerInventory->close();
+				else
+					this->_playerInventory->open();
 			}
 		}
 

@@ -55,6 +55,7 @@ namespace UI
 
 					UI_Item ui_item =
 					{
+						items[i],
 						{ x, y },
 						false,
 						std::make_unique<sf::Sprite>(items[i].getTexture(this->_data->assets)),
@@ -127,7 +128,31 @@ namespace UI
 					// check if clicked on extisting slot
 					if (slot_pos.x < COLS && slot_pos.y < ROWS && slot_pos.x >= 0 && slot_pos.y >= 0)
 					{
-						this->_playerInvComponent.swapItems(this->_movingItem->cords, { slot_pos.x, slot_pos.y }); // swap
+						if (_playerInvComponent.getItemAt(slot_pos).id == 
+							_playerInvComponent.getItemAt(_movingItem->cords).id &&
+							slot_pos != this->_movingItem->cords)
+						{
+							if (this->_playerInvComponent.addItemTo(
+								slot_pos, this->_movingItem->item.curr_num_of_blocks_in_stack))
+							{ // added successfully
+								// added item doesnt exist anymore
+								this->_playerInvComponent.removeItem(this->_movingItem->cords);
+							}
+							else
+							{ // failed to add
+								this->_playerInvComponent.swapItems(
+									this->_movingItem->cords,
+									{ slot_pos.x, slot_pos.y }
+								); // swap
+							}
+						}
+						else
+						{
+							this->_playerInvComponent.swapItems(
+								this->_movingItem->cords, 
+								{ slot_pos.x, slot_pos.y }
+							); // swap
+						}
 						this->refreshItemsSprites(); // refresh
 					}
 				}
@@ -141,7 +166,7 @@ namespace UI
 				}
 				else
 				{
-
+					// TODO: add 1 to clicked slot
 				}
 			}
 		}
@@ -166,5 +191,17 @@ namespace UI
 		{
 			ui_item.render(this->_data->window);
 		}
+	}
+
+	void PlayerInventory::open()
+	{
+		this->setActive(true);
+		this->refreshItemsSprites();
+	}
+
+	void PlayerInventory::close()
+	{
+		this->setActive(false);
+		this->_movingItem = nullptr;
 	}
 }

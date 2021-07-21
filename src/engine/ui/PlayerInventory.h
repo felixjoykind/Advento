@@ -17,6 +17,7 @@ namespace UI
 		struct UI_Item
 		{
 			// invalid to cause error if uninitialized
+			const Engine::Item& item;
 			sf::Vector2i cords = { POS_INVALID_VALUE, POS_INVALID_VALUE };
 
 			bool following_mouse = false;
@@ -91,5 +92,7 @@ namespace UI
 		void update(float deltaTime) override;
 		void render() const override;
 
+		void open();
+		void close();
 	};
 }
