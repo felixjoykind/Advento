@@ -252,7 +252,10 @@ namespace Engine
 						}
 					) == this->_loadedChunks.end())
 					{
+						#ifdef _DEBUG
 						LOG("Loaded chunk: (" << x << ", " << y << ")"); // debug info
+						#endif // _DEBUG
+
 						// get new chunk from file
 						auto new_chunk = this->getChunkFromFile(
 							_worldSaveSettings.dir_path + "\\chunks\\chunk " + std::to_string(x) + " " + std::to_string(y) + ".chunk",
@@ -278,7 +281,10 @@ namespace Engine
 				{
 					// delete it
 					auto chunk_pos = this->_loadedChunks[i]->getPosition();
+
+					#ifdef _DEBUG
 					LOG("Unloaded chunk: (" << chunk_pos.x << ", " << chunk_pos.y << ")"); // debug info
+					#endif // _DEBUG
 
 					// delete chunk
 					delete this->_loadedChunks[i];

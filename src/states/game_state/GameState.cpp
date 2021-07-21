@@ -83,6 +83,8 @@ void GameState::HandleInput()
 				this->_playerInventory->setActive(!_playerInventory->isActive());
 			}
 		}
+
+		this->_playerInventory->handleInput(ev);
 	}
 }
 

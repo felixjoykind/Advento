@@ -2,7 +2,7 @@
 
 namespace Advento
 {
-	TestItem::TestItem()
+	EmptyItem::EmptyItem()
 	{
 		// init item settings
 		this->id = 0;
@@ -11,11 +11,11 @@ namespace Advento
 		this->curr_num_of_blocks_in_stack = 1;
 	}
 
-	TestItem::~TestItem()
+	EmptyItem::~EmptyItem()
 	{ }
 
-	const sf::Texture& TestItem::getTexture(const AssetManager& assets) const
+	const sf::Texture& EmptyItem::getTexture(const AssetManager& assets) const
 	{
-		return assets.GetTexture("test item");
+		return assets.GetTexture("empty item");
 	}
 }

@@ -19,7 +19,5 @@ public:
 	// Getters
 	const sf::Texture& GetTexture(std::string name) const;
 	const sf::Font& GetFont(std::string name) const;
-
-	AssetManager& operator=(const AssetManager& other) = default;
 };
 

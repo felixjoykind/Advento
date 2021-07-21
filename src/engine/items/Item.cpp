@@ -10,6 +10,6 @@ namespace Engine
 
 	const sf::Texture& Item::getTexture(const AssetManager& assets) const
 	{
-		return assets.GetTexture("test item");
+		return assets.GetTexture("empty item");
 	}
 }

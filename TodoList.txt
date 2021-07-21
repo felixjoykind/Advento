@@ -1,5 +1,8 @@
 Game
 	- inventory system !
+		- interaction with inventory
+		- hud
+		- items as world objects
 
 UI
 	Settings

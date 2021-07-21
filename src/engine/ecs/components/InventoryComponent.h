@@ -9,8 +9,7 @@ constexpr float INVENTORY_OFFSET_Y = 150.f;
 constexpr float X_GAP_BETWEEN_SLOTS = 16.f;
 constexpr float Y_GAP_BETWEEN_SLOTS = 16.f;
 
-constexpr float SLOT_SIZE = 64.f + X_GAP_BETWEEN_SLOTS;
-
+constexpr float SLOT_SIZE = ITEM_SIZE + X_GAP_BETWEEN_SLOTS;
 
 constexpr short COLS = 7;
 constexpr short ROWS = 5;
@@ -44,6 +43,8 @@ namespace Engine
 		~InventoryComponent();
 
 		const std::array<Item, inv_size>& getAllItems();
+
+		void swapItems(sf::Vector2i cords1, sf::Vector2i cords2);
 
 		bool addItem(Item&& item);
 
@@ -153,6 +154,14 @@ namespace Engine
 	inline const std::array<Item, inv_size>& InventoryComponent<inv_size>::getAllItems()
 	{
 		return this->_items;
+	}
+
+	template<int inv_size>
+	inline void InventoryComponent<inv_size>::swapItems(sf::Vector2i cords1, sf::Vector2i cords2)
+	{
+		int index1 = cords1.y * COLS + cords1.x;
+		int index2 = cords2.y * COLS + cords2.x;
+		std::swap(this->_items[index1], this->_items[index2]);
 	}
 
 	template<int inv_size>

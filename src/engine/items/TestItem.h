@@ -3,12 +3,12 @@
 
 namespace Advento
 {
-	class TestItem :
+	class EmptyItem :
 		public Engine::Item
 	{
 	public:
-		TestItem();
-		~TestItem();
+		EmptyItem();
+		~EmptyItem();
 
 		const sf::Texture& getTexture(const AssetManager& assets) const override;
 	};

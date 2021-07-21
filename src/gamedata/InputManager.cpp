@@ -25,3 +25,9 @@ bool InputManager::isElementPressed(UI::UIElement* element, const sf::Window& wi
     return isElementHovered(element, window)
         && isMouseButtonPressed(button);
 }
+
+bool InputManager::isSpriteHovered(const sf::Sprite* sprite, const sf::Window& window)
+{
+    auto mouse_pos = getMousePosition(window);
+    return sprite->getGlobalBounds().contains((float)mouse_pos.x, (float)mouse_pos.y);
+}
