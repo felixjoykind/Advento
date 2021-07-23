@@ -224,7 +224,7 @@ namespace Engine
 
 			if (item.curr_num_of_blocks_in_stack > 1)
 			{
-				this->addItem(item.getHalf(), true);
+				this->addItem(std::move(item.getHalf()), true);
 				item.curr_num_of_blocks_in_stack /= 2;
 				return true;
 			}

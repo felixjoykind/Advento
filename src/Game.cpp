@@ -22,6 +22,7 @@ Game::Game()
 	// loading items
 	this->_data->assets.AddTexture("inventory", "./assets/sprites/items/inventory.png"); // inventory
 	this->_data->assets.AddTexture("empty item", "./assets/sprites/items/empty_item.png");
+	this->_data->assets.AddTexture("stick item", "./assets/sprites/items/stick.png");
 
 	// loading animations
 	this->_data->assets.AddTexture("player anim", "./assets/sprites/player/player_anim.png");

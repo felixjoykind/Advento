@@ -1,5 +1,7 @@
 #include "Item.h"
 
+#include "engine/SpriteManipulator.h"
+
 namespace Engine
 {
 	Item::Item()
@@ -15,7 +17,7 @@ namespace Engine
 
 	const sf::Texture& Item::getTexture(const AssetManager& assets) const
 	{
-		return assets.GetTexture("empty item");
+		return assets.GetTexture(SpriteManipulator::getItemTextureNameFromId(this->id));
 	}
 
 	Item Item::getHalf()

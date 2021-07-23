@@ -3,13 +3,14 @@
 
 namespace Advento
 {
-	class EmptyItem :
+	class Stick :
 		public Engine::Item
 	{
 	public:
-		EmptyItem();
-		~EmptyItem();
+		Stick();
+		~Stick();
 
 		Item getHalf() override;
 	};
 }
+

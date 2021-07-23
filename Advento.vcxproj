@@ -183,6 +183,7 @@
     <ClCompile Include="src\engine\ui\elements\WorldPlate.cpp" />
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
     <ClCompile Include="src\engine\items\EmptyItem.cpp" />
+    <ClCompile Include="src\engine\items\Stick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\ui\PlayerInventory.h" />
@@ -233,6 +234,7 @@
     <ClInclude Include="src\engine\ui\elements\WorldPlate.h" />
     <ClInclude Include="src\engine\ui\elements\Textbox.h" />
     <ClInclude Include="src\engine\items\EmptyItem.h" />
+    <ClInclude Include="src\engine\items\Stick.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TodoList.txt" />
