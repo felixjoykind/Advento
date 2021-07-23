@@ -132,7 +132,7 @@ namespace UI
 							_playerInvComponent.getItemAt(_movingItem->cords).id &&
 							slot_pos != this->_movingItem->cords)
 						{
-							if (this->_playerInvComponent.addItemTo(
+							if (this->_playerInvComponent.addToItem(
 								slot_pos, this->_movingItem->item.curr_num_of_blocks_in_stack))
 							{ // added successfully
 								// added item doesnt exist anymore
@@ -161,7 +161,12 @@ namespace UI
 			{ // we want to split item
 				if (this->_movingItem == nullptr)
 				{
-					this->_playerInvComponent.splitItem(getHoveredItem(mouse_pos)->cords);
+					const auto hovered_item = getHoveredItem(mouse_pos);
+
+					if (hovered_item != nullptr)
+					{
+						this->_playerInvComponent.splitItem(hovered_item->cords);
+					}
 					this->refreshItemsSprites();
 				}
 				else

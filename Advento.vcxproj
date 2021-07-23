@@ -182,7 +182,7 @@
     <ClCompile Include="src\engine\tiles\Tile.cpp" />
     <ClCompile Include="src\engine\ui\elements\WorldPlate.cpp" />
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
-    <ClCompile Include="src\engine\items\TestItem.cpp" />
+    <ClCompile Include="src\engine\items\EmptyItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\ui\PlayerInventory.h" />
@@ -232,7 +232,7 @@
     <ClInclude Include="src\engine\ui\elements\UIElement.h" />
     <ClInclude Include="src\engine\ui\elements\WorldPlate.h" />
     <ClInclude Include="src\engine\ui\elements\Textbox.h" />
-    <ClInclude Include="src\engine\items\TestItem.h" />
+    <ClInclude Include="src\engine\items\EmptyItem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TodoList.txt" />

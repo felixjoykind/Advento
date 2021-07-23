@@ -1,7 +1,7 @@
 #include "Player.h"
 
 // DEBUG
-#include "engine/items/TestItem.h"
+#include "engine/items/EmptyItem.h"
 
 Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 	:Entity(data, pos)
@@ -28,7 +28,7 @@ Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 		Entity*>(this);
 
 	// DEBUG ONLY
-	for (size_t i = 0; i < 65; i++)
+	for (size_t i = 0; i < 120; i++)
 	{
 		// TODO: remove
 		this->getComponent<InventoryComponent<PLAYER_INVENTORY_SIZE>>().addItem(

@@ -48,15 +48,15 @@ namespace Engine
 
 		void swapItems(sf::Vector2i cords1, sf::Vector2i cords2);
 
-		// Splits item if possible and returns position of other half
-		sf::Vector2i splitItem(const sf::Vector2i& item_pos);
+		// Splits item if possible
+		bool splitItem(const sf::Vector2i& item_pos);
 
 		const Item& getItemAt(sf::Vector2i slot) const;
-
-		bool addItemTo(sf::Vector2i slot, int amount = 1);
-
-		bool addItem(Item&& item);
+		bool addToItem(sf::Vector2i slot, int amount = 1);
+		bool addItem(Item&& item, bool new_slot = false);
 		bool removeItem(sf::Vector2i slot);
+
+		bool isFull() const;
 
 		void update(float deltaTime) override;
 
@@ -175,8 +175,13 @@ namespace Engine
 	}
 
 	template<int inv_size>
-	inline bool InventoryComponent<inv_size>::addItem(Item&& item)
+	inline bool InventoryComponent<inv_size>::addItem(Item&& item, bool new_slot)
 	{
+		if (new_slot)
+		{
+			return add_item_to_new_stack_if_possible(std::move(item));
+		}
+
 		bool was_possible_to_add_to_existing_stack = add_item_to_existing_stack_if_possible(item);
 
 		if (!was_possible_to_add_to_existing_stack)
@@ -200,17 +205,32 @@ namespace Engine
 	}
 
 	template<int inv_size>
-	inline sf::Vector2i InventoryComponent<inv_size>::splitItem(const sf::Vector2i& item_pos)
+	inline bool InventoryComponent<inv_size>::isFull() const
 	{
-		auto& item = this->_items[item_pos.y * COLS + item_pos.x];
-
-		if (item.curr_num_of_blocks_in_stack > 1)
+		for (const auto& item : this->_items)
 		{
-			int old_num_of_blocks = item.curr_num_of_blocks_in_stack;
-			item.curr_num_of_blocks_in_stack /= 2;
+			if (item.id == EMPTY_SLOT_ID)
+				return false;
+		}
+		return true;
+	}
+
+	template<int inv_size>
+	inline bool InventoryComponent<inv_size>::splitItem(const sf::Vector2i& item_pos)
+	{
+		if (this->isFull() == false)
+		{
+			auto& item = this->_items[item_pos.y * COLS + item_pos.x];
+
+			if (item.curr_num_of_blocks_in_stack > 1)
+			{
+				this->addItem(item.getHalf(), true);
+				item.curr_num_of_blocks_in_stack /= 2;
+				return true;
+			}
 		}
 
-		return { POS_INVALID_VALUE, POS_INVALID_VALUE };
+		return false;
 	}
 
 	template<int inv_size>
@@ -220,7 +240,7 @@ namespace Engine
 	}
 
 	template<int inv_size>
-	inline bool InventoryComponent<inv_size>::addItemTo(sf::Vector2i slot, int amount)
+	inline bool InventoryComponent<inv_size>::addToItem(sf::Vector2i slot, int amount)
 	{
 		auto& item = this->_items[slot.y * COLS + slot.x];
 		if (item.curr_num_of_blocks_in_stack + amount <= item.max_num_blocks_in_stack)

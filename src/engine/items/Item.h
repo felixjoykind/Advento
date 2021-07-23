@@ -6,8 +6,12 @@ constexpr float ITEM_SIZE = 64.f;
 namespace Engine
 {
 	// Base class for all items
-	struct Item
+	class Item
 	{
+	protected:
+		int getHalfOfAmount() const;
+
+	public:
 		int id = -1;
 		bool is_stackable = true;
 		int max_num_blocks_in_stack = 64;
@@ -17,5 +21,6 @@ namespace Engine
 		~Item();
 
 		virtual const sf::Texture& getTexture(const AssetManager& assets) const;
+		virtual Item getHalf();
 	};
 }

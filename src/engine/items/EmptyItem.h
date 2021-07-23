@@ -11,5 +11,6 @@ namespace Advento
 		~EmptyItem();
 
 		const sf::Texture& getTexture(const AssetManager& assets) const override;
+		Item getHalf() override;
 	};
 }

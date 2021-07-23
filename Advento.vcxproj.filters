@@ -105,7 +105,7 @@
     <ClCompile Include="src\engine\items\Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\items\TestItem.cpp">
+    <ClCompile Include="src\engine\items\EmptyItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\ui\PlayerInventory.cpp">
@@ -251,7 +251,7 @@
     <ClInclude Include="src\engine\items\Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\items\TestItem.h">
+    <ClInclude Include="src\engine\items\EmptyItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ui\PlayerInventory.h">
