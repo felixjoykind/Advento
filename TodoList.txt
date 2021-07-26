@@ -1,7 +1,7 @@
 Game
 	- inventory system !
-		- interaction with inventory
 		- hud
+			- scroll select
 		- items as world objects
 
 UI

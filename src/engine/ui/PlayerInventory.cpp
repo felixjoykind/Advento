@@ -2,22 +2,29 @@
 
 #include "engine/ecs/components/InventoryComponent.h"
 
+static const sf::Vector2i INVALID_POS = sf::Vector2i{ POS_INVALID_VALUE, POS_INVALID_VALUE };
+
 namespace UI
 {
 	PlayerInventory::PlayerInventory(GameDataRef data, Player& player)
 		:UIElement(data, { 607.f, 600.f }, { 25.f, 25.f }),
 		_background(new sf::Sprite(data->assets.GetTexture("inventory"))),
+		_hud(new sf::Sprite(data->assets.GetTexture("inventory hud"))),
 		_playerInvComponent(player.getComponent<Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>>())
 	{
 		this->_background->setPosition(this->getPosition());
-		this->setActive(false);
+		this->_hud->setPosition({ this->getPosition().x + INVENTORY_OFFSET_X - 11.f, this->getPosition().y });
+		this->_hudSelector = new HudSelector(this->_hud->getPosition());
 
 		refreshItemsSprites();
+		this->close();
 	}
 
 	PlayerInventory::~PlayerInventory()
 	{
 		delete this->_background;
+		delete this->_hud;
+		delete this->_hudSelector;
 	}
 
 	void PlayerInventory::refreshItemsSprites()
@@ -88,14 +95,14 @@ namespace UI
 			}
 		}
 		
-		return { POS_INVALID_VALUE, POS_INVALID_VALUE };
+		return INVALID_POS;
 	}
 
 	PlayerInventory::UI_Item* PlayerInventory::getHoveredItem(sf::Vector2i mouse_pos)
 	{
 		for (auto& ui_item : this->_inventoryItems)
 		{
-			if (ui_item.sprite_ptr->getGlobalBounds().contains(float(mouse_pos.x), float(mouse_pos.y)))
+			if (ui_item.cords == this->mouseToSlot(mouse_pos))
 			{ // item is hovered
 				return &ui_item;
 			}
@@ -106,6 +113,19 @@ namespace UI
 
 	void PlayerInventory::handleInput(sf::Event ev)
 	{
+		if (this->isActive() == false)
+		{
+			// handle hud events (scroll and nums press)
+			if (ev.type == sf::Event::MouseWheelMoved)
+			{
+				LOG("got here");
+				// move hud inventory selection index
+				this->_hudSelector->increaseSelectedIndex(ev.mouseWheel.delta);
+			}
+			return;
+		}
+		
+		// if active (inventory opened)
 		if (ev.type == sf::Event::MouseButtonPressed)
 		{
 			auto mouse_pos = InputManager::getMousePosition(this->_data->window);
@@ -167,34 +187,74 @@ namespace UI
 					{
 						this->_playerInvComponent.splitItem(hovered_item->cords);
 					}
-					this->refreshItemsSprites();
 				}
 				else
 				{
-					// TODO: add 1 to clicked slot
+					if (this->_movingItem->item.curr_num_of_blocks_in_stack > 1)
+					{
+						const auto& slot_pos = this->mouseToSlot(mouse_pos);
+
+						if (slot_pos != INVALID_POS)
+						{
+							this->_playerInvComponent.addItemToSlot(std::move(this->_movingItem->item.getCopy()), this->mouseToSlot(mouse_pos));
+							this->_playerInvComponent.removeFromItem(this->_movingItem->cords);
+						}
+					}
 				}
+				this->refreshItemsSprites();
 			}
 		}
 	}
 
 	void PlayerInventory::update(float deltaTime)
 	{
-		UIElement::update(deltaTime); // returns if not active
+		if (this->isActive())
+		{ // inventory opened
+			for (auto& ui_item : this->_inventoryItems)
+			{
+				ui_item.update(deltaTime, this->_data->window);
+			}
+		}
+		else
+		{ // only hud
 
-		for (auto& ui_item : this->_inventoryItems)
-		{
-			ui_item.update(deltaTime, this->_data->window);
 		}
 	}
 
 	void PlayerInventory::render() const
 	{
-		this->_data->window.draw(*this->_background); // renders background
+		if (this->isActive())
+		{ // inventory opened
+			this->_data->window.draw(*this->_background); // renders background
 
-		// render items
-		for (const auto& ui_item : this->_inventoryItems)
-		{
-			ui_item.render(this->_data->window);
+			// render items
+			for (const auto& ui_item : this->_inventoryItems)
+			{
+				ui_item.render(this->_data->window);
+			}
+		}
+		else
+		{ // render only first 7 slots (hud)
+			this->_data->window.draw(*this->_hud);
+
+			for (int i = 0; i < 7; i++)
+			{
+				if (i >= (int)this->_inventoryItems.size())
+					break;
+
+				auto& ui_item = this->_inventoryItems[i];
+				// find item with needed position
+				for (int j = 0; j < 7; j++)
+				{
+					if (ui_item.cords.y == 0 && ui_item.cords.x == j)
+					{
+						ui_item.render(this->_data->window);
+					}
+				}
+			}
+
+			// hud selector render
+			this->_data->window.draw(*this->_hudSelector->shape);
 		}
 	}
 
@@ -207,6 +267,31 @@ namespace UI
 	void PlayerInventory::close()
 	{
 		this->setActive(false);
-		this->_movingItem = nullptr;
+
+		if (this->_movingItem != nullptr)
+		{
+			this->_movingItem->following_mouse = false;
+			this->_movingItem = nullptr;
+		}
+
+		this->refreshItemsSprites();
+
+		// update position of first 7 ui items (hud)
+		for (int i = 0; i < 7; i++)
+		{
+			if (i >= (int)this->_inventoryItems.size())
+				break;
+
+			auto& ui_item = this->_inventoryItems[i];
+			// find item with needed position
+			for (int j = 0; j < 7; j++)
+			{
+				if (ui_item.cords.y == 0 && ui_item.cords.x == j)
+				{
+					ui_item.resetColor();
+					ui_item.setPosition({ ui_item.getPosition().x, INVENTORY_OFFSET_X + 4.f });
+				}
+			}
+		}
 	}
 }

@@ -14,14 +14,14 @@ namespace Advento
 	Stick::~Stick()
 	{ }
 
-	Engine::Item Stick::getHalf()
+	Engine::Item Stick::getCopy(int amount) const
 	{
 		Stick half_item;
 
 		half_item.id = this->id;
 		half_item.is_stackable = this->is_stackable;
 		half_item.max_num_blocks_in_stack = this->max_num_blocks_in_stack;
-		half_item.curr_num_of_blocks_in_stack = this->getHalfOfAmount();
+		half_item.curr_num_of_blocks_in_stack = amount;
 
 		return half_item;
 	}

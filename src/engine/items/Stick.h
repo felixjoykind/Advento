@@ -10,7 +10,6 @@ namespace Advento
 		Stick();
 		~Stick();
 
-		Item getHalf() override;
+		Item getCopy(int amount = 1) const override;
 	};
 }
-

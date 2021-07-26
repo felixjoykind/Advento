@@ -14,14 +14,14 @@ namespace Advento
 	EmptyItem::~EmptyItem()
 	{ }
 
-	Engine::Item EmptyItem::getHalf()
+	Engine::Item EmptyItem::getCopy(int amount) const
 	{
-		Item half_item;
+		EmptyItem half_item;
 
 		half_item.id = this->id;
 		half_item.is_stackable = this->is_stackable;
 		half_item.max_num_blocks_in_stack = 64;
-		half_item.curr_num_of_blocks_in_stack = this->getHalfOfAmount();
+		half_item.curr_num_of_blocks_in_stack = amount;
 
 		return half_item;
 	}

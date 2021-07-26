@@ -55,7 +55,7 @@ namespace UI
 			this->_content->setFillColor(this->text_hover);
 
 			// if also pressed
-			if (InputManager::isMouseButtonPressed(sf::Mouse::Button::Left))
+			if (IClickable::GetClick(this->_data->window, sf::Mouse::Button::Left) == ClickType::SINGLE)
 			{
 				this->_shape->setFillColor(this->click_color);
 				this->_content->setFillColor(this->text_click);

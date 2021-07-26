@@ -10,6 +10,6 @@ namespace Advento
 		EmptyItem();
 		~EmptyItem();
 
-		Item getHalf() override;
+		Item getCopy(int amount = 1) const override;
 	};
 }

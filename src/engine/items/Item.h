@@ -9,7 +9,8 @@ namespace Engine
 	class Item
 	{
 	protected:
-		int getHalfOfAmount() const;
+		// Returns item texture name based on its id
+		static std::string getItemTextureNameFromId(int id);
 
 	public:
 		int id = -1;
@@ -20,7 +21,9 @@ namespace Engine
 		Item();
 		~Item();
 
+		int getHalfOfAmount() const;
+
 		virtual const sf::Texture& getTexture(const AssetManager& assets) const;
-		virtual Item getHalf();
+		virtual Item getCopy(int amount = 1) const;
 	};
 }

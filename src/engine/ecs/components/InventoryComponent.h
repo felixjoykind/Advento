@@ -52,8 +52,12 @@ namespace Engine
 		bool splitItem(const sf::Vector2i& item_pos);
 
 		const Item& getItemAt(sf::Vector2i slot) const;
+
+		bool addItemToSlot(Item&& item, sf::Vector2i slot);
 		bool addToItem(sf::Vector2i slot, int amount = 1);
 		bool addItem(Item&& item, bool new_slot = false);
+
+		bool removeFromItem(sf::Vector2i slot, int amount = 1);
 		bool removeItem(sf::Vector2i slot);
 
 		bool isFull() const;
@@ -127,7 +131,6 @@ namespace Engine
 		if (next_empty_slot >= 0)
 		{
 			this->_items[next_empty_slot] = std::move(item);
-
 			return true;
 		}
 
@@ -193,6 +196,18 @@ namespace Engine
 	}
 
 	template<int inv_size>
+	inline bool InventoryComponent<inv_size>::removeFromItem(sf::Vector2i slot, int amount)
+	{
+		int i = slot.y * COLS + slot.x;
+		if (this->_items[i].curr_num_of_blocks_in_stack - amount > 0)
+		{
+			this->_items[i].curr_num_of_blocks_in_stack -= amount;
+			return true;
+		}
+		return false;
+	}
+
+	template<int inv_size>
 	inline bool InventoryComponent<inv_size>::removeItem(sf::Vector2i slot)
 	{
 		int i = slot.y * COLS + slot.x;
@@ -224,7 +239,7 @@ namespace Engine
 
 			if (item.curr_num_of_blocks_in_stack > 1)
 			{
-				this->addItem(std::move(item.getHalf()), true);
+				this->addItem(std::move(item.getCopy(item.getHalfOfAmount())), true);
 				item.curr_num_of_blocks_in_stack /= 2;
 				return true;
 			}
@@ -237,6 +252,22 @@ namespace Engine
 	inline const Item& InventoryComponent<inv_size>::getItemAt(sf::Vector2i slot) const
 	{
 		return this->_items[slot.y * COLS + slot.x];
+	}
+
+	template<int inv_size>
+	inline bool InventoryComponent<inv_size>::addItemToSlot(Item&& item, sf::Vector2i slot)
+	{
+		int i = slot.y * COLS + slot.x;
+		if (this->_items[i].id == EMPTY_SLOT_ID)
+		{
+			this->_items[i] = std::move(item);
+			return true;
+		}
+		else if (this->_items[i].id == item.id)
+		{
+			return this->addToItem(slot, item.curr_num_of_blocks_in_stack);
+		}
+		return false;
 	}
 
 	template<int inv_size>

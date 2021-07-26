@@ -25,6 +25,8 @@ namespace UI
 			Sprite_Ptr sprite_ptr = nullptr;
 			Text_Ptr amount_text_ptr = nullptr;
 
+			sf::Vector2f getPosition() const { return this->sprite_ptr->getPosition(); }
+
 			void setPosition(sf::Vector2f pos)
 			{
 				this->sprite_ptr->setPosition(pos);
@@ -36,6 +38,8 @@ namespace UI
 				);
 			}
 
+			void resetColor() { this->sprite_ptr->setColor(sf::Color::White); }
+
 			void update(float deltaTime, const sf::Window& window)
 			{
 				if (InputManager::isSpriteHovered(this->sprite_ptr.get(), window)
@@ -45,7 +49,7 @@ namespace UI
 				}
 				else
 				{
-					this->sprite_ptr->setColor(sf::Color::White);
+					this->resetColor();
 				}
 				if (this->following_mouse == true)
 				{ // if following mouse
@@ -65,6 +69,48 @@ namespace UI
 				target.draw(*amount_text_ptr);
 			}
 		};
+		struct HudSelector
+		{
+			const float THIKNESS = 4.f;
+
+			int max_selected = 6;
+			int selected_index = 0;
+
+			sf::Vector2f _hudPos;
+			sf::RectangleShape* shape;
+
+			HudSelector(sf::Vector2f hud_pos)
+				:_hudPos(hud_pos)
+			{
+				this->shape = new sf::RectangleShape({ 76.f, 76.f });
+
+				this->shape->setPosition({ hud_pos.x + THIKNESS, hud_pos.y + THIKNESS });
+				this->shape->setFillColor(sf::Color(0, 0, 0, 0)); // blank color
+				this->shape->setOutlineColor(sf::Color(81, 39, 32));
+				this->shape->setOutlineThickness(THIKNESS);
+			}
+
+			~HudSelector() { delete this->shape; }
+
+			void increaseSelectedIndex(int value = 1)
+			{
+				selected_index += value;
+
+				// clamp selected index
+				if (selected_index > max_selected)
+					selected_index = 0;
+				else if (selected_index < 0)
+					selected_index = max_selected;
+
+				// update shape position
+				this->shape->setPosition(
+					{ 
+						(_hudPos.x + THIKNESS * (float(selected_index) + 1.f)) + float(selected_index) * shape->getSize().x, 
+						_hudPos.y + THIKNESS
+					}
+				);
+			}
+		};
 
 		// Converts mouse position to slot position in inventory
 		sf::Vector2i mouseToSlot(sf::Vector2i mouse_pos) const;
@@ -74,6 +120,8 @@ namespace UI
 	private:
 		// background
 		sf::Sprite* _background;
+		sf::Sprite* _hud;
+		HudSelector* _hudSelector;
 
 		// reference to a player inventory component
 		Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>& _playerInvComponent;

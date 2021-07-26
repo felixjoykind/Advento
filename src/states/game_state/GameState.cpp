@@ -154,14 +154,14 @@ void GameState::Render() const
 	{ // render pause menu
 		this->_pauseMenu->render();
 	}
+	else
+	{
+		if (this->_debugInfo->isActive())
+		{ // rednering debug information
+			this->_debugInfo->render();
+		}
 
-	if (this->_debugInfo->isActive())
-	{ // rednering debug information
-		this->_debugInfo->render();
-	}
-
-	if (this->_playerInventory->isActive())
-	{ // render player inventory
+		// render player inventory
 		this->_playerInventory->render();
 	}
 
@@ -178,4 +178,5 @@ void GameState::Pause()
 void GameState::Resume()
 {
 	this->_paused = false;
+	this->_playerInventory->open();
 }
