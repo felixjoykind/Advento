@@ -1,8 +1,8 @@
 Game
 	- inventory system !
-		- hud
-			- scroll select
 		- items as world objects
+		- add default items (sword axe, pickaxe)
+			- these items can be in hand
 
 UI
 	Settings
@@ -14,5 +14,3 @@ UI
 					- fps
 			- saving
 			- loading
-
-	add worlds editing

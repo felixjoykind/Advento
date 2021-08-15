@@ -17,6 +17,8 @@ namespace UI
 		this->_hudSelector = new HudSelector(this->_hud->getPosition());
 
 		refreshItemsSprites();
+		refreshHandledItem();
+
 		this->close();
 	}
 
@@ -111,6 +113,23 @@ namespace UI
 		return nullptr;
 	}
 
+	void PlayerInventory::refreshHandledItem()
+	{
+		for (const auto& ui_item : this->_inventoryItems)
+		{
+			if (ui_item.cords.x == this->_hudSelector->selected_index &&
+				ui_item.cords.y == 0)
+			{ // selected item exists
+				if (ui_item.item.can_nold)
+				{ // player can handle item
+					this->_playerInvComponent.setHoldedItem(&ui_item.item, this->_data->assets);
+					return;
+				}
+			}
+		}
+		this->_playerInvComponent.removeHoldedItem();
+	}
+
 	void PlayerInventory::handleInput(sf::Event ev)
 	{
 		if (this->isActive() == false)
@@ -118,9 +137,9 @@ namespace UI
 			// handle hud events (scroll and nums press)
 			if (ev.type == sf::Event::MouseWheelMoved)
 			{
-				LOG("got here");
 				// move hud inventory selection index
 				this->_hudSelector->increaseSelectedIndex(ev.mouseWheel.delta);
+				this->refreshHandledItem();
 			}
 			return;
 		}

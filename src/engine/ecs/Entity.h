@@ -2,7 +2,7 @@
 
 #include "Game.h"
 #include "engine/ecs/ECS.h"
-#include <SFML/Graphics.hpp>
+#include "engine/items/Item.h"
 #include <cassert>
 
 namespace Engine
@@ -63,6 +63,5 @@ namespace Engine
 		virtual void render() const;
 
 		virtual void destroy();
-
 	};
 }

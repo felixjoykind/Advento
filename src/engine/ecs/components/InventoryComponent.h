@@ -27,6 +27,10 @@ namespace Engine
 	private:
 		std::array<Item, inv_size> _items; // items container
 
+		// item that player handles in hand (fully controlled by UI::PlayerInventory.cpp)
+		const Item* _holdedItem = nullptr;
+		sf::Sprite* _holdedItemSpr = nullptr;
+
 	private:
 		bool is_slot_empty(std::size_t id) const;
 		size_t find_next_empty_slot() const;
@@ -62,8 +66,11 @@ namespace Engine
 
 		bool isFull() const;
 
-		void update(float deltaTime) override;
+		void setHoldedItem(const Item* holdedItemconst, const AssetManager& assets);
+		void removeHoldedItem();
 
+		void update(float deltaTime) override;
+		void render(sf::RenderTarget& target) const override;
 	};
 
 	template<int inv_size>
@@ -161,6 +168,7 @@ namespace Engine
 	template<int inv_size>
 	inline InventoryComponent<inv_size>::~InventoryComponent()
 	{
+		delete this->_holdedItemSpr;
 	}
 
 	template<int inv_size>
@@ -180,6 +188,8 @@ namespace Engine
 	template<int inv_size>
 	inline bool InventoryComponent<inv_size>::addItem(Item&& item, bool new_slot)
 	{
+		LOG(item.id);
+
 		if (new_slot)
 		{
 			return add_item_to_new_stack_if_possible(std::move(item));
@@ -228,6 +238,31 @@ namespace Engine
 				return false;
 		}
 		return true;
+	}
+
+	template<int inv_size>
+	inline void InventoryComponent<inv_size>::setHoldedItem(const Item* holdedItem, const AssetManager& assets)
+	{
+		this->_holdedItem = holdedItem;
+		this->_holdedItemSpr = new sf::Sprite(this->_holdedItem->getTexture(assets));
+
+		if (this->_entity->hasComponent<PositionComponent>())
+		{
+			this->_holdedItemSpr->setPosition(
+				{
+					this->_entity->getComponent<PositionComponent>().getX(),
+					this->_entity->getComponent<PositionComponent>().getY()
+				}
+			);
+		}
+	}
+
+	template<int inv_size>
+	inline void InventoryComponent<inv_size>::removeHoldedItem()
+	{
+		this->_holdedItem = nullptr;
+		delete this->_holdedItemSpr;
+		this->_holdedItemSpr = nullptr;
 	}
 
 	template<int inv_size>
@@ -287,5 +322,25 @@ namespace Engine
 	{
 		/*system("cls");
 		print();*/
+
+		if (this->_holdedItemSpr != nullptr)
+		{
+			if (this->_entity->hasComponent<PositionComponent>())
+			{
+				this->_holdedItemSpr->setPosition(
+					{
+						this->_entity->getComponent<PositionComponent>().getX(),
+						this->_entity->getComponent<PositionComponent>().getY()
+					}
+				);
+			}
+		}
+
+	}
+	template<int inv_size>
+	inline void InventoryComponent<inv_size>::render(sf::RenderTarget& target) const
+	{
+		if (this->_holdedItemSpr != nullptr)
+			target.draw(*this->_holdedItemSpr);
 	}
 }

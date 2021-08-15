@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\items\WoodenAxe.cpp" />
     <ClCompile Include="src\engine\ui\PlayerInventory.cpp" />
     <ClCompile Include="src\engine\items\Item.cpp" />
     <ClCompile Include="src\engine\ui\elements\messagebox\MessageboxManager.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="src\engine\items\Stick.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\items\WoodenAxe.h" />
     <ClInclude Include="src\engine\ui\PlayerInventory.h" />
     <ClInclude Include="src\engine\ecs\components\InventoryComponent.h" />
     <ClInclude Include="src\engine\items\Item.h" />

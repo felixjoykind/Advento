@@ -263,6 +263,8 @@ namespace Engine
 						// load new chunk
 						this->_loadedChunks.push_back(new_chunk);
 					}
+
+					// TODO: if chunk that should be loaded has been changed then load if from _changedChunks
 				}
 			}
 

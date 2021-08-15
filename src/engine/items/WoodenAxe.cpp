@@ -1,23 +1,22 @@
-#include "Stick.h"
+#include "WoodenAxe.h"
 
 namespace Advento
 {
-	Stick::Stick()
+	WoodenAxe::WoodenAxe()
 	{
-		// init item settings
-		this->id = 1;
-		this->is_stackable = true;
-		this->can_nold = false;
-		this->max_num_blocks_in_stack = 64;
+		this->id = 2;
+		this->is_stackable = false;
+		this->can_nold = true;
+		this->max_num_blocks_in_stack = 1;
 		this->curr_num_of_blocks_in_stack = 1;
 	}
 
-	Stick::~Stick()
+	WoodenAxe::~WoodenAxe()
 	{ }
 
-	Engine::Item Stick::getCopy(int amount) const
+	Engine::Item WoodenAxe::getCopy(int amount) const
 	{
-		Stick item_copy;
+		WoodenAxe item_copy;
 
 		item_copy.id = this->id;
 		item_copy.is_stackable = this->is_stackable;

@@ -1,7 +1,5 @@
 #include "Item.h"
 
-#include "engine/SpriteManipulator.h"
-
 namespace Engine
 {
 	Item::Item()
@@ -21,6 +19,8 @@ namespace Engine
 		{
 		case 1:
 			return "stick item";
+		case 2:
+			return "axe item";
 		default:
 			return "empty item";
 		}
@@ -33,12 +33,12 @@ namespace Engine
 
 	Item Item::getCopy(int amount) const
 	{
-		Item half_item;
-		half_item.id = this->id;
-		half_item.is_stackable = this->is_stackable;
-		half_item.max_num_blocks_in_stack = this->max_num_blocks_in_stack;
-		half_item.curr_num_of_blocks_in_stack = amount;
+		Item item_copy;
+		item_copy.id = this->id;
+		item_copy.is_stackable = this->is_stackable;
+		item_copy.max_num_blocks_in_stack = this->max_num_blocks_in_stack;
+		item_copy.curr_num_of_blocks_in_stack = amount;
 
-		return half_item;
+		return item_copy;
 	}
 }

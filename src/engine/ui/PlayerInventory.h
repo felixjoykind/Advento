@@ -72,8 +72,8 @@ namespace UI
 		struct HudSelector
 		{
 			const float THIKNESS = 4.f;
+			const int MAX_SELECTED = 6;
 
-			int max_selected = 6;
 			int selected_index = 0;
 
 			sf::Vector2f _hudPos;
@@ -97,10 +97,10 @@ namespace UI
 				selected_index += value;
 
 				// clamp selected index
-				if (selected_index > max_selected)
+				if (selected_index > MAX_SELECTED)
 					selected_index = 0;
 				else if (selected_index < 0)
-					selected_index = max_selected;
+					selected_index = MAX_SELECTED;
 
 				// update shape position
 				this->shape->setPosition(
@@ -135,6 +135,9 @@ namespace UI
 
 		// Refreshes list of items sprites (shoud be called after every change in inventory)
 		void refreshItemsSprites();
+
+		// Refreshes item in entity hand
+		void refreshHandledItem();
 
 		void handleInput(sf::Event ev);
 		void update(float deltaTime) override;

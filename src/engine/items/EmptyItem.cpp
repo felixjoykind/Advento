@@ -7,6 +7,7 @@ namespace Advento
 		// init item settings
 		this->id = 0;
 		this->is_stackable = true;
+		this->can_nold = false;
 		this->max_num_blocks_in_stack = 64;
 		this->curr_num_of_blocks_in_stack = 1;
 	}

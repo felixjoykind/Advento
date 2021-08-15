@@ -15,6 +15,7 @@ namespace Engine
 	public:
 		int id = -1;
 		bool is_stackable = true;
+		bool can_nold = false;
 		int max_num_blocks_in_stack = 64;
 		int curr_num_of_blocks_in_stack = 1;
 
