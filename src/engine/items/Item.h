@@ -3,6 +3,13 @@
 
 constexpr float ITEM_SIZE = 64.f;
 
+enum class WeaponID 
+{ 
+	Empty = -1,
+	Stick = 1,
+	Axe
+};
+
 namespace Engine
 {
 	// Base class for all items
@@ -10,7 +17,7 @@ namespace Engine
 	{
 	protected:
 		// Returns item texture name based on its id
-		static std::string getItemTextureNameFromId(int id);
+		static std::string getItemTextureNameFromId(WeaponID id);
 
 	public:
 		int id = -1;

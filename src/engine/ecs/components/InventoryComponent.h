@@ -1,7 +1,12 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include "engine/items/Item.h"
 #include "engine/LOG.h"
+
+#include "gamedata/InputManager.h"
 
 constexpr float INVENTORY_OFFSET_X = 32.f;
 constexpr float INVENTORY_OFFSET_Y = 150.f;
@@ -16,6 +21,8 @@ constexpr short ROWS = 5;
 
 constexpr int POS_INVALID_VALUE = -1;
 
+constexpr int PLAYER_INVENTORY_SIZE = ROWS * COLS;
+
 namespace Engine
 {
 	class Component;
@@ -26,6 +33,9 @@ namespace Engine
 	{
 	private:
 		std::array<Item, inv_size> _items; // items container
+
+		const sf::View& _camera;
+		const sf::RenderWindow& _window;
 
 		// item that player handles in hand (fully controlled by UI::PlayerInventory.cpp)
 		const Item* _holdedItem = nullptr;
@@ -45,7 +55,7 @@ namespace Engine
 		static constexpr int EMPTY_SLOT_ID = -1;
 
 	public:
-		InventoryComponent(Entity* entity);
+		InventoryComponent(Entity* entity, const sf::RenderWindow& window, const sf::View& view);
 		~InventoryComponent();
 
 		const std::array<Item, inv_size>& getAllItems();
@@ -160,9 +170,10 @@ namespace Engine
 	}
 
 	template<int inv_size>
-	inline InventoryComponent<inv_size>::InventoryComponent(Entity* entity)
-		:Component(entity)
+	inline InventoryComponent<inv_size>::InventoryComponent(Entity* entity, const sf::RenderWindow& window, const sf::View& view)
+		:Component(entity), _window(window), _camera(view)
 	{
+		
 	}
 
 	template<int inv_size>
@@ -188,8 +199,6 @@ namespace Engine
 	template<int inv_size>
 	inline bool InventoryComponent<inv_size>::addItem(Item&& item, bool new_slot)
 	{
-		LOG(item.id);
-
 		if (new_slot)
 		{
 			return add_item_to_new_stack_if_possible(std::move(item));
@@ -248,10 +257,15 @@ namespace Engine
 
 		if (this->_entity->hasComponent<PositionComponent>())
 		{
+			this->_holdedItemSpr->setOrigin(
+				this->_holdedItemSpr->getPosition().x,
+				this->_holdedItemSpr->getPosition().y + _holdedItemSpr->getTexture()->getSize().y
+			);
+
 			this->_holdedItemSpr->setPosition(
 				{
-					this->_entity->getComponent<PositionComponent>().getX(),
-					this->_entity->getComponent<PositionComponent>().getY()
+					this->_entity->getComponent<PositionComponent>().getX() + 60.f,
+					this->_entity->getComponent<PositionComponent>().getY() + 84.f
 				}
 			);
 		}
@@ -325,22 +339,46 @@ namespace Engine
 
 		if (this->_holdedItemSpr != nullptr)
 		{
+			// setting position
 			if (this->_entity->hasComponent<PositionComponent>())
 			{
+				// set position in hand
 				this->_holdedItemSpr->setPosition(
 					{
-						this->_entity->getComponent<PositionComponent>().getX(),
-						this->_entity->getComponent<PositionComponent>().getY()
+						this->_entity->getComponent<PositionComponent>().getX() + 60.f,
+						this->_entity->getComponent<PositionComponent>().getY() + 84.f
 					}
 				);
 			}
+
+			sf::Vector2i item_pos =
+			{
+				(int)_holdedItemSpr->getPosition().x,
+				(int)_holdedItemSpr->getPosition().y
+			};
+
+			sf::Vector2i hold_item_pos = this->_window.mapCoordsToPixel(_holdedItemSpr->getPosition(), this->_camera);
+
+			// set rotation
+			auto mouse_pos = InputManager::getMousePosition(this->_window);
+			sf::Vector2f diff = {
+				float(mouse_pos.x - hold_item_pos.x),
+				float(mouse_pos.y - hold_item_pos.y)
+			};
+
+			float rotation = atan2(diff.y, diff.x) * float(180) / float(M_PI);
+
+			this->_holdedItemSpr->setRotation(rotation + 45.f);
 		}
 
 	}
+
 	template<int inv_size>
 	inline void InventoryComponent<inv_size>::render(sf::RenderTarget& target) const
 	{
 		if (this->_holdedItemSpr != nullptr)
+		{
 			target.draw(*this->_holdedItemSpr);
+		}
 	}
 }

@@ -5,6 +5,11 @@ sf::Vector2i InputManager::getMousePosition(const sf::Window& window)
     return sf::Mouse::getPosition(window);
 }
 
+sf::Vector2i InputManager::getMousePosition()
+{
+    return sf::Mouse::getPosition();
+}
+
 bool InputManager::isMouseButtonPressed(sf::Mouse::Button button)
 {
     return sf::Mouse::isButtonPressed(button);

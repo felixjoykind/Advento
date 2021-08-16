@@ -24,7 +24,7 @@ private:
 	UI::PlayerInventory* _playerInventory;
 	
 	// camera
-	sf::View _camera;
+	//sf::View _camera;
 
 	// map
 	Engine::TileMap* _map;

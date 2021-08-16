@@ -13,13 +13,13 @@ namespace Engine
 		return (int)std::ceil((float)this->curr_num_of_blocks_in_stack / 2.f);
 	}
 
-	std::string Item::getItemTextureNameFromId(int id)
+	std::string Item::getItemTextureNameFromId(WeaponID id)
 	{
 		switch (id)
 		{
-		case 1:
+		case WeaponID::Stick:
 			return "stick item";
-		case 2:
+		case WeaponID::Axe:
 			return "axe item";
 		default:
 			return "empty item";
@@ -28,7 +28,7 @@ namespace Engine
 
 	const sf::Texture& Item::getTexture(const AssetManager& assets) const
 	{
-		return assets.GetTexture(Item::getItemTextureNameFromId(this->id));
+		return assets.GetTexture(Item::getItemTextureNameFromId((WeaponID)this->id));
 	}
 
 	Item Item::getCopy(int amount) const

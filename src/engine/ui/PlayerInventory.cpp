@@ -76,6 +76,8 @@ namespace UI
 				}
 			}
 		}
+
+		this->refreshHandledItem();
 	}
 
 	sf::Vector2i PlayerInventory::mouseToSlot(sf::Vector2i mouse_pos) const
@@ -294,6 +296,7 @@ namespace UI
 		}
 
 		this->refreshItemsSprites();
+		this->refreshHandledItem();
 
 		// update position of first 7 ui items (hud)
 		for (int i = 0; i < 7; i++)

@@ -2,7 +2,6 @@
 
 #include "Game.h"
 #include "engine/ecs/ECS.h"
-#include "engine/items/Item.h"
 #include <cassert>
 
 namespace Engine

@@ -18,6 +18,7 @@ struct WindowSettings
 struct GameData
 {
 	sf::RenderWindow window;
+	sf::View gameCamera;
 	WindowSettings winConfig;
 	StateMachine states;
 	AssetManager assets;

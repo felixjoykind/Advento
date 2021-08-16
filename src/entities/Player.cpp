@@ -24,7 +24,7 @@ Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
 		Entity*, HitboxSettings>(this, { { 0.f, 0.f }, { PLAYER_HITBOX_SIZE_X, PLAYER_HITBOX_SIZE_Y } });
 
 	this->addComponent<InventoryComponent<PLAYER_INVENTORY_SIZE>,
-		Entity*>(this);
+		Entity*, const sf::RenderWindow&, const sf::View&>(this, _data->window, _data->gameCamera);
 
 	// adding default items
 	this->getComponent<InventoryComponent<PLAYER_INVENTORY_SIZE>>().addItem(

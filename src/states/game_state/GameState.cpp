@@ -9,7 +9,7 @@ GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 	_manager(new Engine::EntityManager(_data)),
 	_player(_manager->createEntity<Player, sf::Vector2f>({ 0.f, 0.f })),
 	_playerInventory(new UI::PlayerInventory(_data, _player)),
-	_camera(sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) })),
+	//_camera(sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) })),
 	_map(new Engine::TileMap(this->_data, 256, 256, &this->_player)),
 	_pauseMenu(new PauseMenu(_data)),
 	_debugInfo(new Engine::DebugInfo(_data, { _player, *_map }))
@@ -30,6 +30,7 @@ GameState::~GameState()
 void GameState::Init()
 {
 	// state init
+	this->_data->gameCamera = sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) });
 
 	// setting player position to the center of the map
 	this->_player.getComponent<Engine::PositionComponent>().setPosition(
@@ -38,7 +39,7 @@ void GameState::Init()
 	);
 	
 	// view
-	this->_camera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
+	this->_data->gameCamera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
 }
 
 void GameState::HandleInput()
@@ -120,7 +121,7 @@ void GameState::Update(float deltaTime)
 	this->_player.update(deltaTime);
 
 	// updating camera (moving with player)
-	this->_camera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
+	this->_data->gameCamera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
 
 	// updating map
 	this->_map->update(deltaTime);
@@ -140,7 +141,7 @@ void GameState::Render() const
 {
 	// rednering things with the right view
 	_data->window.clear();
-	_data->window.setView(_camera);
+	_data->window.setView(this->_data->gameCamera);
 
 	// map
 	this->_map->render();
