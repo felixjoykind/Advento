@@ -337,38 +337,52 @@ namespace Engine
 		/*system("cls");
 		print();*/
 
-		if (this->_holdedItemSpr != nullptr)
-		{
-			// setting position
-			if (this->_entity->hasComponent<PositionComponent>())
-			{
-				// set position in hand
-				this->_holdedItemSpr->setPosition(
-					{
-						this->_entity->getComponent<PositionComponent>().getX() + 60.f,
-						this->_entity->getComponent<PositionComponent>().getY() + 84.f
-					}
-				);
-			}
-
-			sf::Vector2i item_pos =
-			{
-				(int)_holdedItemSpr->getPosition().x,
-				(int)_holdedItemSpr->getPosition().y
-			};
-
-			sf::Vector2i hold_item_pos = this->_window.mapCoordsToPixel(_holdedItemSpr->getPosition(), this->_camera);
+		if (this->_holdedItemSpr != nullptr && this->_entity->hasComponent<PositionComponent>())
+		{ // setting position and rotation
+			sf::Vector2i hold_item_pos_screen = this->_window.mapCoordsToPixel(_holdedItemSpr->getPosition(), this->_camera);
+			sf::Vector2f item_pos = this->_entity->getComponent<PositionComponent>().getPosition();
+			item_pos.y = item_pos.y + 84.f;
 
 			// set rotation
 			auto mouse_pos = InputManager::getMousePosition(this->_window);
 			sf::Vector2f diff = {
-				float(mouse_pos.x - hold_item_pos.x),
-				float(mouse_pos.y - hold_item_pos.y)
+				float(mouse_pos.x - hold_item_pos_screen.x),
+				float(mouse_pos.y - hold_item_pos_screen.y)
 			};
 
 			float rotation = atan2(diff.y, diff.x) * float(180) / float(M_PI);
 
-			this->_holdedItemSpr->setRotation(rotation + 45.f);
+			if (this->_entity->hasComponent<MovementComponent>())
+			{ // set position in hand
+				switch (this->_entity->getComponent<MovementComponent>().getState())
+				{
+				case MovementState::RIGHT:
+					item_pos.x = item_pos.x + 50.f;
+					this->_holdedItemSpr->setScale(1.f, 1.f);
+					rotation += 45.f;
+					break;
+				case MovementState::LEFT:
+					item_pos.x = item_pos.x + 10.f;
+					this->_holdedItemSpr->setScale(-1.f, 1.f);
+					rotation += 135.f;
+					break;
+				case MovementState::IDLE:
+				case MovementState::UP:
+				case MovementState::DOWN:
+					item_pos.x = item_pos.x + 60.f;
+					this->_holdedItemSpr->setScale(1.f, 1.f);
+					rotation += 45.f;
+					break;
+				}
+			}
+			else
+			{
+				item_pos.x = item_pos.x + 60.f;
+				rotation += 45.f;
+			}
+
+			this->_holdedItemSpr->setPosition(item_pos);
+			this->_holdedItemSpr->setRotation(rotation);
 		}
 
 	}
