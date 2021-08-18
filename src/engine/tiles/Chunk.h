@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Tile.h"
+#include "entities/trees/TreesManager.h"
 #include "gamedata/AssetManager.h"
 #include "engine/defenitions/BASIC_WORLD_SETTINGS.h"
 #include "engine/generator/MapGenerator.h"
@@ -13,14 +14,17 @@ namespace Engine
 		// data
 		sf::Vector2u _position;
 		char** _rawTiles;
-		std::vector<std::vector<Tile*>> _tiles;
+		std::vector<Tile*> _tiles;
+
+		// trees in chunk
+		std::vector<std::unique_ptr<Advento::Tree>> _trees;
 
 		std::vector<sf::RectangleShape*> _borders;
 		
 		mutable unsigned _tilesRendered;
 
 	public:
-		Chunk(const AssetManager& assets, sf::Vector2u pos, char** chunkMap);
+		Chunk(const AssetManager& assets, TreesManager& trees_manager, sf::Vector2u pos, char** chunkMap);
 		~Chunk();
 
 		// Returns chunk position in chunks grid

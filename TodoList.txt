@@ -4,6 +4,7 @@ Game
 	- add armor and crafting slots
 	- crafting system
 	- breaking trees !
+		- loot from trees
 
 UI
 	Settings

@@ -14,7 +14,7 @@ namespace Engine
 {
 	TileMap::TileMap(GameDataRef data, unsigned int rows, unsigned int cols, const Entity* trackEntity)
 		:_data(data), _mapSize({ rows, cols }), _mapSizeInChunks({ rows / CHUNK_SIZE, cols / CHUNK_SIZE }),
-		_chunksDistance(1), _trackEntity(trackEntity), _tilesRendered(0)
+		_chunksDistance(1), _trackEntity(trackEntity), _treesManager(new TreesManager(data)), _tilesRendered(0)
 	{
 	}
 
@@ -83,7 +83,7 @@ namespace Engine
 				}
 
 				// init new chunk
-				this->_changedChunks.push_back(new Chunk(this->_data->assets, { x, y }, chunkMap));
+				this->_changedChunks.push_back(new Chunk(this->_data->assets, *this->_treesManager, { x, y }, chunkMap));
 			}
 		}
 
@@ -210,7 +210,7 @@ namespace Engine
 				}
 				++layer_index;
 			}
-			new_chunk = new Chunk(this->_data->assets, chunk_pos, chunk_map);
+			new_chunk = new Chunk(this->_data->assets, *this->_treesManager, chunk_pos, chunk_map);
 		}
 		chunk_file.close();
 
@@ -305,6 +305,9 @@ namespace Engine
 			this->_tilesRendered += chunk->tilesRendered();
 			chunk->update(deltaTime);
 		}
+
+		// update trees
+		this->_treesManager->update(deltaTime);
 	}
 
 	void TileMap::render() const
@@ -312,5 +315,8 @@ namespace Engine
 		// rendering tiles (chunks)
 		for (const auto& chunk : this->_loadedChunks)
 			chunk->render(this->_data->window);
+
+		// render trees
+		this->_treesManager->render();
 	}
 }

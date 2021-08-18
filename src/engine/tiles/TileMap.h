@@ -22,6 +22,9 @@ namespace Engine
 		sf::Vector2u _previousChunk;
 		WorldSaveSettings _worldSaveSettings;
 		const Entity* _trackEntity;
+
+		// trees manager
+		TreesManager* _treesManager;
 		
 		// chunks
 		std::vector<Chunk*> _loadedChunks;
