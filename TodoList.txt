@@ -1,8 +1,9 @@
 Game
 	- inventory system !
 		- items as world objects
-		- add default items (sword axe, pickaxe)
-			- these items can be in hand
+	- add armor and crafting slots
+	- crafting system
+	- breaking trees !
 
 UI
 	Settings

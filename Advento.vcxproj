@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ecs\components\HealthbarComponent.cpp" />
     <ClCompile Include="src\engine\items\WoodenAxe.cpp" />
     <ClCompile Include="src\engine\ui\PlayerInventory.cpp" />
     <ClCompile Include="src\engine\items\Item.cpp" />
@@ -185,8 +186,11 @@
     <ClCompile Include="src\engine\ui\elements\Textbox.cpp" />
     <ClCompile Include="src\engine\items\EmptyItem.cpp" />
     <ClCompile Include="src\engine\items\Stick.cpp" />
+    <ClCompile Include="src\entities\trees\Tree.cpp" />
+    <ClCompile Include="src\entities\trees\TreesManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ecs\components\HealthbarComponent.h" />
     <ClInclude Include="src\engine\items\WoodenAxe.h" />
     <ClInclude Include="src\engine\ui\PlayerInventory.h" />
     <ClInclude Include="src\engine\ecs\components\InventoryComponent.h" />
@@ -237,6 +241,8 @@
     <ClInclude Include="src\engine\ui\elements\Textbox.h" />
     <ClInclude Include="src\engine\items\EmptyItem.h" />
     <ClInclude Include="src\engine\items\Stick.h" />
+    <ClInclude Include="src\entities\trees\Tree.h" />
+    <ClInclude Include="src\entities\trees\TreesManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TodoList.txt" />
