@@ -4,9 +4,11 @@
 #include <math.h>
 
 #include "engine/items/Item.h"
+#include "engine/items/WorldItemsManager.h"
 #include "engine/LOG.h"
 
 #include "gamedata/InputManager.h"
+
 
 constexpr float INVENTORY_OFFSET_X = 32.f;
 constexpr float INVENTORY_OFFSET_Y = 150.f;
@@ -73,6 +75,8 @@ namespace Engine
 
 		bool removeFromItem(sf::Vector2i slot, int amount = 1);
 		bool removeItem(sf::Vector2i slot);
+
+		void dropItem(sf::Vector2i slot, WorldItemsManager& worldItemsManager);
 
 		bool isFull() const;
 
@@ -236,6 +240,19 @@ namespace Engine
 			return true;
 		}
 		return false;
+	}
+
+	template<int inv_size>
+	inline void InventoryComponent<inv_size>::dropItem(sf::Vector2i slot, WorldItemsManager& worldItemsManager)
+	{
+		int i = slot.y * COLS + slot.x;
+		sf::Vector2f drop_pos = {
+			this->_entity->getComponent<PositionComponent>().getPosition().x + 25.f,
+			this->_entity->getComponent<PositionComponent>().getPosition().y + 25.f
+		};
+
+		worldItemsManager.addWorldItem(&this->_items[i], drop_pos);
+		this->removeItem(slot);
 	}
 
 	template<int inv_size>

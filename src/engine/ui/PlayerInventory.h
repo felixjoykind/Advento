@@ -3,6 +3,7 @@
 #include "elements/UIElement.h"
 #include "entities/Player.h"
 #include "gamedata/InputManager.h"
+#include "engine/items/WorldItemsManager.h"
 
 namespace UI
 {
@@ -126,11 +127,14 @@ namespace UI
 		// reference to a player inventory component
 		Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>& _playerInvComponent;
 
+		// reference to a world items manager (for dropping items)
+		WorldItemsManager& _worldItemsManager;
+
 		UI_Item* _movingItem = nullptr; // item moved in inventory by user
 		std::vector<UI_Item> _inventoryItems;
 
 	public:
-		PlayerInventory(GameDataRef data, Player& player);
+		PlayerInventory(GameDataRef data, Player& player, WorldItemsManager& worldItemsManager);
 		~PlayerInventory();
 
 		// Refreshes list of items sprites (shoud be called after every change in inventory)

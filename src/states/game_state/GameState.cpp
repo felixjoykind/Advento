@@ -8,9 +8,8 @@ GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 	:_data(data), _paused(false),
 	_manager(new Engine::EntityManager(_data)),
 	_player(_manager->createEntity<Player, sf::Vector2f>({ 0.f, 0.f })),
-	_playerInventory(new UI::PlayerInventory(_data, _player)),
-	//_camera(sf::View({ 0.f, 0.f }, { float(_data->winConfig.width), float(_data->winConfig.height) })),
 	_map(new Engine::TileMap(this->_data, 256, 256, &this->_player)),
+	_playerInventory(new UI::PlayerInventory(_data, _player, this->_map->getWorldItemsManager())),
 	_pauseMenu(new PauseMenu(_data)),
 	_debugInfo(new Engine::DebugInfo(_data, { _player, *_map }))
 {

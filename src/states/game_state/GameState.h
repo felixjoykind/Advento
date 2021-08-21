@@ -20,14 +20,11 @@ private:
 	Engine::EntityManager* _manager;
 	Player& _player;
 
-	// player inventory data
-	UI::PlayerInventory* _playerInventory;
-	
-	// camera
-	//sf::View _camera;
-
 	// map
 	Engine::TileMap* _map;
+
+	// player inventory data
+	UI::PlayerInventory* _playerInventory;
 
 	// panels
 	PauseMenu* _pauseMenu;

@@ -17,7 +17,7 @@ namespace Engine
 		std::vector<Tile*> _tiles;
 
 		// trees in chunk
-		std::vector<std::unique_ptr<Advento::Tree>> _trees;
+		std::vector<Advento::Tree*> _trees;
 
 		std::vector<sf::RectangleShape*> _borders;
 		

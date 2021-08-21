@@ -188,6 +188,7 @@
     <ClCompile Include="src\engine\items\Stick.cpp" />
     <ClCompile Include="src\entities\trees\Tree.cpp" />
     <ClCompile Include="src\entities\trees\TreesManager.cpp" />
+    <ClCompile Include="src\engine\items\WorldItemsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\ecs\components\HealthbarComponent.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="src\engine\items\Stick.h" />
     <ClInclude Include="src\entities\trees\Tree.h" />
     <ClInclude Include="src\entities\trees\TreesManager.h" />
+    <ClInclude Include="src\engine\items\WorldItemsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TodoList.txt" />

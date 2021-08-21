@@ -43,7 +43,7 @@ namespace Engine
 				{
 				case 't':
 					//tree_texture_name = "tree tile";
-					this->_trees.push_back(trees_manager.addTree(tile_pos));
+					this->_trees.push_back(trees_manager.addTree(tile_pos).get());
 					break;
 				case '.':
 					//tree_texture_name = "empty tile";
@@ -125,6 +125,9 @@ namespace Engine
 	{
 		// clear cnunk map data
 		delete[] this->_rawTiles;
+
+		for (size_t i = 0; i < this->_tiles.size(); i++)
+			delete this->_tiles[i];
 		this->_tiles.clear();
 	}
 

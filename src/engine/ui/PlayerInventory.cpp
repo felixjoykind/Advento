@@ -6,11 +6,12 @@ static const sf::Vector2i INVALID_POS = sf::Vector2i{ POS_INVALID_VALUE, POS_INV
 
 namespace UI
 {
-	PlayerInventory::PlayerInventory(GameDataRef data, Player& player)
+	PlayerInventory::PlayerInventory(GameDataRef data, Player& player, WorldItemsManager& worldItemsManager)
 		:UIElement(data, { 607.f, 600.f }, { 25.f, 25.f }),
 		_background(new sf::Sprite(data->assets.GetTexture("inventory"))),
 		_hud(new sf::Sprite(data->assets.GetTexture("inventory hud"))),
-		_playerInvComponent(player.getComponent<Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>>())
+		_playerInvComponent(player.getComponent<Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>>()),
+		_worldItemsManager(worldItemsManager)
 	{
 		this->_background->setPosition(this->getPosition());
 		this->_hud->setPosition({ this->getPosition().x + INVENTORY_OFFSET_X - 11.f, this->getPosition().y });
@@ -161,8 +162,14 @@ namespace UI
 				else
 				{ // we are moving some ui_item and we want to do smth with it
 					sf::Vector2i slot_pos = this->mouseToSlot(mouse_pos); // position of slot we want to move item
-					if (slot_pos.x == POS_INVALID_VALUE || slot_pos.y == POS_INVALID_VALUE)
+					if (slot_pos == INVALID_POS)
 					{ // invalid click
+						// if clicked out of inventory
+						this->_playerInvComponent.dropItem(this->_movingItem->cords, this->_worldItemsManager);
+						
+						this->refreshItemsSprites();
+						this->refreshHandledItem();
+
 						return;
 					}
 
