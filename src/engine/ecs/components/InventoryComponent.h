@@ -339,8 +339,16 @@ namespace Engine
 
 		if (this->_holdedItemSpr != nullptr && this->_entity->hasComponent<PositionComponent>())
 		{ // setting position and rotation
+			auto& pos_component = this->_entity->getComponent<PositionComponent>();
+
+			const float LEFT_HAND_X_IDLE = pos_component.getPosition().x + 4.f;
+			const float RIGHT_HAND_X_IDLE = pos_component.getPosition().x + 60.f;
+
+			const float LEFT_HAND_X_MOVE = pos_component.getPosition().x + 10.f;
+			const float RIGHT_HAND_X_MOVE = pos_component.getPosition().x + 50.f;
+
 			sf::Vector2i hold_item_pos_screen = this->_window.mapCoordsToPixel(_holdedItemSpr->getPosition(), this->_camera);
-			sf::Vector2f item_pos = this->_entity->getComponent<PositionComponent>().getPosition();
+			sf::Vector2f item_pos = pos_component.getPosition();
 			item_pos.y = item_pos.y + 84.f;
 
 			// set rotation
@@ -357,30 +365,39 @@ namespace Engine
 				switch (this->_entity->getComponent<MovementComponent>().getState())
 				{
 				case MovementState::RIGHT:
-					item_pos.x = item_pos.x + 50.f;
+					item_pos.x = RIGHT_HAND_X_MOVE;
 					this->_holdedItemSpr->setScale(1.f, 1.f);
 					rotation += 45.f;
 					break;
 				case MovementState::LEFT:
-					item_pos.x = item_pos.x + 10.f;
+					item_pos.x = LEFT_HAND_X_MOVE;
 					this->_holdedItemSpr->setScale(-1.f, 1.f);
 					rotation += 135.f;
 					break;
 				case MovementState::IDLE:
 				case MovementState::UP:
 				case MovementState::DOWN:
-					item_pos.x = item_pos.x + 60.f;
+					item_pos.x = RIGHT_HAND_X_IDLE;
 					this->_holdedItemSpr->setScale(1.f, 1.f);
 					rotation += 45.f;
+
+					if (InputManager::getMousePosition(this->_window).x < (int)this->_window.getSize().x / 2)
+					{ // put in left hand
+						item_pos.x = LEFT_HAND_X_IDLE;
+						this->_holdedItemSpr->setScale(-1.f, 1.f);
+						rotation += 90.f;
+					}
+
 					break;
 				}
 			}
 			else
 			{
-				item_pos.x = item_pos.x + 60.f;
+				item_pos.x = RIGHT_HAND_X_IDLE;
 				rotation += 45.f;
 			}
 
+			// set both values
 			this->_holdedItemSpr->setPosition(item_pos);
 			this->_holdedItemSpr->setRotation(rotation);
 		}
