@@ -6,19 +6,18 @@ static const sf::Vector2i INVALID_POS = sf::Vector2i{ POS_INVALID_VALUE, POS_INV
 
 namespace UI
 {
-	PlayerInventory::PlayerInventory(GameDataRef data, Player& player, WorldItemsManager& worldItemsManager)
+	PlayerInventory::PlayerInventory(GameDataRef data, Player& player, Engine::EntitiesManager& entitiesManager)
 		:UIElement(data, { 607.f, 600.f }, { 25.f, 25.f }),
 		_background(new sf::Sprite(data->assets.GetTexture("inventory"))),
 		_hud(new sf::Sprite(data->assets.GetTexture("inventory hud"))),
 		_playerInvComponent(player.getComponent<Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>>()),
-		_worldItemsManager(worldItemsManager)
+		_entitiesManager(entitiesManager)
 	{
 		this->_background->setPosition(this->getPosition());
 		this->_hud->setPosition({ this->getPosition().x + INVENTORY_OFFSET_X - 11.f, this->getPosition().y });
 		this->_hudSelector = new HudSelector(this->_hud->getPosition());
 
-		refreshItemsSprites();
-		refreshHandledItem();
+		this->refresh();
 
 		this->close();
 	}
@@ -78,7 +77,10 @@ namespace UI
 			}
 		}
 
-		this->refreshHandledItem();
+		if (this->isActive() == false) // if closed
+		{
+			this->refreshHud();
+		}
 	}
 
 	sf::Vector2i PlayerInventory::mouseToSlot(sf::Vector2i mouse_pos) const
@@ -114,6 +116,27 @@ namespace UI
 		}
 
 		return nullptr;
+	}
+
+	void PlayerInventory::refreshHud()
+	{
+		// update position of first 7 ui items (hud)
+		for (int i = 0; i < 7; i++)
+		{
+			if (i >= (int)this->_inventoryItems.size())
+				break;
+
+			auto& ui_item = this->_inventoryItems[i];
+			// find item with needed position
+			for (int j = 0; j < 7; j++)
+			{
+				if (ui_item.cords.y == 0 && ui_item.cords.x == j)
+				{
+					ui_item.resetColor();
+					ui_item.setPosition({ ui_item.getPosition().x, INVENTORY_OFFSET_X + 4.f });
+				}
+			}
+		}
 	}
 
 	void PlayerInventory::refreshHandledItem()
@@ -160,15 +183,14 @@ namespace UI
 						this->_movingItem->following_mouse = true;
 				}
 				else
-				{ // we are moving some ui_item and we want to do smth with it
+				{ // we are moving some ui_item and we want to do something with it
 					sf::Vector2i slot_pos = this->mouseToSlot(mouse_pos); // position of slot we want to move item
 					if (slot_pos == INVALID_POS)
 					{ // invalid click
 						// if clicked out of inventory
-						this->_playerInvComponent.dropItem(this->_movingItem->cords, this->_worldItemsManager);
+						this->_playerInvComponent.dropItem(this->_movingItem->cords, this->_entitiesManager); // drop item
 						
-						this->refreshItemsSprites();
-						this->refreshHandledItem();
+						this->refresh();
 
 						return;
 					}
@@ -201,7 +223,7 @@ namespace UI
 								{ slot_pos.x, slot_pos.y }
 							); // swap
 						}
-						this->refreshItemsSprites(); // refresh
+						this->refresh(); // refresh
 					}
 				}
 			}
@@ -229,7 +251,7 @@ namespace UI
 						}
 					}
 				}
-				this->refreshItemsSprites();
+				this->refresh();
 			}
 		}
 	}
@@ -247,6 +269,20 @@ namespace UI
 		{ // only hud
 
 		}
+
+		// for both open and closed
+		if (this->_playerInvComponent.itemAddedRecently())
+		{
+			this->refresh();
+
+			this->_playerInvComponent.setAddedRecently(false);
+		}
+	}
+
+	void PlayerInventory::refresh()
+	{
+		this->refreshItemsSprites();
+		this->refreshHandledItem();
 	}
 
 	void PlayerInventory::render() const
@@ -289,7 +325,7 @@ namespace UI
 	void PlayerInventory::open()
 	{
 		this->setActive(true);
-		this->refreshItemsSprites();
+		this->refresh();
 	}
 
 	void PlayerInventory::close()
@@ -302,25 +338,8 @@ namespace UI
 			this->_movingItem = nullptr;
 		}
 
-		this->refreshItemsSprites();
-		this->refreshHandledItem();
+		this->refresh();
 
-		// update position of first 7 ui items (hud)
-		for (int i = 0; i < 7; i++)
-		{
-			if (i >= (int)this->_inventoryItems.size())
-				break;
-
-			auto& ui_item = this->_inventoryItems[i];
-			// find item with needed position
-			for (int j = 0; j < 7; j++)
-			{
-				if (ui_item.cords.y == 0 && ui_item.cords.x == j)
-				{
-					ui_item.resetColor();
-					ui_item.setPosition({ ui_item.getPosition().x, INVENTORY_OFFSET_X + 4.f });
-				}
-			}
-		}
+		this->refreshHud();
 	}
 }

@@ -3,11 +3,11 @@
 
 constexpr float ITEM_SIZE = 64.f;
 
-enum class WeaponID 
+enum class ItemID 
 { 
 	Empty = -1,
 	Stick = 1,
-	Axe
+	WoodenAxe
 };
 
 namespace Engine
@@ -17,7 +17,7 @@ namespace Engine
 	{
 	protected:
 		// Returns item texture name based on its id
-		static std::string getItemTextureNameFromId(WeaponID id);
+		static std::string getItemTextureNameFromId(ItemID id);
 
 	public:
 		int id = -1;
@@ -26,7 +26,7 @@ namespace Engine
 		int max_num_blocks_in_stack = 64;
 		int curr_num_of_blocks_in_stack = 1;
 
-		Item();
+		Item(int amount = 1);
 		~Item();
 
 		int getHalfOfAmount() const;

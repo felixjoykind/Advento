@@ -16,7 +16,7 @@ class Player
 	: public Engine::Entity
 {
 public:
-	Player(GameDataRef data, sf::Vector2f pos);
+	Player(GameDataRef data, Engine::EntitiesManager* entities, sf::Vector2f pos);
 	~Player();
 
 	void handleInput() override;

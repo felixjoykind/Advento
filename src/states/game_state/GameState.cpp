@@ -6,10 +6,10 @@
 
 GameState::GameState(GameDataRef data, Engine::WorldSaveSettings world_settings)
 	:_data(data), _paused(false),
-	_manager(new Engine::EntityManager(_data)),
+	_manager(new Engine::EntitiesManager(_data)),
 	_player(_manager->createEntity<Player, sf::Vector2f>({ 0.f, 0.f })),
 	_map(new Engine::TileMap(this->_data, 256, 256, &this->_player)),
-	_playerInventory(new UI::PlayerInventory(_data, _player, this->_map->getWorldItemsManager())),
+	_playerInventory(new UI::PlayerInventory(_data, _player, *this->_manager)),
 	_pauseMenu(new PauseMenu(_data)),
 	_debugInfo(new Engine::DebugInfo(_data, { _player, *_map }))
 {
@@ -110,14 +110,15 @@ void GameState::Update(float deltaTime)
 
 	// clamp player position
 	auto& player_pos = this->_player.getComponent<Engine::PositionComponent>();
-
 	player_pos.setX(Math::clamp<float>(0.f, this->_map->getSize().x * TILE_SIZE - PLAYER_HITBOX_SIZE_X, player_pos.getX()));
 	player_pos.setY(Math::clamp<float>(0.f, this->_map->getSize().y * TILE_SIZE - PLAYER_HITBOX_SIZE_Y, player_pos.getY()));
 
 	// updating player
 	if (this->_playerInventory->isActive() == false)
 		this->_player.handleInput();
-	this->_player.update(deltaTime);
+	
+	// updating entities
+	this->_manager->update(deltaTime);
 
 	// updating camera (moving with player)
 	this->_data->gameCamera.setCenter(this->_player.getComponent<Engine::PositionComponent>().getPosition());
@@ -132,8 +133,10 @@ void GameState::Update(float deltaTime)
 
 	if (this->_playerInventory->isActive())
 	{ // update player inventory
-		this->_playerInventory->update(deltaTime);
+		
 	}
+
+	this->_playerInventory->update(deltaTime);
 }
 
 void GameState::Render() const
@@ -145,8 +148,7 @@ void GameState::Render() const
 	// map
 	this->_map->render();
 
-	// rendering player
-	this->_player.render();
+	this->_manager->render();
 
 	this->_data->window.setView(_data->window.getDefaultView()); // setting default view
 

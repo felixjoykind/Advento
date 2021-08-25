@@ -24,7 +24,7 @@ Game::Game()
 	this->_data->assets.AddTexture("inventory hud", "./assets/sprites/items/inventory_hud.png"); // inventory hud
 	this->_data->assets.AddTexture("empty item", "./assets/sprites/items/empty_item.png");
 	this->_data->assets.AddTexture("stick item", "./assets/sprites/items/stick.png");
-	this->_data->assets.AddTexture("axe item", "./assets/sprites/items/axe.png");
+	this->_data->assets.AddTexture("wooden axe item", "./assets/sprites/items/axe.png");
 
 	// loading animations
 	this->_data->assets.AddTexture("player anim", "./assets/sprites/player/player_anim.png");

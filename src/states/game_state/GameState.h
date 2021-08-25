@@ -7,6 +7,7 @@
 #include "engine/ui/PauseMenu.h"
 #include "engine/ui/DebugInfo.h"
 #include "engine/ui/PlayerInventory.h"
+#include "entities/Player.h"
 
 class GameState
 	: public State
@@ -17,7 +18,7 @@ private:
 	bool _paused;
 
 	// game objects
-	Engine::EntityManager* _manager;
+	Engine::EntitiesManager* _manager;
 	Player& _player;
 
 	// map

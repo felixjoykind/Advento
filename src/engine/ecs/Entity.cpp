@@ -4,8 +4,11 @@ namespace Engine
 {
 	Entity::Entity(GameDataRef data, sf::Vector2f pos)
 		:_data(data)
-	{
-	}
+	{ }
+
+	Entity::Entity(GameDataRef data, EntitiesManager* entities, sf::Vector2f pos)
+		:_data(data), _entities(entities)
+	{ }
 
 	Entity::~Entity()
 	{

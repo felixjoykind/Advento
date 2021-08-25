@@ -1,6 +1,4 @@
 Game
-	- inventory system !
-		- items as world objects
 	- add armor and crafting slots
 	- crafting system
 	- breaking trees !

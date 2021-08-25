@@ -126,7 +126,7 @@
     <ClCompile Include="src\entities\trees\TreesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\items\WorldItemsManager.cpp">
+    <ClCompile Include="src\engine\items\world_item\WorldItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -290,7 +290,7 @@
     <ClInclude Include="src\entities\trees\TreesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\items\WorldItemsManager.h">
+    <ClInclude Include="src\engine\items\world_item\WorldItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,8 +3,6 @@
 #include "Chunk.h"
 #include "engine/ecs/Entity.h"
 
-#include "engine/items/WorldItemsManager.h"
-
 namespace Engine
 {
 	struct WorldSaveSettings
@@ -27,7 +25,6 @@ namespace Engine
 
 		// trees manager
 		TreesManager* _treesManager;
-		WorldItemsManager* _worldItemsManager;
 		
 		// chunks
 		std::vector<Chunk*> _loadedChunks;
@@ -61,8 +58,6 @@ namespace Engine
 		// saving/loading
 		void save_to(const WorldSaveSettings settings);
 		void load_from(const std::string filepath);
-
-		WorldItemsManager& getWorldItemsManager() const;
 
 		// basic functions
 		void update(float deltaTime);

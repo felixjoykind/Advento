@@ -29,10 +29,8 @@ namespace Engine
 	HitboxComponent::~HitboxComponent()
 	{ }
 
-	bool HitboxComponent::getVisible() const
-	{
-		return this->_settings.visible;
-	}
+	bool HitboxComponent::getVisible() const { return this->_settings.visible; }
+	void HitboxComponent::setVisible(bool value) { this->_settings.visible = value; }
 
 	bool HitboxComponent::collides(const HitboxComponent& other)
 	{
@@ -40,10 +38,6 @@ namespace Engine
 		return this->_hitbox.getGlobalBounds().intersects(other._hitbox.getGlobalBounds());
 	}
 
-	void HitboxComponent::setVisible(bool value)
-	{
-		this->_settings.visible = value;
-	}
 
 	void HitboxComponent::update(float deltaTime)
 	{

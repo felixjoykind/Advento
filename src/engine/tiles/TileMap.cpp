@@ -14,9 +14,7 @@ namespace Engine
 {
 	TileMap::TileMap(GameDataRef data, unsigned int rows, unsigned int cols, const Entity* trackEntity)
 		:_data(data), _mapSize({ rows, cols }), _mapSizeInChunks({ rows / CHUNK_SIZE, cols / CHUNK_SIZE }),
-		_chunksDistance(1), _trackEntity(trackEntity), 
-		_treesManager(new TreesManager(data)), _worldItemsManager(new WorldItemsManager(data)),
-		_tilesRendered(0)
+		_chunksDistance(1), _trackEntity(trackEntity), _treesManager(new TreesManager(data)), _tilesRendered(0)
 	{
 	}
 
@@ -32,7 +30,6 @@ namespace Engine
 		this->_changedChunks.clear();
 
 		delete this->_treesManager;
-		delete this->_worldItemsManager;
 	}
 
 	unsigned TileMap::tilesRendered() const { return this->_tilesRendered; }
@@ -191,11 +188,6 @@ namespace Engine
 		this->_mapSizeInChunks.y = BASIC_WORLD_SIZE_Y / CHUNK_SIZE; // cols
 	}
 
-	WorldItemsManager& TileMap::getWorldItemsManager() const
-	{
-		return *this->_worldItemsManager;
-	}
-
 	Chunk* TileMap::getChunkFromFile(std::string filepath, sf::Vector2u chunk_pos)
 	{
 		// load it from file
@@ -318,9 +310,6 @@ namespace Engine
 
 		// update trees
 		this->_treesManager->update(deltaTime);
-
-		// update world items
-		this->_worldItemsManager->update(deltaTime);
 	}
 
 	void TileMap::render() const
@@ -331,8 +320,5 @@ namespace Engine
 
 		// render trees
 		this->_treesManager->render();
-
-		// render world items
-		this->_worldItemsManager->render();
 	}
 }

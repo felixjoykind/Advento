@@ -1,24 +1,25 @@
 #pragma once
 
 #include "Game.h"
-#include "Entity.h"
 
 namespace Engine
 {
-	using EntityVector = std::vector<std::unique_ptr<Entity>>;
+	class Entity;
 
-	class EntityManager
+	using EntitiesVector = std::vector<std::unique_ptr<Entity>>;
+
+	class EntitiesManager
 	{
 	private:
 		GameDataRef _data;
-		EntityVector _entities;
+		EntitiesVector _entities;
 
 	public:
-		EntityManager(GameDataRef data) :_data(data) { }
-		~EntityManager() { }
+		EntitiesManager(GameDataRef data) :_data(data) { }
+		~EntitiesManager() { }
 
-		// getters
-		const EntityVector& getEntities() const;
+		// Returns all entities
+		EntitiesVector& getEntities();
 
 		// setters
 		template<class T, class... TArgs>
@@ -27,7 +28,7 @@ namespace Engine
 			static_assert(std::is_base_of<Entity, T>::value,
 				"Type T must be inherited from Entity class.");
 
-			T* e = new T(_data, std::forward<TArgs>(args)...);
+			T* e = new T(_data, this, std::forward<TArgs>(args)...);
 			std::unique_ptr<Entity> uPtr{ e };
 			_entities.emplace_back(std::move(uPtr));
 			return *e;

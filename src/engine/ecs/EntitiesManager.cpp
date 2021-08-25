@@ -1,13 +1,15 @@
 #include "EntitiesManager.h"
 
+#include "Entity.h"
+
 namespace Engine
 {
-	const EntityVector& EntityManager::getEntities() const
+	EntitiesVector& EntitiesManager::getEntities()
 	{
 		return this->_entities;
 	}
 
-	void EntityManager::refresh()
+	void EntitiesManager::refresh()
 	{
 		// deleting unactive entities
 		_entities.erase(std::remove_if(_entities.begin(), _entities.end(),
@@ -17,18 +19,16 @@ namespace Engine
 			}), _entities.end());
 	}
 
-	void EntityManager::update(float deltaTime)
+	void EntitiesManager::update(float deltaTime)
 	{
 		this->refresh(); // refreshing entities
-
-		// TODO: update and render only entities near the player
 
 		// updating entitites
 		for (auto& e : _entities)
 			e->update(deltaTime);
 	}
 
-	void EntityManager::render() const
+	void EntitiesManager::render() const
 	{
 		// rendering entitites
 		for (const auto& e : _entities)

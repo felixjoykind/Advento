@@ -2,6 +2,7 @@
 
 #include "Game.h"
 #include "engine/ecs/ECS.h"
+#include "engine/ecs/EntitiesManager.h"
 #include <cassert>
 
 namespace Engine
@@ -12,6 +13,7 @@ namespace Engine
 	protected:
 		// data
 		GameDataRef _data;
+		EntitiesManager* _entities = nullptr;
 		bool _alive = true;
 
 		// components data
@@ -21,6 +23,7 @@ namespace Engine
 
 	public:
 		Entity(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f });
+		Entity(GameDataRef data, EntitiesManager* entities, sf::Vector2f pos = { 0.f, 0.f });
 		virtual  ~Entity();
 
 		virtual bool isAlive() const;

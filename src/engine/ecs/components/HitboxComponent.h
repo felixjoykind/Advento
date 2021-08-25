@@ -22,7 +22,7 @@ namespace Engine
 
 	public:
 		HitboxComponent(Entity* entity, HitboxSettings settings);
-		HitboxComponent(Entity* entity, sf::Vector2f offset, sf::Vector2f size, bool visible);
+		HitboxComponent(Entity* entity, sf::Vector2f offset, sf::Vector2f size, bool visible = false);
 		~HitboxComponent();
 
 		// getters

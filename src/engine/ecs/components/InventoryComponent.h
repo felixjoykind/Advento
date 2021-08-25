@@ -4,11 +4,11 @@
 #include <math.h>
 
 #include "engine/items/Item.h"
-#include "engine/items/WorldItemsManager.h"
+#include "engine/ecs/EntitiesManager.h"
+#include "engine/items/world_item/WorldItem.h"
 #include "engine/LOG.h"
 
 #include "gamedata/InputManager.h"
-
 
 constexpr float INVENTORY_OFFSET_X = 32.f;
 constexpr float INVENTORY_OFFSET_Y = 150.f;
@@ -39,9 +39,11 @@ namespace Engine
 		const sf::View& _camera;
 		const sf::RenderWindow& _window;
 
-		// item that player handles in hand (fully controlled by UI::PlayerInventory.cpp)
+		// item that player handles in hand
 		const Item* _holdedItem = nullptr;
 		sf::Sprite* _holdedItemSpr = nullptr;
+
+		bool _itemAddedRecently = false;
 
 	private:
 		bool is_slot_empty(std::size_t id) const;
@@ -76,9 +78,12 @@ namespace Engine
 		bool removeFromItem(sf::Vector2i slot, int amount = 1);
 		bool removeItem(sf::Vector2i slot);
 
-		void dropItem(sf::Vector2i slot, WorldItemsManager& worldItemsManager);
+		void dropItem(sf::Vector2i slot, EntitiesManager& entitiesManager);
 
 		bool isFull() const;
+
+		bool itemAddedRecently() const;
+		void setAddedRecently(bool value);
 
 		void setHoldedItem(const Item* holdedItemconst, const AssetManager& assets);
 		void removeHoldedItem();
@@ -205,14 +210,24 @@ namespace Engine
 	{
 		if (new_slot)
 		{
-			return add_item_to_new_stack_if_possible(std::move(item));
+			if (add_item_to_new_stack_if_possible(std::move(item)))
+			{
+				this->setAddedRecently(true);
+				return true;
+			}
+			return false;
 		}
 
 		bool was_possible_to_add_to_existing_stack = add_item_to_existing_stack_if_possible(item);
 
 		if (!was_possible_to_add_to_existing_stack)
 		{
-			return add_item_to_new_stack_if_possible(std::move(item));
+			if (add_item_to_new_stack_if_possible(std::move(item)))
+			{
+				this->setAddedRecently(true);
+				return true;
+			}
+			return false;
 		}
 
 		return false;
@@ -243,15 +258,18 @@ namespace Engine
 	}
 
 	template<int inv_size>
-	inline void InventoryComponent<inv_size>::dropItem(sf::Vector2i slot, WorldItemsManager& worldItemsManager)
+	inline void InventoryComponent<inv_size>::dropItem(sf::Vector2i slot, EntitiesManager& entitiesManager)
 	{
 		int i = slot.y * COLS + slot.x;
 		sf::Vector2f drop_pos = {
-			this->_entity->getComponent<PositionComponent>().getPosition().x + 25.f,
-			this->_entity->getComponent<PositionComponent>().getPosition().y + 25.f
+			this->_entity->getComponent<PositionComponent>().getPosition().x - 64.f - 10.f,
+			this->_entity->getComponent<PositionComponent>().getPosition().y - 64.f - 10.f
 		};
 
-		worldItemsManager.addWorldItem(&this->_items[i], drop_pos);
+		entitiesManager.createEntity<WorldItem, sf::Vector2f, Item*>(
+			std::move(drop_pos),
+			&this->_items[i]
+		);
 		this->removeItem(slot);
 	}
 
@@ -264,6 +282,15 @@ namespace Engine
 				return false;
 		}
 		return true;
+	}
+
+	template<int inv_size>
+	inline bool InventoryComponent<inv_size>::itemAddedRecently() const { return this->_itemAddedRecently; }
+
+	template<int inv_size>
+	inline void InventoryComponent<inv_size>::setAddedRecently(bool value)
+	{
+		this->_itemAddedRecently = value;
 	}
 
 	template<int inv_size>
@@ -351,8 +378,8 @@ namespace Engine
 	template<int inv_size>
 	inline void InventoryComponent<inv_size>::update(float deltaTime)
 	{
-		/*system("cls");
-		print();*/
+		//system("cls");
+		//print();
 
 		if (this->_holdedItemSpr != nullptr && this->_entity->hasComponent<PositionComponent>())
 		{ // setting position and rotation

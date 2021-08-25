@@ -7,7 +7,7 @@ namespace Advento
 		public Engine::Item
 	{
 	public:
-		WoodenAxe();
+		WoodenAxe(int amount = 1);
 		~WoodenAxe();
 
 		Item getCopy(int amount = 1) const override;

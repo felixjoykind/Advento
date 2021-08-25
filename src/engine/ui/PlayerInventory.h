@@ -3,7 +3,7 @@
 #include "elements/UIElement.h"
 #include "entities/Player.h"
 #include "gamedata/InputManager.h"
-#include "engine/items/WorldItemsManager.h"
+#include "engine/ecs/EntitiesManager.h"
 
 namespace UI
 {
@@ -118,6 +118,14 @@ namespace UI
 
 		UI_Item* getHoveredItem(sf::Vector2i mouse_pos);
 
+		void refreshHud();
+
+		// Refreshes list of items sprites (shoud be called after every change in inventory)
+		void refreshItemsSprites();
+
+		// Refreshes item in entity hand
+		void refreshHandledItem();
+
 	private:
 		// background
 		sf::Sprite* _background;
@@ -127,21 +135,17 @@ namespace UI
 		// reference to a player inventory component
 		Engine::InventoryComponent<PLAYER_INVENTORY_SIZE>& _playerInvComponent;
 
-		// reference to a world items manager (for dropping items)
-		WorldItemsManager& _worldItemsManager;
+		// reference to an entities manager (for dropping items)
+		Engine::EntitiesManager& _entitiesManager;
 
 		UI_Item* _movingItem = nullptr; // item moved in inventory by user
 		std::vector<UI_Item> _inventoryItems;
 
 	public:
-		PlayerInventory(GameDataRef data, Player& player, WorldItemsManager& worldItemsManager);
+		PlayerInventory(GameDataRef data, Player& player, Engine::EntitiesManager& entitiesManager);
 		~PlayerInventory();
 
-		// Refreshes list of items sprites (shoud be called after every change in inventory)
-		void refreshItemsSprites();
-
-		// Refreshes item in entity hand
-		void refreshHandledItem();
+		void refresh();
 
 		void handleInput(sf::Event ev);
 		void update(float deltaTime) override;

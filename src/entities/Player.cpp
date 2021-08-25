@@ -1,9 +1,12 @@
 #include "Player.h"
 
+#include <typeinfo>
+
+#include "engine/items/world_item/WorldItem.h"
 #include "engine/items/WoodenAxe.h"
 
-Player::Player(GameDataRef data, sf::Vector2f pos = { 0.f, 0.f })
-	:Entity(data, pos)
+Player::Player(GameDataRef data, Engine::EntitiesManager* entities, sf::Vector2f pos = { 0.f, 0.f })
+	:Entity(data, entities, pos)
 {
 	using namespace Engine;
 
@@ -71,6 +74,7 @@ void Player::update(float deltaTime)
 {
 	using namespace Engine;
 
+	auto& hitbox	= this->getComponent<HitboxComponent>();
 	auto& animation = this->getComponent<AnimationComponent>();
 	
 	// playing animation based on movement
@@ -91,6 +95,20 @@ void Player::update(float deltaTime)
 	case MovementState::DOWN:
 		animation.update("walk_down", deltaTime);
 		break;
+	}
+
+	for (auto& e : this->_entities->getEntities())
+	{
+		WorldItem* world_item = dynamic_cast<WorldItem*>(e.get());
+		if (world_item != nullptr)
+		{ // if object is world item
+			if (hitbox.collides(e->getComponent<HitboxComponent>()))
+			{ // if the are colliding
+				// collect item if possible
+				if (this->getComponent<InventoryComponent<PLAYER_INVENTORY_SIZE>>().addItem(std::move(*world_item->_item)))
+					e->destroy();
+			}
+		}
 	}
 
 	// base entity update function call

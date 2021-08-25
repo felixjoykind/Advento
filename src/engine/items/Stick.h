@@ -7,7 +7,7 @@ namespace Advento
 		public Engine::Item
 	{
 	public:
-		Stick();
+		Stick(int amount = 1);
 		~Stick();
 
 		Item getCopy(int amount = 1) const override;
